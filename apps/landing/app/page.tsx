@@ -16,10 +16,6 @@ type PageProps = {
 export default async function HomePage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const slug = sp.slug?.trim();
-  const demoHref =
-    slug && /^[a-z0-9-]+$/i.test(slug)
-      ? `/demo/${encodeURIComponent(slug.toLowerCase())}`
-      : "#trial";
 
   const siteUrl = getSiteUrl();
 
@@ -64,7 +60,7 @@ export default async function HomePage({ searchParams }: PageProps) {
           __html: JSON.stringify(faqJsonLd),
         }}
       />
-      <Hero demoHref={demoHref} />
+      <Hero />
       <ProblemSection />
       <EngineVisualSection />
       <HowItWorksSection />

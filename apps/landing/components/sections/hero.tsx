@@ -1,16 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
-import { captureEvent } from "@/components/analytics/track-event";
 import { Button } from "@/components/ui/button";
 
 import { HeroVisual } from "./hero-visual";
-
-type HeroProps = {
-  demoHref: string;
-};
 
 const container = {
   hidden: { opacity: 0 },
@@ -29,7 +23,7 @@ const item = {
   },
 };
 
-export function Hero({ demoHref }: HeroProps) {
+export function Hero() {
   const reduced = useReducedMotion();
 
   return (
@@ -112,25 +106,6 @@ export function Hero({ demoHref }: HeroProps) {
               >
                 <a href="#trial">Start filling rooms—free for 30 days</a>
               </Button>
-            </motion.div>
-            <motion.div
-              whileHover={reduced ? undefined : { y: -2 }}
-              whileTap={reduced ? undefined : { scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 28 }}
-            >
-              <Link
-                href={demoHref}
-                prefetch={false}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background/90 px-6 py-3 text-base font-semibold text-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-accent/30 hover:bg-surface hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                onClick={() =>
-                  captureEvent("cta_click", {
-                    location: "hero",
-                    cta_id: "see_live_villa",
-                  })
-                }
-              >
-                See a live villa
-              </Link>
             </motion.div>
           </motion.div>
           <motion.p

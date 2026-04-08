@@ -219,7 +219,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
               />
               <div className="space-y-1.5">
                 <span className="block text-sm font-semibold text-foreground">
-                  Destination
+                  شهر تو
                 </span>
                 <select
                   value={destination}
@@ -270,7 +270,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
                 error={errors.property_url}
               />
               <Select
-                label="Destination"
+                label="شهر تو"
                 name="destination"
                 required
                 value={destination}

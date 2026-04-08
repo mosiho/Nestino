@@ -66,6 +66,37 @@ const cards = [
   },
 ] as const;
 
+function FeatureCardBody({
+  title,
+  subtitle,
+  icon,
+}: {
+  title: string;
+  subtitle: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-border/90 bg-background/85 p-4 shadow-lg shadow-foreground/[0.04] ring-1 ring-accent/15 backdrop-blur-md sm:p-5">
+      <div className="flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/10">
+          {icon}
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-foreground">{title}</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-muted">{subtitle}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const stackSpring = {
+  type: "spring" as const,
+  stiffness: 420,
+  damping: 32,
+  mass: 0.85,
+};
+
 export function HeroVisual() {
   const reduced = useReducedMotion();
 
@@ -78,79 +109,147 @@ export function HeroVisual() {
         ease: "easeInOut",
       };
 
+  const stackFloat = reduced
+    ? undefined
+    : { y: [0, -5, 0] };
+
+  const stackFloatTransition = (index: number) =>
+    reduced
+      ? { duration: 0 }
+      : {
+          duration: 4.2 + index * 0.35,
+          repeat: Infinity,
+          repeatType: "mirror" as const,
+          ease: "easeInOut" as const,
+          delay: index * 0.22,
+        };
+
   return (
     <div
-      className="relative mx-auto mt-14 min-h-[340px] w-full max-w-[min(100%,420px)] lg:mt-0 lg:max-w-none lg:min-h-[420px]"
+      className="relative mx-auto mt-10 w-full max-w-lg sm:mt-12 lg:mt-0 lg:max-w-none lg:min-h-[420px]"
       aria-hidden
     >
+      {/* Mobile / tablet: readable vertical stack */}
       <motion.div
-        className="absolute -right-4 -top-8 h-56 w-56 rounded-full bg-accent/25 blur-3xl sm:h-72 sm:w-72"
-        animate={
-          reduced
-            ? undefined
-            : { scale: [1, 1.12, 1], opacity: [0.45, 0.65, 0.45] }
-        }
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute -bottom-12 left-0 h-48 w-48 rounded-full bg-accent/15 blur-3xl sm:h-64 sm:w-64"
-        animate={
-          reduced
-            ? undefined
-            : { scale: [1.08, 1, 1.08], opacity: [0.35, 0.55, 0.35] }
-        }
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <svg
-        className="pointer-events-none absolute inset-0 h-full w-full text-accent/25"
-        preserveAspectRatio="none"
+        className="flex flex-col gap-3 sm:gap-3.5 lg:hidden"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: { staggerChildren: 0.11, delayChildren: 0.08 },
+          },
+        }}
       >
-        <path
-          d="M 78% 18% Q 52% 38% 42% 52% T 22% 78%"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.25"
-          strokeDasharray="5 7"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-
-      {cards.map((card) => (
-        <motion.div
-          key={card.title}
-          className={`absolute ${card.className}`}
-          initial={{ opacity: 0, y: 28, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{
-            duration: 0.55,
-            ease: "easeOut",
-            delay: card.floatDelay * 0.35,
-          }}
-        >
+        {cards.map((card, index) => (
           <motion.div
-            animate={reduced ? undefined : { y: [0, -6, 0] }}
-            transition={{
-              ...floatTransition,
-              delay: card.floatDelay,
+            key={`stack-${card.title}`}
+            variants={{
+              hidden: {
+                opacity: 0,
+                y: 28,
+                scale: 0.94,
+                x: index % 2 === 0 ? -18 : 18,
+              },
+              show: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                x: 0,
+                transition: stackSpring,
+              },
             }}
           >
-            <div className="rounded-2xl border border-border/90 bg-background/85 p-4 shadow-lg shadow-foreground/[0.04] ring-1 ring-accent/15 backdrop-blur-md sm:p-5">
-              <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-                  {card.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-foreground">{card.title}</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-muted">
-                    {card.subtitle}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <motion.div
+              animate={stackFloat}
+              transition={stackFloatTransition(index)}
+            >
+              <FeatureCardBody
+                title={card.title}
+                subtitle={card.subtitle}
+                icon={card.icon}
+              />
+            </motion.div>
           </motion.div>
-        </motion.div>
-      ))}
+        ))}
+      </motion.div>
+
+      {/* Desktop: floating collage */}
+      <div className="relative hidden min-h-[420px] lg:block">
+        <motion.div
+          className="absolute -right-4 -top-8 h-56 w-56 rounded-full bg-accent/25 blur-3xl sm:h-72 sm:w-72"
+          animate={
+            reduced
+              ? undefined
+              : { scale: [1, 1.12, 1], opacity: [0.45, 0.65, 0.45] }
+          }
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute -bottom-12 left-0 h-48 w-48 rounded-full bg-accent/15 blur-3xl sm:h-64 sm:w-64"
+          animate={
+            reduced
+              ? undefined
+              : { scale: [1.08, 1, 1.08], opacity: [0.35, 0.55, 0.35] }
+          }
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <svg
+          className="pointer-events-none absolute inset-0 h-full w-full text-accent/25"
+          preserveAspectRatio="none"
+        >
+          <motion.path
+            d="M 78% 18% Q 52% 38% 42% 52% T 22% 78%"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.25"
+            strokeDasharray="5 7"
+            vectorEffect="non-scaling-stroke"
+            initial={
+              reduced
+                ? { pathLength: 1, opacity: 1 }
+                : { pathLength: 0, opacity: 0.35 }
+            }
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{
+              pathLength: { duration: 1.35, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
+              opacity: { duration: 0.6, delay: 0.2 },
+            }}
+          />
+        </svg>
+
+        {cards.map((card) => (
+          <motion.div
+            key={card.title}
+            className={`absolute ${card.className}`}
+            initial={{ opacity: 0, y: 36, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 320,
+              damping: 26,
+              mass: 0.95,
+              delay: 0.12 + card.floatDelay * 0.32,
+            }}
+          >
+            <motion.div
+              animate={reduced ? undefined : { y: [0, -6, 0] }}
+              transition={{
+                ...floatTransition,
+                delay: card.floatDelay,
+              }}
+            >
+              <FeatureCardBody
+                title={card.title}
+                subtitle={card.subtitle}
+                icon={card.icon}
+              />
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }
