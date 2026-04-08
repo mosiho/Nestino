@@ -1,0 +1,16 @@
+{
+  "name": "nestino",
+  "private": true,
+  "scripts": {
+    "dev:landing": "pnpm --filter @nestino/landing dev",
+    "dev:villa": "echo \"villa app not scaffolded yet\"",
+    "dev:console": "echo \"console app not scaffolded yet\"",
+    "dev:engine": "echo \"engine: see engine/ README\"",
+    "lint": "pnpm --filter @nestino/landing lint",
+    "build": "pnpm --filter @nestino/landing build"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
