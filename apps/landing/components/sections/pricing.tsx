@@ -58,7 +58,7 @@ export function PricingSection() {
         <SectionHeader
           badge="Pricing"
           title="Keep the booking. Skip the commission."
-          subtitle="Choose monthly, quarterly, or annual billing. Every tier includes the same product—pick the cadence that fits how you run the property."
+          subtitle="Choose monthly, quarterly, or annual billing. Every tier includes the same product—pick the cadence that fits how you run the property. A one-time $99 setup fee covers getting you launched."
         />
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3 lg:items-stretch">
@@ -129,7 +129,7 @@ export function PricingSection() {
         >
           <p className="text-sm font-semibold text-foreground">What&apos;s included</p>
           <p className="mt-1 text-sm text-muted">
-            All plans include the same features. No hidden setup fees on the standard path.
+            All plans include the same features. We charge a one-time $99 setup fee when you start.
             Cancel anytime after your trial. See our{" "}
             <Link href="/terms" className="font-semibold text-accent hover:underline">
               Terms
