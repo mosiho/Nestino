@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+import { captureEvent } from "@/components/analytics/track-event";
 import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
+import { getWhatsAppChatUrl } from "@/lib/constants";
 import { localizedPath } from "@/lib/i18n/paths";
 
 const TIER_ORDER = ["monthly", "quarterly", "annual"] as const;
@@ -15,6 +17,7 @@ export function PricingSection() {
   const { locale, messages } = useLocaleContext();
   const pr = messages.pricing;
   const termsHref = localizedPath(locale, "/terms");
+  const waHref = getWhatsAppChatUrl(messages.whatsappPrefill);
 
   const tiers = TIER_ORDER.map((id) => {
     const tierMeta = pr.tiers.find((t) => t.id === id);
@@ -22,10 +25,10 @@ export function PricingSection() {
     if (!tierMeta || !prices) return null;
     const ctaId =
       id === "monthly"
-        ? "start_trial_monthly"
+        ? "whatsapp_pricing_monthly"
         : id === "quarterly"
-          ? "start_trial_quarterly"
-          : "start_trial_annual";
+          ? "whatsapp_pricing_quarterly"
+          : "whatsapp_pricing_annual";
     const highlight =
       id === "quarterly"
         ? ("popular" as const)
@@ -112,7 +115,14 @@ export function PricingSection() {
                   analytics={{ location: "pricing", ctaId: tier.ctaId }}
                   asChild
                 >
-                  <a href="#trial">{pr.startFreeTrial}</a>
+                  <a
+                    href={waHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => captureEvent("whatsapp_click")}
+                  >
+                    {pr.whatsAppCta}
+                  </a>
                 </Button>
               </motion.div>
             );

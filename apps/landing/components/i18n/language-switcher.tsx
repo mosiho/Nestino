@@ -7,7 +7,7 @@ import { localizedPath, switchLocalePath } from "@/lib/i18n/paths";
 
 import { useLocaleContext } from "./locale-provider";
 
-/** Home URL with optional query and/or hash, e.g. `?slug=demo#trial`. */
+/** Home URL with optional query and/or hash, e.g. `?slug=demo#contact`. */
 export function localizedHomeHref(locale: Locale, queryAndHash: string): string {
   const base = localizedPath(locale, "/");
   if (!queryAndHash) return base;

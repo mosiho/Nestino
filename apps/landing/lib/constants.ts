@@ -18,17 +18,18 @@ export function getVillaBaseDomain(): string {
   return process.env.NEXT_PUBLIC_VILLA_BASE_DOMAIN ?? "nestino.com";
 }
 
+/** Default Nestino marketing WhatsApp (overridable via NEXT_PUBLIC_WHATSAPP_E164). */
+const DEFAULT_WHATSAPP_E164 = "+905346191692";
+
 export function getWhatsAppNumber(): string {
-  return process.env.NEXT_PUBLIC_WHATSAPP_E164 ?? "";
+  return process.env.NEXT_PUBLIC_WHATSAPP_E164?.trim() || DEFAULT_WHATSAPP_E164;
 }
 
-export function getWhatsAppPrefillMessage(propertyName?: string): string {
-  const base =
-    "Hi Nestino — I want to learn more about direct bookings and the free trial.";
-  if (propertyName?.trim()) {
-    return `${base} Property: ${propertyName.trim()}`;
-  }
-  return base;
+/** wa.me URL with optional pre-filled message (UTF-8). */
+export function getWhatsAppChatUrl(prefill: string): string {
+  const raw = getWhatsAppNumber();
+  const digits = raw.replace(/\D/g, "");
+  return `https://wa.me/${digits}?text=${encodeURIComponent(prefill)}`;
 }
 
 export function getInternalNotifyEmail(): string {

@@ -7,7 +7,7 @@ import { captureEvent } from "@/components/analytics/track-event";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
-import { getWhatsAppNumber } from "@/lib/constants";
+import { getWhatsAppChatUrl } from "@/lib/constants";
 import { localizedPath } from "@/lib/i18n/paths";
 
 const SECTION_IDS = [
@@ -18,7 +18,7 @@ const SECTION_IDS = [
   "proof",
   "pricing",
   "faq",
-  "trial",
+  "contact",
 ] as const;
 
 /** Viewport offset from top: sticky header + small buffer for scroll-spy */
@@ -44,7 +44,7 @@ export function Navbar() {
     proof: nav.proof,
     pricing: nav.pricing,
     faq: nav.faq,
-    trial: nav.start,
+    contact: nav.contact,
   };
 
   const [activeId, setActiveId] =
@@ -52,10 +52,7 @@ export function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
-  const wa = getWhatsAppNumber();
-  const waHref = wa
-    ? `https://wa.me/${wa.replace(/\+/g, "")}?text=${encodeURIComponent(messages.whatsappPrefill)}`
-    : null;
+  const waHref = getWhatsAppChatUrl(messages.whatsappPrefill);
 
   const updateActive = useCallback(() => {
     let next: (typeof SECTION_IDS)[number] = SECTION_IDS[0];
@@ -149,44 +146,44 @@ export function Navbar() {
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <LanguageSwitcher />
-          {waHref ? (
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-foreground/[0.04] hover:text-foreground sm:inline-flex"
-              onClick={() => captureEvent("whatsapp_click")}
-            >
-              {nav.whatsapp}
-            </a>
-          ) : null}
-          {waHref ? (
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-muted transition-colors hover:bg-accent/12 hover:text-accent sm:hidden"
-              aria-label={nav.whatsapp}
-              onClick={() => captureEvent("whatsapp_click")}
-            >
-              {nav.whatsappShort}
-            </a>
-          ) : null}
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-foreground/[0.04] hover:text-foreground sm:inline-flex"
+            onClick={() => captureEvent("whatsapp_click")}
+          >
+            {nav.whatsapp}
+          </a>
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-muted transition-colors hover:bg-accent/12 hover:text-accent sm:hidden"
+            aria-label={nav.whatsapp}
+            onClick={() => captureEvent("whatsapp_click")}
+          >
+            {nav.whatsappShort}
+          </a>
           <Button
             size="sm"
             className="hidden whitespace-nowrap sm:inline-flex"
-            analytics={{ location: "nav", ctaId: "start_free_trial" }}
-            onClick={() => scrollToSection("trial")}
+            analytics={{ location: "nav", ctaId: "whatsapp_nav" }}
+            asChild
           >
-            {nav.startFreeTrial}
+            <a href={waHref} target="_blank" rel="noopener noreferrer">
+              {nav.messageWhatsApp}
+            </a>
           </Button>
           <Button
             size="sm"
             className="px-2.5 text-xs sm:hidden"
-            analytics={{ location: "nav", ctaId: "start_free_trial" }}
-            onClick={() => scrollToSection("trial")}
+            analytics={{ location: "nav", ctaId: "whatsapp_nav" }}
+            asChild
           >
-            {nav.trialShort}
+            <a href={waHref} target="_blank" rel="noopener noreferrer">
+              {nav.messageWhatsAppShort}
+            </a>
           </Button>
         </div>
       </div>

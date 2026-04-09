@@ -2,8 +2,10 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
+import { captureEvent } from "@/components/analytics/track-event";
 import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
+import { getWhatsAppChatUrl } from "@/lib/constants";
 
 import { HeroVisual } from "./hero-visual";
 
@@ -28,6 +30,7 @@ export function Hero() {
   const reduced = useReducedMotion();
   const { messages } = useLocaleContext();
   const h = messages.hero;
+  const waHref = getWhatsAppChatUrl(messages.whatsappPrefill);
 
   return (
     <section
@@ -102,10 +105,17 @@ export function Hero() {
             >
               <Button
                 size="lg"
-                analytics={{ location: "hero", ctaId: "start_filling_rooms" }}
+                analytics={{ location: "hero", ctaId: "whatsapp_hero" }}
                 asChild
               >
-                <a href="#trial">{h.cta}</a>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => captureEvent("whatsapp_click")}
+                >
+                  {h.cta}
+                </a>
               </Button>
             </motion.div>
           </motion.div>

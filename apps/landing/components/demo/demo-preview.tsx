@@ -35,7 +35,7 @@ export function DemoPreview({ slug, destination }: DemoPreviewProps) {
 
   const claimHref = localizedHomeHref(
     locale,
-    `?slug=${encodeURIComponent(slug)}#trial`,
+    `?slug=${encodeURIComponent(slug)}#contact`,
   );
 
   return (

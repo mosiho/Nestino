@@ -16,7 +16,6 @@ import { localizedPath } from "@/lib/i18n/paths";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ slug?: string }>;
 };
 
 export async function generateMetadata({
@@ -58,13 +57,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function HomePage({ params, searchParams }: PageProps) {
+export default async function HomePage({ params }: PageProps) {
   const { locale: raw } = await params;
   if (!isLocale(raw)) {
     notFound();
   }
-  const sp = await searchParams;
-  const slug = sp.slug?.trim();
 
   const siteUrl = getSiteUrl();
   const messages = getMessages(raw);
@@ -116,11 +113,7 @@ export default async function HomePage({ params, searchParams }: PageProps) {
       <ProofSection />
       <PricingSection />
       <FaqSection />
-      <FinalCtaSection
-        demoSlug={
-          slug && /^[a-z0-9-]+$/i.test(slug) ? slug.toLowerCase() : undefined
-        }
-      />
+      <FinalCtaSection />
     </>
   );
 }
