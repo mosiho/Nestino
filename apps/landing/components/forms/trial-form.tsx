@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { captureEvent } from "@/components/analytics/track-event";
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { DESTINATIONS } from "@/lib/constants";
+import { localizedPath } from "@/lib/i18n/paths";
 
 type FieldErrors = Partial<
   Record<
@@ -27,6 +29,11 @@ function destinationLabel(value: string): string {
 
 export function TrialForm({ demoSlug }: TrialFormProps) {
   const router = useRouter();
+  const { locale, messages } = useLocaleContext();
+  const tf = messages.trialForm;
+  const termsHref = localizedPath(locale, "/terms");
+  const privacyHref = localizedPath(locale, "/privacy");
+
   const [step, setStep] = useState<1 | 2>(1);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
@@ -43,10 +50,18 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
     [destination]
   );
 
+  const summaryLine2 = useMemo(
+    () =>
+      tf.summarySecondLine
+        .replace("{name}", propertyName)
+        .replace("{dest}", previewDestination),
+    [tf.summarySecondLine, propertyName, previewDestination]
+  );
+
   function validateStep1(): boolean {
     const next: FieldErrors = {};
     if (!propertyName.trim()) {
-      next.property_name = "Property name is required";
+      next.property_name = tf.propertyNameRequired;
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -99,7 +114,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
           }
           setErrors(next);
         }
-        setMessage(errObj.error?.message ?? "Something went wrong");
+        setMessage(errObj.error?.message ?? tf.genericError);
         setStatus("error");
         return;
       }
@@ -111,15 +126,17 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
       if (ok.demo_url) setDemoUrl(ok.demo_url);
       captureEvent("form_submit", { destination: body.destination });
       setStatus("success");
-      setMessage(
-        "You’re in. Check your email for confirmation — your demo link is below."
-      );
+      setMessage(tf.successTitle);
       router.refresh();
     } catch {
       setStatus("error");
-      setMessage("Network error. Please try again.");
+      setMessage(tf.networkError);
     }
   }
+
+  const demoPreviewHref = demoSlug
+    ? localizedPath(locale, `/demo/${demoSlug}`)
+    : null;
 
   if (status === "success") {
     return (
@@ -141,20 +158,20 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
         <p className="text-center text-lg font-bold text-foreground">{message}</p>
         {demoUrl ? (
           <p className="mt-4 text-center text-sm text-muted">
-            Demo:{" "}
+            {tf.demoLabel}{" "}
             <a href={demoUrl} className="font-semibold text-accent underline">
               {demoUrl}
             </a>
           </p>
         ) : null}
-        {demoSlug ? (
+        {demoPreviewHref ? (
           <p className="mt-4 text-center text-sm text-muted">
-            Preview:{" "}
+            {tf.previewLabel}{" "}
             <a
-              href={`/demo/${demoSlug}`}
+              href={demoPreviewHref}
               className="font-semibold text-accent underline"
             >
-              Open full-screen demo
+              {tf.openDemo}
             </a>
           </p>
         ) : null}
@@ -184,7 +201,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
       <div className="relative">
         <div className="mb-6 flex items-center justify-between gap-4">
           <p className="text-xs font-bold uppercase tracking-wide text-muted">
-            Step {step} of 2
+            {tf.stepOf.replace("{step}", String(step))}
           </p>
           <div className="h-1.5 flex-1 max-w-[200px] rounded-full bg-border">
             <motion.div
@@ -209,7 +226,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
               className="space-y-5"
             >
               <Input
-                label="Villa / property name"
+                label={tf.villaNameLabel}
                 id="trial-property-name"
                 required
                 autoComplete="organization"
@@ -219,7 +236,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
               />
               <div className="space-y-1.5">
                 <span className="block text-sm font-semibold text-foreground">
-                  the city
+                  {tf.destinationLabel}
                 </span>
                 <select
                   value={destination}
@@ -234,7 +251,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
                 </select>
               </div>
               <Button type="submit" className="w-full" size="lg">
-                Continue
+                {tf.continue}
               </Button>
             </motion.div>
           ) : (
@@ -247,14 +264,11 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
               className="space-y-5"
             >
               <div className="rounded-xl border border-accent/25 bg-accent/5 px-4 py-3 text-sm text-foreground">
-                <p className="font-semibold">Nice — we’ll prioritize direct bookings for</p>
-                <p className="mt-1 text-muted">
-                  <span className="font-bold text-foreground">{propertyName}</span>{" "}
-                  in <span className="font-bold text-foreground">{previewDestination}</span>.
-                </p>
+                <p className="font-semibold">{tf.summaryTitle}</p>
+                <p className="mt-1 text-muted leading-relaxed">{summaryLine2}</p>
               </div>
               <Input
-                label="Email"
+                label={tf.emailLabel}
                 name="email"
                 type="email"
                 required
@@ -262,15 +276,15 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
                 error={errors.email}
               />
               <Input
-                label="Current property URL (optional)"
+                label={tf.propertyUrlLabel}
                 name="property_url"
                 type="url"
-                placeholder="https://"
+                placeholder={tf.propertyUrlPlaceholder}
                 autoComplete="url"
                 error={errors.property_url}
               />
               <Select
-                label="the city"
+                label={tf.destinationLabel}
                 name="destination"
                 required
                 value={destination}
@@ -282,9 +296,9 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
                 error={errors.destination}
               />
               <Input
-                label="WhatsApp (optional, E.164)"
+                label={tf.whatsappLabel}
                 name="whatsapp_e164"
-                placeholder="+6281234567890"
+                placeholder={tf.whatsappPlaceholder}
                 autoComplete="tel"
                 error={errors.whatsapp_e164}
               />
@@ -299,7 +313,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
                     setMessage("");
                   }}
                 >
-                  Back
+                  {tf.back}
                 </Button>
                 <Button
                   type="submit"
@@ -307,9 +321,7 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
                   size="lg"
                   disabled={status === "loading"}
                 >
-                  {status === "loading"
-                    ? "Launching…"
-                    : "Launch my direct booking channel"}
+                  {status === "loading" ? tf.launching : tf.submit}
                 </Button>
               </div>
             </motion.div>
@@ -322,13 +334,13 @@ export function TrialForm({ demoSlug }: TrialFormProps) {
           </p>
         ) : null}
         <p className="relative mt-4 text-xs text-muted leading-relaxed">
-          By submitting, you agree to our{" "}
-          <a href="/terms" className="font-semibold text-accent hover:underline">
-            Terms
+          {tf.agreePrefix}{" "}
+          <a href={termsHref} className="font-semibold text-accent hover:underline">
+            {tf.terms}
           </a>{" "}
-          and{" "}
-          <a href="/privacy" className="font-semibold text-accent hover:underline">
-            Privacy Policy
+          {tf.and}{" "}
+          <a href={privacyHref} className="font-semibold text-accent hover:underline">
+            {tf.privacyPolicy}
           </a>
           .
         </p>

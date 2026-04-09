@@ -2,64 +2,63 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-const cards = [
+import { useLocaleContext } from "@/components/i18n/locale-provider";
+
+const CARD_ICONS = [
+  (
+    <svg key="d" viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+        className="stroke-accent"
+        strokeWidth="1.75"
+      />
+      <path
+        d="M16.5 16.5 21 21"
+        className="stroke-accent"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+  (
+    <svg key="v" viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z"
+        className="stroke-accent"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+  (
+    <svg key="b" viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M8 10h8M8 14h5"
+        className="stroke-accent"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+      <path
+        d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
+        className="stroke-accent"
+        strokeWidth="1.75"
+      />
+    </svg>
+  ),
+] as const;
+
+const CARD_LAYOUT = [
   {
-    title: "Discovery",
-    subtitle: "Google & AI-ready answers",
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-        <path
-          d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
-          className="stroke-accent"
-          strokeWidth="1.75"
-        />
-        <path
-          d="M16.5 16.5 21 21"
-          className="stroke-accent"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
     className:
       "right-[2%] top-[4%] sm:right-[4%] w-[min(100%,260px)] rotate-[-2deg]",
     floatDelay: 0,
   },
   {
-    title: "Your villa presence",
-    subtitle: "Fast, trustworthy, mobile-first",
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-        <path
-          d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z"
-          className="stroke-accent"
-          strokeWidth="1.75"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
     className:
       "left-[0%] top-[36%] sm:left-[2%] w-[min(100%,272px)] rotate-[1.5deg]",
     floatDelay: 0.6,
   },
   {
-    title: "Direct bookings",
-    subtitle: "Inquiries straight to you",
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-        <path
-          d="M8 10h8M8 14h5"
-          className="stroke-accent"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-        />
-        <path
-          d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
-          className="stroke-accent"
-          strokeWidth="1.75"
-        />
-      </svg>
-    ),
     className:
       "right-[6%] bottom-[2%] sm:right-[10%] w-[min(100%,268px)] rotate-[-1deg]",
     floatDelay: 1.2,
@@ -99,6 +98,17 @@ const stackSpring = {
 
 export function HeroVisual() {
   const reduced = useReducedMotion();
+  const { messages } = useLocaleContext();
+  const cards = messages.hero.visualCards.map((c, i) => {
+    const layout = CARD_LAYOUT[i];
+    return {
+      title: c.title,
+      subtitle: c.subtitle,
+      icon: CARD_ICONS[i],
+      className: layout?.className ?? "",
+      floatDelay: layout?.floatDelay ?? 0,
+    };
+  });
 
   const floatTransition = reduced
     ? { duration: 0 }
@@ -109,9 +119,7 @@ export function HeroVisual() {
         ease: "easeInOut",
       };
 
-  const stackFloat = reduced
-    ? undefined
-    : { y: [0, -5, 0] };
+  const stackFloat = reduced ? undefined : { y: [0, -5, 0] };
 
   const stackFloatTransition = (index: number) =>
     reduced
@@ -129,7 +137,6 @@ export function HeroVisual() {
       className="relative mx-auto mt-10 w-full max-w-lg sm:mt-12 lg:mt-0 lg:max-w-none lg:min-h-[420px]"
       aria-hidden
     >
-      {/* Mobile / tablet: readable vertical stack */}
       <motion.div
         className="flex flex-col gap-3 sm:gap-3.5 lg:hidden"
         initial="hidden"
@@ -175,7 +182,6 @@ export function HeroVisual() {
         ))}
       </motion.div>
 
-      {/* Desktop: floating collage */}
       <div className="relative hidden min-h-[420px] lg:block">
         <motion.div
           className="absolute -right-4 -top-8 h-56 w-56 rounded-full bg-accent/25 blur-3xl sm:h-72 sm:w-72"

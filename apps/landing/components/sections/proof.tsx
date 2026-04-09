@@ -2,38 +2,20 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { SectionHeader } from "@/components/ui/section-header";
 
-const milestones = [
-  {
-    icon: "01",
-    title: "More direct inquiries",
-    body: "Guests use your site—form, WhatsApp, email—so you can compare volume and quality to your baseline.",
-  },
-  {
-    icon: "02",
-    title: "Clearer guest intent",
-    body: `Fewer "what's your lowest price?" threads; more dates, party size, and ready-to-book questions.`,
-  },
-  {
-    icon: "03",
-    title: "Stronger discovery",
-    body: "Better footprint in Google results and AI-style answers that summarize your property accurately.",
-  },
-  {
-    icon: "04",
-    title: "Smarter languages",
-    body: "Tier-1 pages and FAQs aligned with how international guests actually search your destination.",
-  },
-  {
-    icon: "05",
-    title: "A weekly improvement loop",
-    body: "Diagnose what's weak, ship fixes, then see what moved—so progress isn't a one-off launch.",
-  },
-] as const;
+const ICONS = ["01", "02", "03", "04", "05"] as const;
 
 export function ProofSection() {
   const reduced = useReducedMotion();
+  const { messages } = useLocaleContext();
+  const p = messages.proof;
+  const milestones = p.milestones.map((m, i) => ({
+    icon: ICONS[i] ?? String(i + 1),
+    title: m.title,
+    body: m.body,
+  }));
 
   return (
     <section
@@ -48,9 +30,9 @@ export function ProofSection() {
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeader
-          badge="First 30 days"
-          title="What villa owners usually notice first"
-          subtitle="A realistic picture of early momentum—not a promise of identical numbers for every property."
+          badge={p.badge}
+          title={p.title}
+          subtitle={p.subtitle}
           titleId="proof-heading"
         />
 
@@ -65,10 +47,9 @@ export function ProofSection() {
             30
           </span>
           <div>
-            <p className="text-sm font-semibold text-foreground">Day window</p>
+            <p className="text-sm font-semibold text-foreground">{p.dayWindow}</p>
             <p className="mt-0.5 text-sm leading-relaxed text-muted">
-              When we most often see the first meaningful shifts in inquiries,
-              search visibility, and how guests talk to you.
+              {p.dayWindowBody}
             </p>
           </div>
         </motion.div>
@@ -112,11 +93,10 @@ export function ProofSection() {
             &ldquo;
           </span>
           <blockquote className="mt-2 text-lg leading-relaxed text-foreground">
-            If direct inquiries rise and OTA share of voice drops—even a
-            little—that&apos;s margin back in your pocket.
+            {p.quote}
           </blockquote>
           <figcaption className="mt-4 text-xs font-semibold uppercase tracking-wider text-muted">
-            Nestino playbook
+            {p.quoteCaption}
           </figcaption>
         </motion.figure>
       </div>

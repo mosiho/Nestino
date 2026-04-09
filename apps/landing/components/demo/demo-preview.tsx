@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { captureEvent } from "@/components/analytics/track-event";
+import { localizedHomeHref } from "@/components/i18n/language-switcher";
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
 import { getVillaBaseDomain } from "@/lib/constants";
 
@@ -16,6 +18,8 @@ export function DemoPreview({ slug, destination }: DemoPreviewProps) {
   const [compact, setCompact] = useState(false);
   const domain = getVillaBaseDomain();
   const src = `https://${slug}.${domain}/en`;
+  const { locale, messages } = useLocaleContext();
+  const d = messages.demo;
 
   useEffect(() => {
     captureEvent("demo_view", { slug });
@@ -29,16 +33,19 @@ export function DemoPreview({ slug, destination }: DemoPreviewProps) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  const claimHref = localizedHomeHref(
+    locale,
+    `?slug=${encodeURIComponent(slug)}#trial`,
+  );
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
       <div className="flex items-center justify-between gap-3 border-b border-border bg-surface/90 px-3 py-3 sm:px-4">
         <div className="min-w-0 flex-1">
           {!compact ? (
-            <p className="truncate text-sm text-foreground">
-              This is your new site — live preview
-            </p>
+            <p className="truncate text-sm text-foreground">{d.previewTitle}</p>
           ) : (
-            <p className="sr-only">Live preview</p>
+            <p className="sr-only">{d.previewSr}</p>
           )}
           <p className="truncate text-xs text-muted">
             {slug}.{domain} · {destination}
@@ -46,8 +53,8 @@ export function DemoPreview({ slug, destination }: DemoPreviewProps) {
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <Button size="sm" analytics={{ location: "demo_bar", ctaId: "claim" }} asChild>
-            <Link href={`/?slug=${encodeURIComponent(slug)}#trial`}>
-              {compact ? "Claim" : "Claim this site"}
+            <Link href={claimHref}>
+              {compact ? d.claim : d.claimFull}
             </Link>
           </Button>
         </div>

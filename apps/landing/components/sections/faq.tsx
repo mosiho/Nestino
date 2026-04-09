@@ -1,10 +1,14 @@
+"use client";
+
 import { FaqAccordion } from "@/components/ui/accordion";
 import { AnimateIn } from "@/components/ui/animate-in";
 import { SectionHeader } from "@/components/ui/section-header";
-import { faqEntries } from "@/lib/faq-data";
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 
 export function FaqSection() {
-  const items = faqEntries.map((e) => ({
+  const { messages } = useLocaleContext();
+  const f = messages.faq;
+  const items = f.items.map((e) => ({
     id: e.id,
     question: e.question,
     answer: e.answer,
@@ -17,9 +21,9 @@ export function FaqSection() {
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <SectionHeader
-          badge="FAQ"
-          title="Direct bookings, explained plainly"
-          subtitle="What we do, what we don’t, and how this differs from paying commissions to OTAs."
+          badge={f.badge}
+          title={f.title}
+          subtitle={f.subtitle}
         />
         <AnimateIn delay={0.1} className="mt-10">
           <FaqAccordion items={items} />

@@ -1,10 +1,16 @@
+"use client";
+
 import Link from "next/link";
 
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { getSiteUrl } from "@/lib/constants";
+import { localizedPath } from "@/lib/i18n/paths";
 
 export function Footer() {
   const year = new Date().getFullYear();
   const site = getSiteUrl();
+  const { locale, messages } = useLocaleContext();
+  const f = messages.footer;
 
   return (
     <footer className="border-t border-border bg-surface/60">
@@ -13,9 +19,7 @@ export function Footer() {
           <div>
             <p className="text-lg font-bold text-foreground">Nestino</p>
             <p className="mt-2 max-w-sm text-sm text-muted leading-relaxed">
-              Zero-commission direct bookings for premium villas—discovery,
-              conversion, and a growth engine built for owners who want margin
-              back.
+              {f.tagline}
             </p>
             <p className="mt-4 text-sm text-muted">
               <a
@@ -28,12 +32,18 @@ export function Footer() {
           </div>
           <div className="flex gap-8 text-sm">
             <div className="flex flex-col gap-2">
-              <span className="font-semibold text-foreground">Legal</span>
-              <Link href="/privacy" className="text-muted hover:text-foreground">
-                Privacy
+              <span className="font-semibold text-foreground">{f.legal}</span>
+              <Link
+                href={localizedPath(locale, "/privacy")}
+                className="text-muted hover:text-foreground"
+              >
+                {f.privacy}
               </Link>
-              <Link href="/terms" className="text-muted hover:text-foreground">
-                Terms
+              <Link
+                href={localizedPath(locale, "/terms")}
+                className="text-muted hover:text-foreground"
+              >
+                {f.terms}
               </Link>
             </div>
           </div>

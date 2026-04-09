@@ -1,16 +1,16 @@
 import { Analytics } from "@vercel/analytics/react";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
 
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
+import { htmlLang, isLocale, type Locale } from "@/lib/i18n/config";
 import { getSiteUrl } from "@/lib/constants";
 
 import "./globals.css";
 
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-geist-sans",
   display: "swap",
 });
@@ -25,56 +25,27 @@ export const metadata: Metadata = {
   },
   description:
     "Fill your rooms with direct bookings. Nestino drives qualified guests to your villa—Google, AI search, and high-converting channels. No OTA commissions. First month free.",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteUrl,
-    siteName: "Nestino",
-    title: "Nestino — Zero-commission direct bookings for villas",
-    description:
-      "Fill your rooms directly. No middleman. No commission. Your bookings, your margin.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Nestino — Zero-commission direct bookings for villas",
-    description:
-      "Direct bookings for premium villas. Keep 100% of every booking.",
-  },
-  alternates: {
-    canonical: "/",
-  },
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Nestino",
-  url: siteUrl,
-  description:
-    "Zero-commission direct booking growth for premium villas and boutique stays.",
-  email: "hello@nestino.ai",
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const h = await headers();
+  const raw = h.get("x-nestino-locale");
+  const locale: Locale = raw && isLocale(raw) ? raw : "en";
+  const lang = htmlLang(locale);
+  const htmlClass =
+    locale === "tr"
+      ? `${inter.variable} font-sans is-locale-tr`
+      : `${inter.variable} font-sans`;
+
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} font-sans min-h-screen flex flex-col bg-background text-foreground antialiased`}
-      >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationJsonLd),
-          }}
-        />
+    <html lang={lang} className={htmlClass}>
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
         <PostHogProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          {children}
         </PostHogProvider>
         <Analytics />
       </body>

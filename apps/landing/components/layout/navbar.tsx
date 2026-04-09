@@ -4,27 +4,27 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { captureEvent } from "@/components/analytics/track-event";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
-import {
-  getWhatsAppNumber,
-  getWhatsAppPrefillMessage,
-} from "@/lib/constants";
+import { getWhatsAppNumber } from "@/lib/constants";
+import { localizedPath } from "@/lib/i18n/paths";
 
-const SECTIONS = [
-  { id: "hero", label: "Overview" },
-  { id: "problem", label: "Problem" },
-  { id: "engine", label: "Engine" },
-  { id: "how-it-works", label: "How it works" },
-  { id: "proof", label: "Results" },
-  { id: "pricing", label: "Pricing" },
-  { id: "faq", label: "FAQ" },
-  { id: "trial", label: "Start" },
+const SECTION_IDS = [
+  "hero",
+  "problem",
+  "engine",
+  "how-it-works",
+  "proof",
+  "pricing",
+  "faq",
+  "trial",
 ] as const;
 
 /** Viewport offset from top: sticky header + small buffer for scroll-spy */
 const SCROLL_SPY_OFFSET_PX = 76;
 
-function scrollToSection(id: (typeof SECTIONS)[number]["id"]) {
+function scrollToSection(id: (typeof SECTION_IDS)[number]) {
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
@@ -34,19 +34,32 @@ function scrollToSection(id: (typeof SECTIONS)[number]["id"]) {
 }
 
 export function Navbar() {
+  const { locale, messages } = useLocaleContext();
+  const nav = messages.nav;
+  const sectionLabels: Record<(typeof SECTION_IDS)[number], string> = {
+    hero: nav.overview,
+    problem: nav.problem,
+    engine: nav.engine,
+    "how-it-works": nav.howItWorks,
+    proof: nav.proof,
+    pricing: nav.pricing,
+    faq: nav.faq,
+    trial: nav.start,
+  };
+
   const [activeId, setActiveId] =
-    useState<(typeof SECTIONS)[number]["id"]>("hero");
+    useState<(typeof SECTION_IDS)[number]>("hero");
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
   const wa = getWhatsAppNumber();
   const waHref = wa
-    ? `https://wa.me/${wa.replace(/\+/g, "")}?text=${encodeURIComponent(getWhatsAppPrefillMessage())}`
+    ? `https://wa.me/${wa.replace(/\+/g, "")}?text=${encodeURIComponent(messages.whatsappPrefill)}`
     : null;
 
   const updateActive = useCallback(() => {
-    let next: (typeof SECTIONS)[number]["id"] = SECTIONS[0].id;
-    for (const { id } of SECTIONS) {
+    let next: (typeof SECTION_IDS)[number] = SECTION_IDS[0];
+    for (const id of SECTION_IDS) {
       const el = document.getElementById(id);
       if (!el) continue;
       const { top } = el.getBoundingClientRect();
@@ -67,23 +80,25 @@ export function Navbar() {
 
   useEffect(() => {
     const link = linkRefs.current.get(activeId);
-    const nav = navRef.current;
-    if (!link || !nav) return;
-    const navRect = nav.getBoundingClientRect();
+    const navEl = navRef.current;
+    if (!link || !navEl) return;
+    const navRect = navEl.getBoundingClientRect();
     const linkRect = link.getBoundingClientRect();
     const pad = 12;
     if (linkRect.left < navRect.left + pad) {
-      nav.scrollBy({ left: linkRect.left - navRect.left - pad, behavior: "auto" });
+      navEl.scrollBy({ left: linkRect.left - navRect.left - pad, behavior: "auto" });
     } else if (linkRect.right > navRect.right - pad) {
-      nav.scrollBy({ left: linkRect.right - navRect.right + pad, behavior: "auto" });
+      navEl.scrollBy({ left: linkRect.right - navRect.right + pad, behavior: "auto" });
     }
   }, [activeId]);
+
+  const homeHref = localizedPath(locale, "/");
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/90 bg-background/90 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-2.5">
         <Link
-          href="/"
+          href={homeHref}
           className="shrink-0 text-base font-bold tracking-tight text-foreground sm:text-lg"
         >
           Nestino
@@ -101,9 +116,9 @@ export function Navbar() {
           <nav
             ref={navRef}
             className="flex gap-1 overflow-x-auto overscroll-x-contain py-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-1.5 [&::-webkit-scrollbar]:hidden"
-            aria-label="On this page"
+            aria-label={nav.onThisPage}
           >
-            {SECTIONS.map(({ id, label }) => {
+            {SECTION_IDS.map((id) => {
               const isActive = activeId === id;
               return (
                 <a
@@ -125,7 +140,7 @@ export function Navbar() {
                     scrollToSection(id);
                   }}
                 >
-                  {label}
+                  {sectionLabels[id]}
                 </a>
               );
             })}
@@ -133,6 +148,7 @@ export function Navbar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <LanguageSwitcher />
           {waHref ? (
             <a
               href={waHref}
@@ -141,7 +157,7 @@ export function Navbar() {
               className="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-foreground/[0.04] hover:text-foreground sm:inline-flex"
               onClick={() => captureEvent("whatsapp_click")}
             >
-              WhatsApp
+              {nav.whatsapp}
             </a>
           ) : null}
           {waHref ? (
@@ -150,10 +166,10 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-muted transition-colors hover:bg-accent/12 hover:text-accent sm:hidden"
-              aria-label="WhatsApp"
+              aria-label={nav.whatsapp}
               onClick={() => captureEvent("whatsapp_click")}
             >
-              WA
+              {nav.whatsappShort}
             </a>
           ) : null}
           <Button
@@ -162,7 +178,7 @@ export function Navbar() {
             analytics={{ location: "nav", ctaId: "start_free_trial" }}
             onClick={() => scrollToSection("trial")}
           >
-            Start free trial
+            {nav.startFreeTrial}
           </Button>
           <Button
             size="sm"
@@ -170,7 +186,7 @@ export function Navbar() {
             analytics={{ location: "nav", ctaId: "start_free_trial" }}
             onClick={() => scrollToSection("trial")}
           >
-            Trial
+            {nav.trialShort}
           </Button>
         </div>
       </div>

@@ -25,6 +25,10 @@
     @apply bg-background text-foreground antialiased;
   }
 
+  html.is-locale-tr body {
+    text-rendering: optimizeLegibility;
+  }
+
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
   }

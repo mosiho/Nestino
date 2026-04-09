@@ -1,24 +1,19 @@
+"use client";
+
 import { AnimateIn } from "@/components/ui/animate-in";
 import { SectionHeader } from "@/components/ui/section-header";
+import { useLocaleContext } from "@/components/i18n/locale-provider";
+
+const EMOJIS = ["📉", "🔍", "🛏️"] as const;
 
 export function ProblemSection() {
-  const items = [
-    {
-      emoji: "📉",
-      title: "15–30% of every booking goes to OTAs",
-      body: "Commissions quietly eat your margin night after night—while you still do the hosting work.",
-    },
-    {
-      emoji: "🔍",
-      title: "Guests can’t find you directly",
-      body: "If you’re invisible on Google and AI answers, demand gets routed to OTAs and aggregators first.",
-    },
-    {
-      emoji: "🛏️",
-      title: "Empty nights cost you—OTAs won’t fix that",
-      body: "OTAs optimize for their marketplace—not for your calendar. Direct demand is how you protect ADR and occupancy.",
-    },
-  ];
+  const { messages } = useLocaleContext();
+  const p = messages.problem;
+  const items = p.items.map((item, i) => ({
+    emoji: EMOJIS[i] ?? "•",
+    title: item.title,
+    body: item.body,
+  }));
 
   return (
     <section
@@ -27,9 +22,9 @@ export function ProblemSection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeader
-          badge="The problem"
-          title="You’re paying OTAs to sell what’s already yours"
-          subtitle="Premium villas lose margin and control when discovery happens on someone else’s rails. Direct booking is the lever you can own—without giving up a commission on every stay."
+          badge={p.badge}
+          title={p.title}
+          subtitle={p.subtitle}
         />
         <ul className="mt-12 grid gap-8 sm:grid-cols-3">
           {items.map((item, i) => (
@@ -49,9 +44,7 @@ export function ProblemSection() {
           ))}
         </ul>
         <p className="mt-10 text-xs text-muted leading-relaxed">
-          Illustrative context: OTAs capture a large share of online travel
-          demand in many markets. Outcomes vary by property—Nestino focuses on
-          measurable movement in direct inquiries and booking intent.
+          {p.disclaimer}
         </p>
       </div>
     </section>

@@ -2,27 +2,14 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { SectionHeader } from "@/components/ui/section-header";
 
 export function HowItWorksSection() {
   const reduced = useReducedMotion();
-  const steps = [
-    {
-      n: "01",
-      title: "We set up your direct booking channel",
-      body: "A premium villa presence engineered to convert—fast, mobile-first, and built to earn trust in seconds.",
-    },
-    {
-      n: "02",
-      title: "Our engine drives qualified guests to you",
-      body: "Continuous discovery work across search + AI surfaces routes high-intent travelers toward your direct funnel.",
-    },
-    {
-      n: "03",
-      title: "You keep 100% of every booking",
-      body: "No OTA commission on direct stays. More margin on the same guest—reinvested into your property, not a marketplace.",
-    },
-  ];
+  const { messages } = useLocaleContext();
+  const h = messages.howItWorks;
+  const steps = h.steps;
 
   return (
     <section
@@ -31,9 +18,9 @@ export function HowItWorksSection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeader
-          badge="How it works"
-          title="From invisible to fully booked—directly"
-          subtitle="Three clear steps. Built for owners who want occupancy and margin—not another dashboard to babysit."
+          badge={h.badge}
+          title={h.title}
+          subtitle={h.subtitle}
         />
         <ol className="mt-12 grid gap-8 md:grid-cols-3">
           {steps.map((s, i) => (

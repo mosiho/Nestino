@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
 
 import { HeroVisual } from "./hero-visual";
@@ -25,6 +26,8 @@ const item = {
 
 export function Hero() {
   const reduced = useReducedMotion();
+  const { messages } = useLocaleContext();
+  const h = messages.hero;
 
   return (
     <section
@@ -63,32 +66,30 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-accent opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
             </span>
-            Zero commission · direct bookings
+            {h.badge}
           </motion.p>
           <motion.h1
             variants={item}
             id="hero-heading"
             className="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-[3.25rem] xl:text-6xl [text-wrap:balance]"
           >
-            Fill your rooms{" "}
+            {h.titleBefore}{" "}
             <span className="relative inline-block">
               <span className="relative z-[1] bg-gradient-to-r from-accent to-teal-600 bg-clip-text text-transparent">
-                directly
+                {h.titleHighlight}
               </span>
               <span
                 className="absolute -inset-x-1 -bottom-1 -z-0 h-3 rounded-md bg-accent/15 sm:h-3.5"
                 aria-hidden
               />
             </span>{" "}
-            zero OTA commissions
+            {h.titleAfter}
           </motion.h1>
           <motion.p
             variants={item}
             className="mt-6 max-w-xl text-lg text-muted leading-relaxed lg:max-w-2xl"
           >
-            Nestino drives qualified guests straight to your villa through Google,
-            AI search, and high-converting direct channels. No middleman. No
-            commission. Your bookings, your margin.
+            {h.body}
           </motion.p>
           <motion.div
             variants={item}
@@ -104,7 +105,7 @@ export function Hero() {
                 analytics={{ location: "hero", ctaId: "start_filling_rooms" }}
                 asChild
               >
-                <a href="#trial">Start filling rooms—free for 30 days</a>
+                <a href="#trial">{h.cta}</a>
               </Button>
             </motion.div>
           </motion.div>
@@ -112,7 +113,7 @@ export function Hero() {
             variants={item}
             className="mt-6 text-sm font-medium text-muted"
           >
-            No credit card. No OTA commissions. Cancel anytime.
+            {h.footnote}
           </motion.p>
         </motion.div>
 

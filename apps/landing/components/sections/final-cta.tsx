@@ -2,23 +2,23 @@
 
 import Image from "next/image";
 
-import { TrialForm } from "@/components/forms/trial-form";
 import { captureEvent } from "@/components/analytics/track-event";
+import { TrialForm } from "@/components/forms/trial-form";
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { SectionHeader } from "@/components/ui/section-header";
-import {
-  getWhatsAppNumber,
-  getWhatsAppPrefillMessage,
-} from "@/lib/constants";
+import { getWhatsAppNumber } from "@/lib/constants";
 
 type FinalCtaProps = {
   demoSlug?: string;
 };
 
 export function FinalCtaSection({ demoSlug }: FinalCtaProps) {
+  const { messages } = useLocaleContext();
+  const fc = messages.finalCta;
   const wa = getWhatsAppNumber();
   const waHref = wa
     ? `https://wa.me/${wa.replace(/\+/g, "")}?text=${encodeURIComponent(
-        getWhatsAppPrefillMessage()
+        messages.whatsappPrefill,
       )}`
     : null;
 
@@ -29,9 +29,9 @@ export function FinalCtaSection({ demoSlug }: FinalCtaProps) {
           <div className="flex min-w-0 flex-col gap-10">
             <div>
               <SectionHeader
-                badge="Get started"
-                title="Start getting direct bookings"
-                subtitle="Tell us about your villa. We’ll set up your trial, your demo presence, and the default language stack—then kick off your first crawl job."
+                badge={fc.badge}
+                title={fc.title}
+                subtitle={fc.subtitle}
               />
               {waHref ? (
                 <a
@@ -41,7 +41,7 @@ export function FinalCtaSection({ demoSlug }: FinalCtaProps) {
                   className="mt-6 inline-flex text-sm font-semibold text-accent hover:underline"
                   onClick={() => captureEvent("whatsapp_click")}
                 >
-                  Prefer WhatsApp? Chat with us →
+                  {fc.whatsappPrefer}
                 </a>
               ) : null}
             </div>
@@ -54,7 +54,7 @@ export function FinalCtaSection({ demoSlug }: FinalCtaProps) {
                 />
                 <Image
                   src="/images/final-cta-villa.jpg"
-                  alt="Premium villa with pool—example of the high-trust presence owners get with Nestino."
+                  alt={fc.imageAlt}
                   fill
                   className="object-cover object-center"
                   sizes="(min-width: 1280px) 520px, (min-width: 1024px) 45vw, 100vw"

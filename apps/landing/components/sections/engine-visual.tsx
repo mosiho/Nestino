@@ -2,34 +2,23 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
+import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { AnimateIn } from "@/components/ui/animate-in";
 import { SectionHeader } from "@/components/ui/section-header";
 
-const OUTPUTS = [
-  { id: "inq", label: "Direct inquiry", y: 20 },
-  { id: "wa", label: "WhatsApp lead", y: 76 },
-  { id: "ph", label: "Phone call", y: 132 },
-  { id: "em", label: "Email booking", y: 188 },
-];
+const SOURCE_KEYS = [
+  "google",
+  "chatgpt",
+  "perplexity",
+  "instagram",
+  "direct",
+] as const;
 
-const SOURCES = [
-  { id: "google", label: "Google", y: 28 },
-  { id: "chatgpt", label: "ChatGPT", y: 76 },
-  { id: "perplexity", label: "Perplexity", y: 124 },
-  { id: "instagram", label: "Instagram", y: 172 },
-  { id: "direct", label: "Direct", y: 220 },
-];
+const SOURCE_YS = [28, 76, 124, 172, 220] as const;
 
-/** Stacked layout for narrow viewports (viewBox 320×560). */
-const MOBILE_SOURCES = SOURCES.map((s, i) => ({
-  ...s,
-  y: 14 + i * 44,
-}));
-
-const MOBILE_OUTPUTS = OUTPUTS.map((o, i) => ({
-  ...o,
-  y: 358 + i * 44,
-}));
+const OUTPUT_KEYS = ["inquiry", "whatsapp", "phone", "email"] as const;
+const OUTPUT_IDS = ["inq", "wa", "ph", "em"] as const;
+const OUTPUT_YS = [20, 76, 132, 188] as const;
 
 const MOBILE = {
   w: 320,
@@ -44,6 +33,31 @@ const MOBILE = {
 
 export function EngineVisualSection() {
   const reduced = useReducedMotion();
+  const { messages } = useLocaleContext();
+  const e = messages.engine;
+  const src = e.sources;
+
+  const sources = SOURCE_KEYS.map((k, i) => ({
+    id: k,
+    label: src[k],
+    y: SOURCE_YS[i]!,
+  }));
+
+  const outputs = OUTPUT_KEYS.map((k, i) => ({
+    id: OUTPUT_IDS[i]!,
+    label: e.outputs[k],
+    y: OUTPUT_YS[i]!,
+  }));
+
+  const mobileSources = sources.map((s, i) => ({
+    ...s,
+    y: 14 + i * 44,
+  }));
+
+  const mobileOutputs = outputs.map((o, i) => ({
+    ...o,
+    y: 358 + i * 44,
+  }));
 
   return (
     <section
@@ -53,9 +67,9 @@ export function EngineVisualSection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeader
-          badge="The engine"
-          title="One system: traffic in, qualified leads out"
-          subtitle="Guests discover you across search and AI surfaces. Nestino routes intent into your direct booking funnel—no OTA in the middle, no commission on the conversion."
+          badge={e.badge}
+          title={e.title}
+          subtitle={e.subtitle}
         />
 
         <AnimateIn delay={0.12} className="mt-14">
@@ -73,7 +87,7 @@ export function EngineVisualSection() {
                   </linearGradient>
                 </defs>
 
-                {SOURCES.map((s, i) => (
+                {sources.map((s, i) => (
                   <motion.g
                     key={s.id}
                     initial={reduced ? false : { opacity: 0, x: -12 }}
@@ -136,7 +150,7 @@ export function EngineVisualSection() {
                     className="fill-foreground"
                     style={{ fontSize: 12, fontWeight: 700 }}
                   >
-                    Nestino
+                    {e.hubName}
                   </text>
                   <text
                     x={360}
@@ -145,7 +159,7 @@ export function EngineVisualSection() {
                     className="fill-muted"
                     style={{ fontSize: 10, fontWeight: 600 }}
                   >
-                    Engine
+                    {e.hubSubtitle}
                   </text>
                   <text
                     x={360}
@@ -154,11 +168,11 @@ export function EngineVisualSection() {
                     className="fill-muted"
                     style={{ fontSize: 9 }}
                   >
-                    routing · optimization
+                    {e.hubMeta}
                   </text>
                 </motion.g>
 
-                {OUTPUTS.map((o, i) => (
+                {outputs.map((o, i) => (
                   <motion.g
                     key={o.id}
                     initial={reduced ? false : { opacity: 0, x: 12 }}
@@ -238,7 +252,7 @@ export function EngineVisualSection() {
 
               <svg
                 viewBox={`0 0 ${MOBILE.w} ${MOBILE.h}`}
-                className="h-auto w-full max-w-sm mx-auto text-foreground lg:hidden"
+                className="mx-auto h-auto w-full max-w-sm text-foreground lg:hidden"
                 aria-hidden
               >
                 <defs>
@@ -255,13 +269,13 @@ export function EngineVisualSection() {
                 </defs>
 
                 <g className="stroke-border" strokeWidth={1.5} fill="none">
-                  {MOBILE_SOURCES.map((s) => (
+                  {mobileSources.map((s) => (
                     <path
                       key={`in-${s.id}`}
                       d={`M ${MOBILE.cx} ${s.y + MOBILE.sourceRect.h} L ${MOBILE.cx} ${MOBILE.hubRect.y}`}
                     />
                   ))}
-                  {MOBILE_OUTPUTS.map((o) => (
+                  {mobileOutputs.map((o) => (
                     <path
                       key={`out-${o.id}`}
                       d={`M ${MOBILE.cx} ${MOBILE.hubRect.y + MOBILE.hubRect.h} L ${MOBILE.cx} ${o.y}`}
@@ -269,7 +283,7 @@ export function EngineVisualSection() {
                   ))}
                 </g>
 
-                {MOBILE_SOURCES.map((s, i) => (
+                {mobileSources.map((s, i) => (
                   <motion.g
                     key={`m-${s.id}`}
                     initial={reduced ? false : { opacity: 0, y: -10 }}
@@ -337,7 +351,7 @@ export function EngineVisualSection() {
                     className="fill-foreground"
                     style={{ fontSize: 12, fontWeight: 700 }}
                   >
-                    Nestino
+                    {e.hubName}
                   </text>
                   <text
                     x={MOBILE.cx}
@@ -346,7 +360,7 @@ export function EngineVisualSection() {
                     className="fill-muted"
                     style={{ fontSize: 10, fontWeight: 600 }}
                   >
-                    Engine
+                    {e.hubSubtitle}
                   </text>
                   <text
                     x={MOBILE.cx}
@@ -355,11 +369,11 @@ export function EngineVisualSection() {
                     className="fill-muted"
                     style={{ fontSize: 9 }}
                   >
-                    routing · optimization
+                    {e.hubMeta}
                   </text>
                 </motion.g>
 
-                {MOBILE_OUTPUTS.map((o, i) => (
+                {mobileOutputs.map((o, i) => (
                   <motion.g
                     key={`mo-${o.id}`}
                     initial={reduced ? false : { opacity: 0, y: 10 }}
@@ -392,11 +406,11 @@ export function EngineVisualSection() {
                   <g className="text-accent" fill="currentColor">
                     <motion.circle
                       cx={MOBILE.cx}
-                      cy={MOBILE_SOURCES[0]!.y + 18}
+                      cy={mobileSources[0]!.y + 18}
                       r={4}
                       animate={{
                         cy: [
-                          MOBILE_SOURCES[0]!.y + 18,
+                          mobileSources[0]!.y + 18,
                           MOBILE.hubRect.y + MOBILE.hubRect.h / 2,
                         ],
                       }}
@@ -404,11 +418,11 @@ export function EngineVisualSection() {
                     />
                     <motion.circle
                       cx={MOBILE.cx}
-                      cy={MOBILE_SOURCES[2]!.y + 18}
+                      cy={mobileSources[2]!.y + 18}
                       r={4}
                       animate={{
                         cy: [
-                          MOBILE_SOURCES[2]!.y + 18,
+                          mobileSources[2]!.y + 18,
                           MOBILE.hubRect.y + MOBILE.hubRect.h / 2,
                         ],
                       }}
@@ -426,7 +440,7 @@ export function EngineVisualSection() {
                       animate={{
                         cy: [
                           MOBILE.hubCy,
-                          MOBILE_OUTPUTS[1]!.y + MOBILE.outputRect.h / 2,
+                          mobileOutputs[1]!.y + MOBILE.outputRect.h / 2,
                         ],
                       }}
                       transition={{
@@ -441,21 +455,17 @@ export function EngineVisualSection() {
               </svg>
 
               <h3 id="engine-heading" className="sr-only">
-                Nestino engine connects traffic sources to your villa leads
+                {e.srHeading}
               </h3>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                {[
-                  { k: "5+ sources", v: "Search, AI, social & direct" },
-                  { k: "Zero commissions", v: "Keep every dollar on direct stays" },
-                  { k: "Lead routing", v: "Inquiry → your inbox & WhatsApp" },
-                ].map((stat) => (
+                {e.stats.map((stat) => (
                   <div
-                    key={stat.k}
+                    key={stat.key}
                     className="rounded-xl border border-border bg-surface/80 px-4 py-3 text-center shadow-sm"
                   >
-                    <p className="text-sm font-bold text-foreground">{stat.k}</p>
-                    <p className="mt-1 text-xs text-muted">{stat.v}</p>
+                    <p className="text-sm font-bold text-foreground">{stat.key}</p>
+                    <p className="mt-1 text-xs text-muted">{stat.value}</p>
                   </div>
                 ))}
               </div>
