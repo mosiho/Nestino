@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import type { ReactNode } from "react";
 
 import { isLang, type Lang } from "../lib/i18n";
 import { resolveRequestOrigin } from "../lib/site-origin";
 import { getSiteBySubdomain } from "../lib/tenant";
 import { villaPath } from "../lib/villa-path";
+import { WHATSAPP_BRAND_GREEN } from "../lib/whatsapp-brand";
 
 const LAT = 36.823;
 const LNG = 30.5378;
@@ -44,6 +46,74 @@ const ROW_LABELS: Record<string, Record<string, string>> = {
   duden: { en: "Düden Waterfalls", tr: "Düden Şelaleleri", ar: "شلالات دودين", ru: "Водопады Дюден" },
   lara: { en: "Lara Beach", tr: "Lara Sahili", ar: "شاطئ لارا", ru: "Пляж Лара" },
 };
+
+const ICON_SVG_PROPS = { width: 18, height: 18, viewBox: "0 0 24 24", fill: "none" as const, stroke: "currentColor", strokeWidth: 1.5, "aria-hidden": true as const };
+
+/** Destination + distance row icons (stroke matches villa-site patterns). */
+const ROW_ICONS: Record<(typeof ROWS)[number]["key"], ReactNode> = {
+  ayt: (
+    <svg {...ICON_SVG_PROPS}>
+      <path d="M17.8 19.2 16 11l3.5-3.5c1.5-1.5 2-3.5 1.5-4.5s-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+    </svg>
+  ),
+  city: (
+    <svg {...ICON_SVG_PROPS}>
+      <path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18" />
+      <path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2" />
+      <path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2" />
+      <path d="M10 6h4M10 10h4M10 14h4M10 18h4" />
+    </svg>
+  ),
+  beach: (
+    <svg {...ICON_SVG_PROPS}>
+      <path d="M2 6c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 0 2.5 2 5 2c1.3 0 1.9-.5 2.5-1" />
+      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 0 2.5 2 5 2c1.3 0 1.9-.5 2.5-1" />
+      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 0 2.5 2 5 2c1.3 0 1.9-.5 2.5-1" />
+    </svg>
+  ),
+  kaleici: (
+    <svg {...ICON_SVG_PROPS}>
+      <path d="M3 21h18" />
+      <path d="M6 21V10l6-6 6 6v11" />
+      <path d="M9 21v-4h6v4" />
+      <path d="M9 13h.01M12 13h.01M15 13h.01" />
+    </svg>
+  ),
+  duden: (
+    <svg {...ICON_SVG_PROPS}>
+      <path d="M7 16.3c2.2 2 4.8 1.2 4.8-1.8 0-2.3-1.6-5.6-4.8-9.5-3.2 3.9-4.8 7.2-4.8 9.5 0 3 2.6 3.8 4.8 1.8z" />
+      <path d="M14.8 15.6c1.4 1.2 3.1.7 3.1-1.2 0-1.5-.9-3.5-3.1-6-2.2 2.5-3.1 4.5-3.1 6 0 1.9 1.7 2.4 3.1 1.2z" />
+    </svg>
+  ),
+  lara: (
+    <svg {...ICON_SVG_PROPS}>
+      <path d="M22 12a10 10 0 10-20 0Z" />
+      <path d="M12 12v8a2 2 0 004 0" />
+      <path d="M12 2v1" />
+    </svg>
+  ),
+};
+
+function RouteDistanceIcon() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="shrink-0 opacity-85" aria-hidden>
+      <circle cx="6" cy="19" r="3" />
+      <path d="M9 19h8.5a2.5 2.5 0 002-4.5L18 5" />
+      <circle cx="18" cy="5" r="3" />
+    </svg>
+  );
+}
+
+function CarIcon() {
+  return (
+    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="shrink-0 opacity-70" aria-hidden>
+      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 8H6L4.5 11.1C3.7 11.3 3 12.1 3 13v3c0 .6.4 1 1 1h2" />
+      <circle cx="7" cy="17" r="2" />
+      <path d="M9 17h6" />
+      <circle cx="17" cy="17" r="2" />
+    </svg>
+  );
+}
 
 function driveForLang(lang: string, row: (typeof ROWS)[number]): string {
   if (lang === "tr") return row.driveTr;
@@ -111,12 +181,24 @@ export default async function LocationPage({ params, pathPrefix }: Props) {
           {/* Distance cards instead of table */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-12">
             {ROWS.map((row) => (
-              <div key={row.key} className="flex items-center gap-4 p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+              <div key={row.key} className="flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text-secondary)]"
+                  aria-hidden
+                >
+                  {ROW_ICONS[row.key]}
+                </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-[var(--color-text-primary)]">{ROW_LABELS[row.key]?.[safeLang] ?? ROW_LABELS[row.key]?.en}</p>
-                  <p className="text-xs text-[var(--color-text-muted)]">{driveForLang(safeLang, row)}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] inline-flex items-center gap-1.5">
+                    <CarIcon />
+                    {driveForLang(safeLang, row)}
+                  </p>
                 </div>
-                <span className="text-sm font-semibold tabular-nums shrink-0" style={{ color: "var(--accent-500)" }}>{row.dist}</span>
+                <div className="flex items-center gap-1.5 shrink-0" style={{ color: "var(--accent-500)" }}>
+                  <RouteDistanceIcon />
+                  <span className="text-sm font-semibold tabular-nums">{row.dist}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -147,8 +229,11 @@ export default async function LocationPage({ params, pathPrefix }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-md text-sm font-medium text-white transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:brightness-110 active:scale-[0.97]"
-              style={{ backgroundColor: "var(--accent-500)" }}
+              style={{ backgroundColor: WHATSAPP_BRAND_GREEN }}
             >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
               WhatsApp
             </a>
           </div>
