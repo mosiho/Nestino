@@ -166,6 +166,26 @@ html.villa-site-root {
     flex-shrink: 0;
   }
 
+  html.villa-site-root .snap-carousel.snap-carousel--reviews {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-text-muted) 45%, transparent) transparent;
+    padding-bottom: var(--space-2);
+  }
+
+  html.villa-site-root .snap-carousel.snap-carousel--reviews::-webkit-scrollbar {
+    display: block;
+    height: 6px;
+  }
+
+  html.villa-site-root .snap-carousel.snap-carousel--reviews::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  html.villa-site-root .snap-carousel.snap-carousel--reviews::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--color-text-muted) 50%, transparent);
+    border-radius: var(--radius-full);
+  }
+
   @media (max-width: 374px) {
     html.villa-site-root .snap-carousel {
       scroll-padding-inline: var(--space-3);

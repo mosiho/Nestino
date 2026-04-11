@@ -116,12 +116,20 @@ export default function VillaCards({ lang, pathPrefix = "" }: Props) {
   const titles = SECTION_TITLE[lang] ?? SECTION_TITLE.en!;
 
   return (
-    <section className="section-y bg-[var(--color-surface)] content-lazy">
+    <section
+      className="section-y bg-[var(--color-surface)] content-lazy"
+      aria-labelledby="villa-cards-heading"
+    >
       <div className="content-wrapper">
         <AnimateOnScroll variant="fade-up">
           <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <div className="max-w-lg">
-              <h2 className="font-serif text-h2 font-semibold text-[var(--color-text-primary)]">{titles.heading}</h2>
+              <h2
+                id="villa-cards-heading"
+                className="font-serif text-h2 font-semibold text-[var(--color-text-primary)]"
+              >
+                {titles.heading}
+              </h2>
               <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base">{titles.sub}</p>
             </div>
             <Link

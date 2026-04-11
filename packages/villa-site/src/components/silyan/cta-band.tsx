@@ -41,7 +41,7 @@ export default function CtaBand({ lang, phone, pathPrefix = "" }: Props) {
   const waHref = digits ? `https://wa.me/${digits}` : "#";
 
   return (
-    <section className="relative overflow-hidden content-lazy">
+    <section className="relative overflow-hidden content-lazy" aria-labelledby="cta-band-heading">
       {/* Warm gradient background */}
       <div
         className="absolute inset-0"
@@ -62,6 +62,7 @@ export default function CtaBand({ lang, phone, pathPrefix = "" }: Props) {
 
           <AnimateOnScroll variant="fade-up">
             <h2
+              id="cta-band-heading"
               className="font-serif font-semibold text-[var(--color-text-primary)] mb-3"
               style={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)", lineHeight: "1.15" }}
             >

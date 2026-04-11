@@ -129,3 +129,51 @@
     }
   }
 }
+
+/* Horizontal scroll strips (gallery, reviews, location tiles) */
+.snap-carousel {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-4);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.snap-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-carousel > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+@media (max-width: 374px) {
+  .snap-carousel {
+    scroll-padding-inline: var(--space-3);
+  }
+}
+
+/* Reviews: visible scrollbar so desktop + mobile users see horizontal affordance */
+.snap-carousel.snap-carousel--reviews {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-text-muted) 45%, transparent) transparent;
+  padding-bottom: var(--space-2);
+}
+
+.snap-carousel.snap-carousel--reviews::-webkit-scrollbar {
+  display: block;
+  height: 6px;
+}
+
+.snap-carousel.snap-carousel--reviews::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.snap-carousel.snap-carousel--reviews::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-text-muted) 50%, transparent);
+  border-radius: var(--radius-full);
+}

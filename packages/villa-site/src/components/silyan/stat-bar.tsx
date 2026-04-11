@@ -56,6 +56,13 @@ const STAT_LABELS: Record<string, string[]> = {
   ru: ["Частных вилл", "Макс. гостей", "Частных бассейнов", "До моря"],
 };
 
+const STAT_SECTION_TITLE: Record<string, string> = {
+  en: "Property highlights",
+  tr: "Öne çıkan bilgiler",
+  ar: "أبرز المعلومات",
+  ru: "Ключевые факты",
+};
+
 function useCountUp(target: number, inView: boolean, duration = 1200) {
   const [count, setCount] = useState(0);
   const raf = useRef<number>(0);
@@ -113,6 +120,7 @@ export default function StatBar({ lang }: Props) {
   const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
   const labels = STAT_LABELS[lang] ?? STAT_LABELS.en!;
+  const sectionTitle = STAT_SECTION_TITLE[lang] ?? STAT_SECTION_TITLE.en!;
 
   useEffect(() => {
     const el = ref.current;
@@ -130,9 +138,12 @@ export default function StatBar({ lang }: Props) {
       ref={ref}
       className="border-y border-[var(--color-border)]"
       style={{ backgroundColor: "var(--accent-muted)" }}
-      aria-label="Property highlights"
+      aria-labelledby="stat-bar-heading"
     >
       <div className="content-wrapper">
+        <h2 id="stat-bar-heading" className="sr-only">
+          {sectionTitle}
+        </h2>
         <ul className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[var(--color-border)]/50">
           {STATS.map((stat, i) => (
             <StatItem

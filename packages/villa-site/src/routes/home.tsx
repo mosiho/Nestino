@@ -7,6 +7,7 @@ import { resolveRequestOrigin } from "../lib/site-origin";
 import { getActiveLangs, getSiteBySubdomain } from "../lib/tenant";
 import { villaPath } from "../lib/villa-path";
 import { HERO_POSTER, SITE_LOGO } from "../lib/silyan-images";
+import { buildSilyanFaqPageJsonLdEntities } from "../lib/silyan-faq-data";
 
 import Hero from "../components/silyan/hero";
 import StatBar from "../components/silyan/stat-bar";
@@ -167,48 +168,7 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
       "@context": "https://schema.org",
       "@type": "FAQPage",
       inLanguage: lang,
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "How many villas are there at Silyan Villas?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Eleven independent villas — including Villa Portakal, Villa Defne, Villa İncir, Villa Badem, and others. Each is a fully separate home with its own private pool, garden, and entrance; pools are never shared between guests.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "How far is Silyan Villas from Antalya Airport?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "22 km — approximately 25–30 minutes by car.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Does each villa have a private pool?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. Every villa has its own private pool and garden — guests do not share pools.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "What is the minimum stay at Silyan Villas?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "The minimum stay is 2 nights for all villas.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Is Silyan Villas quiet and close to nature?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. The villas are on a forested hillside in Hisarçandır above Konyaaltı — calm at night and immersed in pine forest. Antalya city centre and beaches are a short drive when you want them.",
-          },
-        },
-      ],
+      mainEntity: buildSilyanFaqPageJsonLdEntities(lang),
     },
   ];
 }

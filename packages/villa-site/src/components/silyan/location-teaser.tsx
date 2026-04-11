@@ -76,7 +76,7 @@ export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
   const c = COPY[lang] ?? COPY.en!;
 
   return (
-    <section className="section-y content-lazy">
+    <section className="section-y content-lazy" aria-labelledby="location-teaser-heading">
       <div className="content-wrapper">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* Text — first on mobile */}
@@ -87,7 +87,10 @@ export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
             >
               {lang === "tr" ? "Konum" : lang === "ar" ? "الموقع" : lang === "ru" ? "Расположение" : "Location"}
             </p>
-            <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-4">
+            <h2
+              id="location-teaser-heading"
+              className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-4"
+            >
               {c.headline}
             </h2>
             <p className="text-base text-[var(--color-text-secondary)] mb-6 leading-relaxed">
@@ -95,11 +98,11 @@ export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
             </p>
 
             {/* Distance pills — compact row on mobile */}
-            <div className="flex flex-wrap gap-2 mb-6">
+            <ul className="m-0 mb-6 flex list-none flex-wrap gap-2 p-0">
               {DISTANCES.map(({ value, label }) => (
-                <div
+                <li
                   key={value}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-sm"
+                  className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm"
                 >
                   <span className="font-semibold tabular-nums" style={{ color: "var(--accent-500)" }}>
                     {value}
@@ -107,9 +110,9 @@ export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
                   <span className="text-[var(--color-text-secondary)]">
                     {label[lang as keyof typeof label] ?? label.en}
                   </span>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
 
             <Link
               href={villaPath(pathPrefix, `/${lang}/location`)}

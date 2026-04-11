@@ -52,7 +52,10 @@ export default function Footer({
   const whatsappHref = digits ? `https://wa.me/${digits}` : "#";
 
   return (
-    <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface)] safe-bottom">
+    <footer
+      id="site-footer"
+      className="border-t border-[var(--color-border)] bg-[var(--color-surface)] safe-bottom"
+    >
       {/* Gold divider */}
       <div className="h-px bg-gradient-to-r from-transparent via-[var(--gold-accent)]/30 to-transparent" />
 

@@ -81,7 +81,7 @@ export default function TheStay({ lang }: Props) {
   const c = COPY[lang] ?? COPY.en!;
 
   return (
-    <section className="section-y">
+    <section className="section-y" aria-labelledby="the-stay-heading">
       <div className="content-wrapper">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* Image — first on mobile */}
@@ -115,7 +115,10 @@ export default function TheStay({ lang }: Props) {
             <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-5">
               {c.introLead}
             </p>
-            <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-4">
+            <h2
+              id="the-stay-heading"
+              className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-4"
+            >
               {c.headline}
             </h2>
             <p
@@ -142,11 +145,11 @@ export default function TheStay({ lang }: Props) {
             </p>
 
             {/* Distance pills — horizontal scroll on mobile */}
-            <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
+            <ul className="m-0 flex list-none gap-2 overflow-x-auto px-1 pb-1 -mx-1 scrollbar-none">
               {DISTANCES.map(({ km, label }) => (
-                <div
+                <li
                   key={km}
-                  className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] shrink-0"
+                  className="flex shrink-0 items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2"
                 >
                   <span
                     className="text-sm font-semibold tabular-nums"
@@ -157,9 +160,9 @@ export default function TheStay({ lang }: Props) {
                   <span className="text-sm text-[var(--color-text-secondary)]">
                     {label[lang as keyof typeof label] ?? label.en}
                   </span>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </AnimateOnScroll>
         </div>
       </div>

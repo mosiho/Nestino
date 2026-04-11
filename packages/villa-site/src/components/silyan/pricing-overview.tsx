@@ -248,16 +248,43 @@ export default function PricingOverview({ lang, pathPrefix = "" }: Props) {
   const months = SEASON_MONTHS[lang] ?? SEASON_MONTHS.en;
 
   const seasons = [
-    { label: c.lowSeason, months: months.low, price: c.low, icon: SEASON_ICONS[0], highlight: false },
-    { label: c.midSeason, months: months.mid, price: c.mid, icon: SEASON_ICONS[1], highlight: false },
-    { label: c.highSeason, months: months.high, price: c.high, icon: SEASON_ICONS[2], highlight: true },
+    {
+      id: "pricing-tier-low",
+      label: c.lowSeason,
+      months: months.low,
+      price: c.low,
+      icon: SEASON_ICONS[0],
+      highlight: false,
+    },
+    {
+      id: "pricing-tier-mid",
+      label: c.midSeason,
+      months: months.mid,
+      price: c.mid,
+      icon: SEASON_ICONS[1],
+      highlight: false,
+    },
+    {
+      id: "pricing-tier-high",
+      label: c.highSeason,
+      months: months.high,
+      price: c.high,
+      icon: SEASON_ICONS[2],
+      highlight: true,
+    },
   ];
 
   return (
-    <section className="section-y bg-[var(--color-surface)] content-lazy">
+    <section
+      className="section-y bg-[var(--color-surface)] content-lazy"
+      aria-labelledby="pricing-overview-heading"
+    >
       <div className="content-wrapper">
         <AnimateOnScroll variant="fade-up">
-          <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-3">
+          <h2
+            id="pricing-overview-heading"
+            className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-3"
+          >
             {c.headline}
           </h2>
           <p className="text-base text-[var(--color-text-secondary)] mb-8 max-w-xl leading-relaxed">
@@ -266,8 +293,8 @@ export default function PricingOverview({ lang, pathPrefix = "" }: Props) {
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          {seasons.map(({ label, months, price, icon, highlight }, i) => (
-            <AnimateOnScroll key={label} variant="fade-up" delay={i * 0.08}>
+          {seasons.map(({ id, label, months, price, icon, highlight }, i) => (
+            <AnimateOnScroll key={id} variant="fade-up" delay={i * 0.08}>
               <div
                 className={`rounded-xl border p-6 transition-shadow duration-300 ${
                   highlight
@@ -280,9 +307,12 @@ export default function PricingOverview({ lang, pathPrefix = "" }: Props) {
                   <span style={{ color: highlight ? "var(--accent-500)" : "var(--color-text-muted)" }}>
                     {icon}
                   </span>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+                  <h3
+                    id={id}
+                    className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] m-0"
+                  >
                     {label}
-                  </p>
+                  </h3>
                   {highlight && (
                     <span className="ms-auto text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: "var(--accent-600)", backgroundColor: "var(--accent-muted)" }}>
                       {c.popular}

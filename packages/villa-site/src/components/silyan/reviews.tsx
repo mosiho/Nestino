@@ -1,5 +1,6 @@
 import type { Lang } from "../../lib/i18n";
 import AnimateOnScroll from "../animate-on-scroll";
+import ReviewsCarousel from "./reviews-carousel";
 
 type TopicKey = "hospitality" | "space" | "pool" | "location" | "celebrations";
 
@@ -68,6 +69,21 @@ const HEADLINE: Record<string, string> = {
   tr: "Misafirlerimiz ne diyor?",
   ar: "ماذا يقول ضيوفنا؟",
   ru: "Что говорят наши гости?",
+};
+
+/** Shown above the review strip so mobile + desktop users notice horizontal scrolling */
+const SCROLL_HINT: Record<string, string> = {
+  en: "Scroll sideways for more guest reviews",
+  tr: "Daha fazla misafir yorumu için yatay kaydırın",
+  ar: "المزيد من آراء الضيوف — مرّر أفقيًا",
+  ru: "Прокрутите в сторону, чтобы увидеть больше отзывов",
+};
+
+const REVIEWS_SCROLL_REGION: Record<string, string> = {
+  en: "Guest reviews, horizontal list",
+  tr: "Misafir yorumları, yatay liste",
+  ar: "آراء الضيوف، قائمة أفقية",
+  ru: "Отзывы гостей, горизонтальный список",
 };
 
 /** Public aggregate for the complex (all units); neutral wording, no third-party names */
@@ -233,28 +249,17 @@ function ReviewCard({ review, lang, className = "" }: { review: Review; lang: La
   );
 }
 
-/** Grid placement for lg+ bento layout */
-function reviewGridClass(index: number, featuredIndex: number): string {
-  if (index === featuredIndex) {
-    return "md:col-span-2 lg:col-span-7 lg:row-span-2 lg:row-start-1";
-  }
-  const order = [0, 1, 2, 3, 4].filter((i) => i !== featuredIndex);
-  const pos = order.indexOf(index);
-  if (pos === 0) return "md:col-span-1 lg:col-span-5 lg:row-start-1 lg:col-start-8";
-  if (pos === 1) return "md:col-span-1 lg:col-span-5 lg:row-start-2 lg:col-start-8";
-  if (pos === 2) return "md:col-span-1 lg:col-span-6 lg:row-start-3 lg:col-start-1";
-  if (pos === 3) return "md:col-span-1 lg:col-span-6 lg:row-start-3 lg:col-start-7";
-  return "";
-}
-
 export default function Reviews({ lang }: { lang: Lang | string }) {
   const label = SECTION_LABEL[lang] ?? SECTION_LABEL.en!;
   const headline = HEADLINE[lang] ?? HEADLINE.en!;
-  const featuredIndex = REVIEWS.findIndex((r) => r.featured);
-  const fi = featuredIndex >= 0 ? featuredIndex : 0;
+  const scrollHint = SCROLL_HINT[lang] ?? SCROLL_HINT.en!;
+  const reviewsRegionLabel = REVIEWS_SCROLL_REGION[lang] ?? REVIEWS_SCROLL_REGION.en!;
 
   return (
-    <section className="section-y content-lazy border-t border-[var(--color-border)]/60 bg-[var(--color-surface)]/35">
+    <section
+      className="section-y content-lazy border-t border-[var(--color-border)]/60 bg-[var(--color-surface)]/35"
+      aria-labelledby="reviews-heading"
+    >
       <div className="content-wrapper">
         <AnimateOnScroll variant="fade-up">
           <div className="mb-10 flex flex-col gap-8 lg:mb-12 lg:flex-row lg:items-end lg:justify-between">
@@ -262,29 +267,29 @@ export default function Reviews({ lang }: { lang: Lang | string }) {
               <p className="mb-3 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--accent-500)" }}>
                 {label}
               </p>
-              <h2 className="font-serif text-h2 font-semibold text-[var(--color-text-primary)]">{headline}</h2>
+              <h2 id="reviews-heading" className="font-serif text-h2 font-semibold text-[var(--color-text-primary)]">
+                {headline}
+              </h2>
             </div>
             <GuestScoreCard lang={lang} />
           </div>
         </AnimateOnScroll>
 
-        {/* Mobile: horizontal scroll, all reviews */}
-        <div className="snap-carousel pb-1 md:hidden">
-          {REVIEWS.map((r, i) => (
-            <AnimateOnScroll key={`m-${r.name}-${i}`} variant="fade-up" delay={i * 0.06} className="w-[min(88vw,400px)]">
-              <ReviewCard review={r} lang={lang} />
-            </AnimateOnScroll>
-          ))}
-        </div>
-
-        {/* Tablet & desktop */}
-        <div className="hidden md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-12 lg:grid-rows-3 lg:gap-6 lg:items-stretch">
-          {REVIEWS.map((r, i) => (
-            <AnimateOnScroll key={`d-${r.name}-${i}`} variant="fade-up" delay={i * 0.07} className={`${reviewGridClass(i, fi)} h-full min-h-0`}>
-              <ReviewCard review={r} lang={lang} className="h-full" />
-            </AnimateOnScroll>
-          ))}
-        </div>
+        <AnimateOnScroll variant="fade-up" delay={0.06}>
+          <ReviewsCarousel scrollHint={scrollHint} regionLabel={reviewsRegionLabel}>
+            {REVIEWS.map((r, i) => (
+              <div
+                key={`${r.name}-${i}`}
+                className={[
+                  "flex min-h-[260px] w-[min(86vw,380px)] shrink-0 flex-col sm:w-[min(72vw,400px)] md:w-[min(360px,42vw)]",
+                  r.featured ? "lg:w-[420px]" : "lg:w-[380px]",
+                ].join(" ")}
+              >
+                <ReviewCard review={r} lang={lang} className="h-full min-h-0 flex-1" />
+              </div>
+            ))}
+          </ReviewsCarousel>
+        </AnimateOnScroll>
       </div>
     </section>
   );

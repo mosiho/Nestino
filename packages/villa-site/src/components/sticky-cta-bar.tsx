@@ -55,14 +55,37 @@ function whatsappHref(phoneDigits: string, message: string): string {
   return `https://wa.me/${phoneDigits}?text=${text}`;
 }
 
+const SCROLL_REVEAL_PX = 300;
+
 export default function StickyCtaBar({ phone, lang, siteName }: Props) {
-  const [visible, setVisible] = useState(false);
+  const [scrolledEnough, setScrolledEnough] = useState(false);
+  const [footerInView, setFooterInView] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 300);
+    const onScroll = () => setScrolledEnough(window.scrollY > SCROLL_REVEAL_PX);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const footer = document.getElementById("site-footer");
+    if (!footer) {
+      return () => window.removeEventListener("scroll", onScroll);
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setFooterInView(entry?.isIntersecting ?? false);
+      },
+      { root: null, threshold: 0, rootMargin: "0px" },
+    );
+    io.observe(footer);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      io.disconnect();
+    };
   }, []);
+
+  const visible = scrolledEnough && !footerInView;
 
   const labels = CTA_LABELS[lang] ?? CTA_LABELS.en!;
   const digits = phone.replace(/\D/g, "");

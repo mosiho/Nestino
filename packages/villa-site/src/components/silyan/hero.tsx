@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
@@ -23,7 +23,6 @@ type HeroCopy = {
   subhead: string;
   cta1: string;
   cta2: string;
-  videoHint: string;
   /** Poster / hero still — locale-specific for image SEO and accessibility */
   heroImageAlt: string;
   /** Short factual phrases aligned with on-page JSON-LD (desktop strip) */
@@ -43,7 +42,6 @@ const HERO_COPY: Record<string, HeroCopy> = {
       "Each villa has its own pool among pine-cooled hills — a quiet base away from city noise. The Mediterranean is 8 km away; Antalya centre and AYT airport stay within an easy drive when you want them.",
     cta1: "Explore Villas",
     cta2: "WhatsApp",
-    videoHint: "Play video",
     heroImageAlt:
       "Private pool and pine-covered hills at Silyan Villas — Hisarçandır, Konyaaltı, Antalya, Turkey",
     facts: ["11 independent villas", "Private pool each", "8 km to the sea", "22 km to AYT airport"],
@@ -58,7 +56,6 @@ const HERO_COPY: Record<string, HeroCopy> = {
       "Her villa çam serinliğindeki yamaçlarda kendi havuzuyla sessiz bir kaçış sunar; şehir gürültüsünden uzak. Akdeniz 8 km, merkez ve AYT havalimanı istediğinizde kısa sürüş mesafesinde.",
     cta1: "Villaları Keşfet",
     cta2: "WhatsApp",
-    videoHint: "Videoyu oynat",
     heroImageAlt:
       "Silyan Villas'ta özel havuz ve çam ormanlı yamaç — Hisarçandır, Konyaaltı, Antalya, Türkiye",
     facts: ["11 bağımsız villa", "Her villa özel havuz", "Denize 8 km", "AYT havalimanına 22 km"],
@@ -73,7 +70,6 @@ const HERO_COPY: Record<string, HeroCopy> = {
       "لكل فيلا مسبحها الخاص بين تلال الصنوبر والهواء الجبلي — ملاذ هادئ بعيدًا عن ضجيج المدينة. البحر الأبيض المتوسط على بعد 8 كم، ووسط أنطاليا والمطار ضمن سهولة الوصول.",
     cta1: "استكشف الفيلات",
     cta2: "واتساب",
-    videoHint: "تشغيل الفيديو",
     heroImageAlt:
       "مسبح خاص ومنحدرات مغطاة بالأشجار في سيليان فيلاز — هيسارتشاندير، كونيالتي، أنطاليا، تركيا",
     facts: ["11 فيلا مستقلة", "مسبح خاص لكل فيلا", "8 كم إلى البحر", "22 كم إلى مطار AYT"],
@@ -88,7 +84,6 @@ const HERO_COPY: Record<string, HeroCopy> = {
       "У каждой виллы свой бассейн среди сосновых склонов — тихая база вдали от городского шума. До Средиземного моря 8 км; центр Анталии и аэропорт AYT — в комфортной доступности по дороге.",
     cta1: "Смотреть виллы",
     cta2: "WhatsApp",
-    videoHint: "Включить видео",
     heroImageAlt:
       "Частный бассейн и лесистый склон в Silyan Villas — Хисарчандыре, Коньяалты, Анталия, Турция",
     facts: ["11 отдельных вилл", "Свой бассейн в каждой", "8 км до моря", "22 км до аэропорта AYT"],
@@ -112,8 +107,6 @@ function useMediaQuery(query: string): boolean | null {
 export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [saveData, setSaveData] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const isCoarse = useMediaQuery("(pointer: coarse)");
 
@@ -127,45 +120,34 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
 
   const enableParallax = Boolean(!prefersReducedMotion && isCoarse === false);
 
-  const tryLoadVideo = useCallback(() => {
-    setVideoLoaded(true);
-  }, []);
-
   useEffect(() => {
     if (prefersReducedMotion && videoRef.current) {
       videoRef.current.pause();
     }
   }, [prefersReducedMotion]);
 
+  /**
+   * Autoplay: browsers require muted + playsInline. React can hydrate `muted` late on
+   * `<video>`; setting `muted` / `defaultMuted` on the element before `play()` avoids
+   * silent NotAllowedError on Safari/WebKit (especially iOS).
+   */
   useEffect(() => {
     if (prefersReducedMotion) return;
-    if (isCoarse === null) return;
-
-    const sd = Boolean(
-      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData,
-    );
-    setSaveData(sd);
-
-    if (isCoarse === false) {
-      if (!sd) tryLoadVideo();
-      return;
-    }
-
-    const onInteract = () => {
-      tryLoadVideo();
-      window.removeEventListener("scroll", onInteract);
-      window.removeEventListener("touchstart", onInteract);
-      window.removeEventListener("pointerdown", onInteract);
+    const v = videoRef.current;
+    if (!v) return;
+    const kick = () => {
+      v.defaultMuted = true;
+      v.muted = true;
+      void v.play().catch(() => {});
     };
-    window.addEventListener("scroll", onInteract, { once: true, passive: true });
-    window.addEventListener("touchstart", onInteract, { once: true, passive: true });
-    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
+    kick();
+    v.addEventListener("loadeddata", kick);
+    v.addEventListener("canplay", kick);
     return () => {
-      window.removeEventListener("scroll", onInteract);
-      window.removeEventListener("touchstart", onInteract);
-      window.removeEventListener("pointerdown", onInteract);
+      v.removeEventListener("loadeddata", kick);
+      v.removeEventListener("canplay", kick);
     };
-  }, [prefersReducedMotion, isCoarse, tryLoadVideo]);
+  }, [prefersReducedMotion]);
 
   const copy = HERO_COPY[lang] ?? HERO_COPY.en!;
   const digits = phone.replace(/\D/g, "");
@@ -186,24 +168,9 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         className="absolute inset-0"
         style={enableParallax ? { scale: mediaScale } : undefined}
       >
-        {videoLoaded ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full object-cover"
-            aria-hidden="true"
-            poster={HERO_POSTER}
-          >
-            <source src={HERO_VIDEO} type="video/webm" />
-          </video>
-        ) : (
+        {prefersReducedMotion ? (
           <div className="absolute inset-0 overflow-hidden">
-            <div
-              className={`relative h-full w-full ${prefersReducedMotion ? "" : "motion-safe:animate-hero-ken"}`}
-            >
+            <div className="relative h-full w-full">
               <Image
                 src={HERO_POSTER}
                 alt={copy.heroImageAlt}
@@ -215,6 +182,19 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
               />
             </div>
           </div>
+        ) : (
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover"
+            aria-hidden="true"
+          >
+            <source src={HERO_VIDEO} type="video/webm" />
+          </video>
         )}
       </motion.div>
 
@@ -247,23 +227,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         aria-hidden
       />
 
-      {/* ── Video play button (mobile save-data) ── */}
-      {!videoLoaded && !prefersReducedMotion && (isCoarse === true || saveData) && (
-        <button
-          type="button"
-          onClick={tryLoadVideo}
-          className="absolute end-3 top-[calc(env(safe-area-inset-top,0px)+4.25rem)] z-20 flex items-center gap-2 rounded-full border border-white/25 bg-black/40 px-3.5 py-2.5 text-xs font-semibold text-white/95 shadow-lg backdrop-blur-md transition hover:bg-black/55 active:scale-[0.97] sm:end-5 sm:top-[calc(env(safe-area-inset-top,0px)+5.5rem)]"
-        >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/18 ring-1 ring-white/20">
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" className="ms-0.5" aria-hidden>
-              <path d="M2 1.5v9l8-4.5-8-4.5z" />
-            </svg>
-          </span>
-          {copy.videoHint}
-        </button>
-      )}
-
-      {/* ── Spacer: image shows through this transparent area ── */}
+      {/* ── Spacer: media shows through this transparent area ── */}
       <div className="relative z-10 flex-1" />
 
       {/* ── Content zone (no scroll opacity — keeps desktop frosted panel stable) ── */}
