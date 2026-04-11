@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Lang } from "../../lib/i18n";
+import AnimateOnScroll from "../animate-on-scroll";
 
 type FAQItem = { q: string; a: string };
 
@@ -28,31 +30,28 @@ const FAQ_ITEMS: Record<string, FAQItem[]> = {
   ],
   ar: [
     { q: "كم عدد الفيلات؟", a: "ثلاث — فيلا بادم، وفيلا دفني، وفيلا إنجير. كل فيلا مستقلة تماماً بمسبحها وحديقتها ومدخلها الخاص." },
-    { q: "كم عدد الضيوف الذين يمكن استيعابهم في سيليان فيلاز؟", a: "يمكن لجميع الفيلات الثلاث معاً استيعاب ما يصل إلى 22 ضيفاً: تستوعب بادم وإنجير 6 ضيوف لكل منهما، وتستوعب دفني 10 ضيوف." },
-    { q: "هل يمكن حجز أكثر من فيلا في آنٍ واحد؟", a: "نعم. تواصل معنا مباشرة إذا كنت ترغب في حجز فيلتين أو الثلاث معاً لمجموعة." },
+    { q: "كم عدد الضيوف الذين يمكن استيعابهم؟", a: "يمكن لجميع الفيلات الثلاث معاً استيعاب ما يصل إلى 22 ضيفاً." },
+    { q: "هل يمكن حجز أكثر من فيلا؟", a: "نعم. تواصل معنا مباشرة إذا كنت ترغب في حجز فيلتين أو الثلاث معاً." },
     { q: "ما هو الحد الأدنى لمدة الإقامة؟", a: "ليلتان كحد أدنى لجميع الفيلات." },
-    { q: "هل يوجد مسبح خاص في كل فيلا؟", a: "نعم. لكل فيلا مسبحها وحديقتها الخاصين — لن تتشاركها مع ضيوف آخرين." },
-    { q: "كم تبعد سيليان فيلاز عن مطار أنطاليا؟", a: "22 كيلومتراً — ما يقارب 25-30 دقيقة بالسيارة." },
+    { q: "هل يوجد مسبح خاص في كل فيلا؟", a: "نعم. لكل فيلا مسبحها وحديقتها الخاصين." },
+    { q: "كم تبعد عن مطار أنطاليا؟", a: "22 كيلومتراً — ما يقارب 25-30 دقيقة بالسيارة." },
     { q: "هل الحيوانات الأليفة مسموح بها؟", a: "لا يُسمح بالحيوانات الأليفة في سيليان فيلاز." },
-    { q: "هل المكان مناسب للعائلات ذات الأطفال؟", a: "نعم. جميع الفيلات الثلاث مصممة للعائلات والمجموعات. يجب الإشراف على الأطفال دائماً في منطقة المسبح." },
+    { q: "هل المكان مناسب للعائلات ذات الأطفال؟", a: "نعم. جميع الفيلات مصممة للعائلات والمجموعات. يجب الإشراف على الأطفال دائماً في منطقة المسبح." },
   ],
   ru: [
-    { q: "Сколько здесь вилл?", a: "Три — Villa Badem, Villa Defne и Villa İncir. Каждая является полностью независимой виллой с собственным частным бассейном, садом и входом." },
-    { q: "Сколько гостей могут разместиться в Silyan Villas?", a: "Все три виллы вместе вмещают до 22 гостей: Badem и İncir — по 6, Defne — 10." },
-    { q: "Можно ли забронировать сразу несколько вилл?", a: "Да. Свяжитесь с нами напрямую, если вы хотите забронировать две или все три виллы одновременно для большой группы." },
-    { q: "Каков минимальный срок проживания?", a: "Минимум 2 ночи для всех вилл." },
-    { q: "У каждой виллы есть частный бассейн?", a: "Да. У каждой виллы свой частный бассейн и сад — вы не будете делить их с другими гостями." },
-    { q: "Как далеко Silyan Villas от аэропорта Анталии?", a: "22 км — примерно 25–30 минут езды в зависимости от трафика." },
-    { q: "Разрешены ли домашние животные?", a: "Домашние животные в Silyan Villas не допускаются." },
-    { q: "Подходит ли отель для семей с детьми?", a: "Да. Все три виллы рассчитаны на семьи и группы с частными садами и бассейнами. Дети должны находиться под присмотром у бассейна." },
+    { q: "Сколько здесь вилл?", a: "Три — Villa Badem, Villa Defne и Villa İncir. Каждая полностью независима." },
+    { q: "Сколько гостей вмещают?", a: "Все три виллы вместе вмещают до 22 гостей." },
+    { q: "Можно забронировать несколько вилл?", a: "Да. Свяжитесь с нами напрямую." },
+    { q: "Минимальный срок?", a: "Минимум 2 ночи для всех вилл." },
+    { q: "У каждой виллы есть бассейн?", a: "Да. У каждой виллы свой частный бассейн и сад." },
+    { q: "Как далеко от аэропорта?", a: "22 км — примерно 25–30 минут езды." },
+    { q: "Разрешены животные?", a: "Нет, домашние животные не допускаются." },
+    { q: "Подходит для семей с детьми?", a: "Да. Все виллы рассчитаны на семьи. Дети должны быть под присмотром у бассейна." },
   ],
 };
 
 const FAQ_LABEL: Record<string, string> = {
-  en: "Frequently asked questions",
-  tr: "Sık sorulan sorular",
-  ar: "الأسئلة الشائعة",
-  ru: "Часто задаваемые вопросы",
+  en: "Frequently asked questions", tr: "Sık sorulan sorular", ar: "الأسئلة الشائعة", ru: "Часто задаваемые вопросы",
 };
 
 export default function FAQ({ lang }: { lang: Lang }) {
@@ -61,45 +60,67 @@ export default function FAQ({ lang }: { lang: Lang }) {
   const label = FAQ_LABEL[lang] ?? FAQ_LABEL.en!;
 
   return (
-    <section className="section-y bg-[var(--color-surface)]">
+    <section className="section-y bg-[var(--color-surface)] content-lazy">
       <div className="content-wrapper">
-        <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-8">
-          {label}
-        </h2>
+        <AnimateOnScroll variant="fade-up">
+          <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-8">
+            {label}
+          </h2>
+        </AnimateOnScroll>
 
         <div className="max-w-2xl space-y-2">
-          {items.map((item, i) => (
-            <div
-              key={i}
-              className="border border-[var(--color-border)] rounded-md overflow-hidden"
-            >
-              <button
-                className="w-full flex items-center justify-between gap-4 px-4 py-4 text-left text-sm font-medium text-[var(--color-text-primary)] hover:bg-[var(--color-bg)] transition-colors"
-                onClick={() => setOpen(open === i ? null : i)}
-                aria-expanded={open === i}
-              >
-                <span>{item.q}</span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className={`flex-shrink-0 transition-transform duration-200 ${open === i ? "rotate-180" : ""}`}
-                  aria-hidden="true"
+          {items.map((item, i) => {
+            const isOpen = open === i;
+            return (
+              <AnimateOnScroll key={i} variant="fade-up" delay={i * 0.03}>
+                <div
+                  className={`border rounded-xl overflow-hidden transition-colors duration-300 ${
+                    isOpen
+                      ? "border-[var(--accent-400)]/50 bg-[var(--color-bg)]"
+                      : "border-[var(--color-border)]"
+                  }`}
                 >
-                  <path d="M4 6l4 4 4-4" />
-                </svg>
-              </button>
+                  <button
+                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left text-base font-medium text-[var(--color-text-primary)] transition-colors duration-200 min-h-[var(--tap-target)]"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                  >
+                    <span>{item.q}</span>
+                    <motion.svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      className="flex-shrink-0 text-[var(--color-text-muted)]"
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                      aria-hidden="true"
+                    >
+                      <path d="M4 6l4 4 4-4" />
+                    </motion.svg>
+                  </button>
 
-              {open === i && (
-                <div className="px-4 pb-4 text-sm text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border)]">
-                  <div className="pt-3">{item.a}</div>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 pb-5 text-base text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border)]/50">
+                          <div className="pt-4">{item.a}</div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              )}
-            </div>
-          ))}
+              </AnimateOnScroll>
+            );
+          })}
         </div>
       </div>
     </section>

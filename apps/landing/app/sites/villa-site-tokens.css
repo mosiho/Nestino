@@ -15,12 +15,17 @@ html.villa-site-root {
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
+    --radius-xl: 16px;
     --radius-full: 9999px;
+
+    --tap-target: 44px;
 
     --z-base: 0;
     --z-sticky-header: 40;
     --z-sticky-cta: 45;
     --z-floating-whatsapp: 50;
+    --z-drawer-backdrop: 90;
+    --z-drawer: 95;
     --z-lightbox: 100;
 
     --color-bg: #faf9f7;
@@ -30,6 +35,7 @@ html.villa-site-root {
     --color-text-muted: #737373;
     --color-border: #e7e5e4;
     --color-border-strong: #d6d3d1;
+    --color-overlay: rgba(255, 255, 255, 0.72);
 
     --accent-500: #8b7355;
     --accent-600: #77614a;
@@ -37,9 +43,15 @@ html.villa-site-root {
     --accent-muted: color-mix(in srgb, var(--accent-500) 20%, transparent);
     --ring-accent: color-mix(in srgb, var(--accent-500) 40%, transparent);
 
+    --gold-accent: #c9a96e;
+    --gold-muted: color-mix(in srgb, #c9a96e 15%, transparent);
+
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
     --shadow-md: 0 4px 12px 0 rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-    --shadow-lg: 0 16px 48px 0 rgb(0 0 0 / 0.14), 0 4px 12px -4px rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 20px 56px 0 rgb(0 0 0 / 0.10), 0 6px 16px -4px rgb(0 0 0 / 0.06);
+    --shadow-glow: 0 8px 32px 0 rgba(139, 115, 85, 0.15);
+
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 
     scroll-behavior: smooth;
     background-color: var(--color-bg);
@@ -55,10 +67,16 @@ html.villa-site-root {
     --color-text-muted: #737373;
     --color-border: #27272a;
     --color-border-strong: #3f3f46;
+    --color-overlay: rgba(20, 20, 22, 0.72);
 
     --accent-500: #c4a574;
     --accent-600: #b8935f;
     --accent-400: #d4ba8f;
+
+    --gold-accent: #d4ba8f;
+    --gold-muted: color-mix(in srgb, #d4ba8f 15%, transparent);
+
+    --shadow-glow: 0 8px 32px 0 rgba(196, 165, 116, 0.12);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -80,7 +98,7 @@ html.villa-site-root {
     color: var(--color-text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-height: 100dvh;
+    min-height: 100svh;
   }
 
   html.villa-site-root :focus-visible {
@@ -88,9 +106,10 @@ html.villa-site-root {
     outline-offset: 2px;
   }
 
+  /* Section spacing: tighter on mobile, generous on desktop */
   html.villa-site-root .section-y {
-    padding-top: var(--space-10);
-    padding-bottom: var(--space-10);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
   }
 
   @media (min-width: 768px) {
@@ -106,8 +125,51 @@ html.villa-site-root {
     padding-inline: var(--space-4);
   }
 
+  @media (max-width: 374px) {
+    html.villa-site-root .content-wrapper {
+      padding-inline: var(--space-3);
+    }
+  }
+
   @media (min-width: 768px) {
     html.villa-site-root .content-wrapper {
       padding-inline: var(--space-6);
     }
+  }
+
+  /* Scroll-snap carousel utility */
+  html.villa-site-root .snap-carousel {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--space-4);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  html.villa-site-root .snap-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  html.villa-site-root .snap-carousel > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 374px) {
+    html.villa-site-root .snap-carousel {
+      scroll-padding-inline: var(--space-3);
+    }
+  }
+
+  /* Below-fold sections render faster */
+  html.villa-site-root .content-lazy {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+
+  /* Safe area padding for fixed bottom elements */
+  html.villa-site-root .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
