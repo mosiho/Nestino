@@ -9,6 +9,7 @@ import { HowItWorksSection } from "@/components/sections/how-it-works";
 import { PricingSection } from "@/components/sections/pricing";
 import { ProblemSection } from "@/components/sections/problem";
 import { ProofSection } from "@/components/sections/proof";
+import { PropertySitesSection } from "@/components/sections/property-sites";
 import { getSiteUrl } from "@/lib/constants";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/get-messages";
@@ -111,6 +112,7 @@ export default async function HomePage({ params }: PageProps) {
       <EngineVisualSection />
       <HowItWorksSection />
       <ProofSection />
+      <PropertySitesSection messages={messages.propertySites} />
       <PricingSection />
       <FaqSection />
       <FinalCtaSection />

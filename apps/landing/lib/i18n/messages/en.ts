@@ -286,6 +286,14 @@ export const enMessages = {
     termsBody:
       "Placeholder. Replace with production terms covering the trial, subscription ($399/mo or other billing options after the free month), acceptable use, intellectual property, limitation of liability, and governing law. Align with your billing flow when Stripe is enabled in the operator console.",
   },
+  propertySites: {
+    title: "Live property sites",
+    subtitle:
+      "Guest-facing sites we ship for owners—hosted here on Nestino so you can open them in one click.",
+    visitLabel: "Open site",
+    silyanName: "Silyan Villas",
+    silyanHint: "Demo · Antalya, Turkey · multilingual",
+  },
   demo: {
     previewTitle: "This is your new site — live preview",
     previewSr: "Live preview",

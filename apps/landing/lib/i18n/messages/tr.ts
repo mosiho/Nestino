@@ -290,6 +290,14 @@ export const trMessages: Messages = {
     termsBody:
       "Yer tutucu. Üretim şartlarıyla değiştirin: deneme, abonelik (ücretsiz aydan sonra 399 $/ay veya diğer faturalandırma), kabul edilebilir kullanım, fikri mülkiyet, sorumluluk sınırı ve uygulanacak hukuk. Operatör konsolunda Stripe etkinleştirildiğinde faturalandırma akışıyla uyumlu olsun.",
   },
+  propertySites: {
+    title: "Yayında olan mülk siteleri",
+    subtitle:
+      "Sahipler için yayınladığımız misafir siteleri—Nestino üzerinde tek tıkla açılır.",
+    visitLabel: "Siteyi aç",
+    silyanName: "Silyan Villas",
+    silyanHint: "Demo · Antalya, Türkiye · çok dilli",
+  },
   demo: {
     previewTitle: "Yeni siteniz — canlı önizleme",
     previewSr: "Canlı önizleme",

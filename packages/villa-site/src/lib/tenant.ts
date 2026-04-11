@@ -34,9 +34,10 @@ export type SiteContext = {
 };
 
 // ---------------------------------------------------------------------------
-// Local dev fallback — used when DATABASE_URL is not set.
-// Matches any subdomain so the full site renders without a DB connection.
-// NEVER used in production (isDatabaseConfigured() is true there).
+// Offline fallback when DATABASE_URL is not set.
+// - In development: any slug gets the Silyan demo context so UI is testable.
+// - In production: only `silyan` resolves so /sites/silyan/… works on the
+//   marketing host without Postgres (other slugs still need a real DB row).
 // ---------------------------------------------------------------------------
 const DEV_FALLBACK_CTX: SiteContext = {
   site: {
@@ -73,8 +74,13 @@ const DEV_FALLBACK_CTX: SiteContext = {
 export const getSiteBySubdomain = unstable_cache(
   async (subdomain: string): Promise<SiteContext | null> => {
     if (!isDatabaseConfigured()) {
-      // Return dev fallback for any slug so the UI renders locally
-      return process.env.NODE_ENV === "development" ? DEV_FALLBACK_CTX : null;
+      if (process.env.NODE_ENV === "development") {
+        return DEV_FALLBACK_CTX;
+      }
+      if (subdomain === DEV_FALLBACK_CTX.site.subdomain) {
+        return DEV_FALLBACK_CTX;
+      }
+      return null;
     }
 
     const db = getDb();
