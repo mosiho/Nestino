@@ -28,6 +28,7 @@ Business rationale lives in [../../strategy.md](../../strategy.md) Section 11.
 | `thailand` | `en`, `zh-Hans` | `de`, `ru`, `ko`, `fr` | … |
 | `europe` | `en`, `de`, `fr` | `it`, `nl`, `es` | … |
 | `caribbean` | `en` | `fr`, `es` | … |
+| `antalya` | `en`, `tr`, `ar`, `ru` | `de` | `fr`, `nl` |
 | `other` | `en` | (manual) | (manual) |
 
 **Note:** Use BCP-47 tags consistently (`zh-Hans` not `zh-CN` in code, but Search Console property may use `zh-cn` — store both if needed).

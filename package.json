@@ -3,11 +3,14 @@
   "private": true,
   "scripts": {
     "dev:landing": "pnpm --filter @nestino/landing dev",
-    "dev:villa": "echo \"villa app not scaffolded yet\"",
+    "dev:villa": "pnpm --filter @nestino/villa-sites dev",
     "dev:console": "echo \"console app not scaffolded yet\"",
     "dev:engine": "echo \"engine: see engine/ README\"",
     "lint": "pnpm --filter @nestino/landing lint",
-    "build": "pnpm --filter @nestino/landing build"
+    "lint:villa": "pnpm --filter @nestino/villa-sites lint",
+    "build": "pnpm --filter @nestino/landing build",
+    "build:villa": "pnpm --filter @nestino/villa-sites build",
+    "verify": "pnpm build && pnpm build:villa && pnpm lint && pnpm lint:villa"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
