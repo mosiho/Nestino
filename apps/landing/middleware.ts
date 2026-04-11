@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
-import { isLang } from "@nestino/villa-site/lib/i18n";
+import { isVillaPathLang } from "@/lib/villa-lang-segment";
 
 function localeFromPathname(pathname: string): Locale | null {
   for (const loc of locales) {
@@ -41,7 +41,7 @@ export function middleware(request: NextRequest) {
       requestHeaders.set("x-nestino-slug", siteSlug);
     }
     requestHeaders.set("x-nestino-villa-ui", "1");
-    if (maybeLang && isLang(maybeLang)) {
+    if (maybeLang && isVillaPathLang(maybeLang)) {
       requestHeaders.set("x-nestino-villa-lang", maybeLang);
     }
     if (parts.length === 2 && siteSlug) {

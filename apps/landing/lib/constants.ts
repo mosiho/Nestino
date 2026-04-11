@@ -10,8 +10,31 @@ export const DESTINATIONS = [
 
 export type DestinationValue = (typeof DESTINATIONS)[number]["value"];
 
+const SITE_URL_FALLBACK = "https://nestino-main.vercel.app";
+
+/**
+ * Canonical site URL for links and metadata. Always absolute https.
+ * Vercel env is sometimes set without a scheme — `new URL()` would throw.
+ */
 export function getSiteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://nestino-main.vercel.app";
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!raw) return SITE_URL_FALLBACK;
+  const withScheme = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    const u = new URL(withScheme);
+    return `${u.protocol}//${u.host}`;
+  } catch {
+    return SITE_URL_FALLBACK;
+  }
+}
+
+/** Safe for `metadataBase` in app/layout — never throws. */
+export function getMetadataBaseUrl(): URL {
+  try {
+    return new URL(getSiteUrl());
+  } catch {
+    return new URL(SITE_URL_FALLBACK);
+  }
 }
 
 export function getVillaBaseDomain(): string {

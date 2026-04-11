@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { htmlLang, isLocale, type Locale } from "@/lib/i18n/config";
-import { getSiteUrl } from "@/lib/constants";
+import { getMetadataBaseUrl } from "@/lib/constants";
 
 import { isLang, isRtl, htmlLang as villaHtmlLang, type Lang } from "@nestino/villa-site/lib/i18n";
 import { getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
@@ -32,10 +32,8 @@ const interVilla = Inter({
   display: "swap",
 });
 
-const siteUrl = getSiteUrl();
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: getMetadataBaseUrl(),
   title: {
     default: "Nestino — Zero-commission direct bookings for villas",
     template: "%s | Nestino",
