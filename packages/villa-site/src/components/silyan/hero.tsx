@@ -322,7 +322,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         <div className="bg-[#0f0d0a] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:bg-transparent sm:pb-[5.5rem] md:pb-24">
           <div className="content-wrapper">
             {/* Desktop: frosted glass panel, start-aligned. Mobile: content flows naturally */}
-            <div className="sm:max-w-[36rem] sm:rounded-2xl sm:border sm:border-white/[0.12] sm:bg-black/35 sm:p-8 sm:shadow-[0_32px_80px_-12px_rgba(0,0,0,0.5)] sm:backdrop-blur-[32px] md:max-w-[38rem] md:p-10">
+            <div className="sm:max-w-[36rem] sm:rounded-2xl sm:border sm:border-white/[0.12] sm:bg-black/35 sm:p-8 sm:shadow-[0_32px_80px_-12px_rgba(0,0,0,0.5)] sm:backdrop-blur-[20px] md:max-w-[38rem] md:p-10">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/72 sm:text-xs sm:tracking-[0.34em]">
                 {copy.kicker}
               </p>
