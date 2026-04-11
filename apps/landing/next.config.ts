@@ -6,8 +6,8 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.posthog.com https://us.i.posthog.com https://eu.i.posthog.com wss://*.posthog.com https://vitals.vercel-insights.com",
-  "frame-src https://*.nestino.com https://nestino-main.vercel.app https://*.nestino-main.vercel.app https:",
+  "connect-src 'self' https://*.posthog.com https://us.i.posthog.com https://eu.i.posthog.com wss://*.posthog.com https://vitals.vercel-insights.com https://maps.googleapis.com",
+  "frame-src https://*.nestino.com https://nestino-main.vercel.app https://*.nestino-main.vercel.app https://www.google.com https://maps.google.com https:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "www.silyanvillas.com",
+      },
+      // Engine / CMS may host media on arbitrary HTTPS CDNs
+      {
+        protocol: "https",
+        hostname: "**",
       },
     ],
   },

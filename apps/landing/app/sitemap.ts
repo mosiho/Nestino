@@ -1,8 +1,15 @@
 import type { MetadataRoute } from "next";
+import { and, eq } from "drizzle-orm";
 
 import { getSiteUrl } from "@/lib/constants";
-import { isDatabaseConfigured } from "@nestino/db";
 import { listDemoSitemapSubdomains } from "@/lib/demo-queries";
+import {
+  contentPages,
+  contentVersions,
+  getDb,
+  isDatabaseConfigured,
+} from "@nestino/db";
+import { getActiveLangs, getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
 
 function publicPaths(): string[] {
   const core = ["/", "/privacy", "/terms"];
@@ -57,7 +64,60 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
       },
     ]);
-    return [...staticRoutes, ...demoRoutes];
+
+    const db = getDb();
+    const villaGuideRoutes: MetadataRoute.Sitemap = [];
+
+    for (const sub of subdomains) {
+      const ctx = await getSiteBySubdomain(sub);
+      if (!ctx) continue;
+      const langs = getActiveLangs(ctx);
+      if (langs.length === 0) continue;
+
+      for (const lang of langs) {
+        villaGuideRoutes.push({
+          url: `${base}/sites/${sub}/${lang}/guides`,
+          lastModified,
+          changeFrequency: "weekly",
+          priority: 0.65,
+        });
+      }
+
+      const guidePages = await db
+        .selectDistinctOn([contentPages.slug], {
+          slug: contentPages.slug,
+          publishedAt: contentVersions.publishedAt,
+        })
+        .from(contentPages)
+        .innerJoin(
+          contentVersions,
+          and(
+            eq(contentVersions.pageId, contentPages.id),
+            eq(contentVersions.isCurrent, true),
+            eq(contentVersions.status, "published")
+          )
+        )
+        .where(
+          and(
+            eq(contentPages.siteId, ctx.site.id),
+            eq(contentPages.status, "active"),
+            eq(contentPages.pageType, "guide")
+          )
+        );
+
+      for (const page of guidePages) {
+        for (const lang of langs) {
+          villaGuideRoutes.push({
+            url: `${base}/sites/${sub}/${lang}/${page.slug}`,
+            lastModified: page.publishedAt ?? lastModified,
+            changeFrequency: "weekly",
+            priority: 0.64,
+          });
+        }
+      }
+    }
+
+    return [...staticRoutes, ...demoRoutes, ...villaGuideRoutes];
   } catch {
     return staticRoutes;
   }

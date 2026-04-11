@@ -38,6 +38,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const entries: MetadataRoute.Sitemap = [];
 
+  for (const lang of activeLangs) {
+    entries.push({
+      url: `${base}/${lang}/guides`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(activeLangs.map((l) => [l, `${base}/${l}/guides`])),
+      },
+    });
+  }
+
   for (const page of pages) {
     for (const lang of activeLangs) {
       const pagePath = page.slug ? `/${page.slug}` : "";

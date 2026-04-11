@@ -11,11 +11,14 @@ type Props = {
   pathPrefix?: string;
 };
 
-const NAV_ITEMS: Record<string, { villas: string; location: string; about: string; contact: string }> = {
-  en: { villas: "Villas", location: "Location", about: "About", contact: "Contact" },
-  tr: { villas: "Villalar", location: "Konum", about: "Hakkımızda", contact: "İletişim" },
-  ar: { villas: "الفيلات", location: "الموقع", about: "من نحن", contact: "اتصل بنا" },
-  ru: { villas: "Виллы", location: "Расположение", about: "О нас", contact: "Контакты" },
+const NAV_ITEMS: Record<
+  string,
+  { villas: string; guides: string; location: string; about: string; contact: string }
+> = {
+  en: { villas: "Villas", guides: "Guides", location: "Location", about: "About", contact: "Contact" },
+  tr: { villas: "Villalar", guides: "Rehberler", location: "Konum", about: "Hakkımızda", contact: "İletişim" },
+  ar: { villas: "الفيلات", guides: "أدلة", location: "الموقع", about: "من نحن", contact: "اتصل بنا" },
+  ru: { villas: "Виллы", guides: "Гиды", location: "Расположение", about: "О нас", contact: "Контакты" },
 };
 
 const FOOTER_LABELS: Record<string, { explore: string; language: string; privacy: string }> = {
@@ -38,6 +41,7 @@ export default function Footer({
 
   const links = [
     { label: nav.villas, href: villaPath(pathPrefix, `/${lang}/villas`) },
+    { label: nav.guides, href: villaPath(pathPrefix, `/${lang}/guides`) },
     { label: nav.location, href: villaPath(pathPrefix, `/${lang}/location`) },
     { label: nav.about, href: villaPath(pathPrefix, `/${lang}/about`) },
     { label: nav.contact, href: villaPath(pathPrefix, `/${lang}/contact`) },

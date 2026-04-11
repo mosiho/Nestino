@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Contact" };
+import ContactPage, { generateContactMetadata } from "@nestino/villa-site/routes/contact-page";
 
-export default function ContactPage() {
-  return (
-    <div className="pt-24 section-y">
-      <div className="content-wrapper">
-        <h1 className="font-serif font-semibold text-h1 text-[var(--color-text-primary)] mb-4">
-          Contact
-        </h1>
-        <p className="text-[var(--color-text-secondary)]">
-          Contact page with inquiry form — content coming in Step 3.
-        </p>
-      </div>
-    </div>
-  );
+type Props = { params: Promise<{ siteSlug: string; lang: string }> };
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { siteSlug } = await props.params;
+  return generateContactMetadata({ params: props.params, pathPrefix: `/sites/${siteSlug}` });
+}
+
+export default async function Page(props: Props) {
+  const { siteSlug } = await props.params;
+  return <ContactPage params={props.params} pathPrefix={`/sites/${siteSlug}`} />;
 }

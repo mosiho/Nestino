@@ -10,7 +10,15 @@ type Props = {
   pageId?: string;
 };
 
-function Block({ block }: { block: BodyJsonBlock }) {
+function Block({
+  block,
+  siteId,
+  pageId,
+}: {
+  block: BodyJsonBlock;
+  siteId?: string;
+  pageId?: string;
+}) {
   switch (block.type) {
     case "paragraph":
       return (
@@ -107,9 +115,11 @@ function Block({ block }: { block: BodyJsonBlock }) {
         </div>
       );
 
-    default:
-      // Unknown block type — skip with no output (forward-compat)
+    default: {
+      const t = (block as { type?: string }).type ?? "unknown";
+      console.warn("[BlockRenderer] Unknown block type", { siteId, pageId, type: t });
       return null;
+    }
   }
 }
 
@@ -126,7 +136,7 @@ export default function BlockRenderer({ body, siteId, pageId }: Props) {
   return (
     <div className="space-y-4">
       {body.blocks.map((block, i) => (
-        <Block key={i} block={block} />
+        <Block key={i} block={block} siteId={siteId} pageId={pageId} />
       ))}
     </div>
   );

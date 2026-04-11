@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { LANG_LABELS, type Lang } from "../lib/i18n";
@@ -12,10 +13,13 @@ type Props = {
   phone: string;
   /** e.g. `/sites/silyan` when embedded on the marketing host; empty for subdomain deployments */
   pathPrefix?: string;
+  /** Optional brand image (e.g. official Silyan wordmark). */
+  logoSrc?: string;
 };
 
 const NAV_LINKS = [
   { labelKey: "Villas", href: "/villas" },
+  { labelKey: "Guides", href: "/guides" },
   { labelKey: "Location", href: "/location" },
   { labelKey: "About", href: "/about" },
   { labelKey: "Contact", href: "/contact" },
@@ -23,11 +27,11 @@ const NAV_LINKS = [
 
 // Nav labels by language
 const NAV_LABELS: Record<string, Record<string, string>> = {
-  en: { Villas: "Villas", Location: "Location", About: "About", Contact: "Contact" },
-  tr: { Villas: "Villalar", Location: "Konum", About: "Hakkımızda", Contact: "İletişim" },
-  ar: { Villas: "الفيلات", Location: "الموقع", About: "من نحن", Contact: "اتصل بنا" },
-  ru: { Villas: "Виллы", Location: "Расположение", About: "О нас", Contact: "Контакты" },
-  de: { Villas: "Villen", Location: "Lage", About: "Über uns", Contact: "Kontakt" },
+  en: { Villas: "Villas", Guides: "Guides", Location: "Location", About: "About", Contact: "Contact" },
+  tr: { Villas: "Villalar", Guides: "Rehberler", Location: "Konum", About: "Hakkımızda", Contact: "İletişim" },
+  ar: { Villas: "الفيلات", Guides: "أدلة", Location: "الموقع", About: "من نحن", Contact: "اتصل بنا" },
+  ru: { Villas: "Виллы", Guides: "Гиды", Location: "Расположение", About: "О нас", Contact: "Контакты" },
+  de: { Villas: "Villen", Guides: "Guides", Location: "Lage", About: "Über uns", Contact: "Kontakt" },
 };
 
 function navLabel(lang: string, key: string): string {
@@ -40,6 +44,7 @@ export default function SiteHeader({
   activeLangs,
   phone,
   pathPrefix = "",
+  logoSrc,
 }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -67,9 +72,25 @@ export default function SiteHeader({
         {/* Logo / wordmark */}
         <Link
           href={villaPath(pathPrefix, `/${lang}`)}
-          className="font-serif font-semibold text-lg tracking-tight text-[var(--color-text-primary)] hover:text-[var(--accent-500)] transition-colors"
+          className={
+            logoSrc
+              ? "inline-flex items-center shrink-0 opacity-95 hover:opacity-100 transition-opacity"
+              : "font-serif font-semibold text-lg tracking-tight text-[var(--color-text-primary)] hover:text-[var(--accent-500)] transition-colors"
+          }
         >
-          {siteName}
+          {logoSrc ? (
+            <Image
+              src={logoSrc}
+              alt={siteName}
+              width={250}
+              height={53}
+              className="h-8 md:h-9 w-auto max-w-[min(200px,55vw)] object-contain object-left"
+              sizes="(max-width: 768px) 55vw, 200px"
+              priority
+            />
+          ) : (
+            siteName
+          )}
         </Link>
 
         {/* Desktop nav */}

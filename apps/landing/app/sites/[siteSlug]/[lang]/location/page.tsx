@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Location" };
+import LocationPage, { generateLocationMetadata } from "@nestino/villa-site/routes/location-page";
 
-export default function LocationPage() {
-  return (
-    <div className="pt-24 section-y">
-      <div className="content-wrapper">
-        <h1 className="font-serif font-semibold text-h1 text-[var(--color-text-primary)] mb-4">
-          Location
-        </h1>
-        <p className="text-[var(--color-text-secondary)]">
-          Location page — content coming in Step 3.
-        </p>
-      </div>
-    </div>
-  );
+type Props = { params: Promise<{ siteSlug: string; lang: string }> };
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { siteSlug } = await props.params;
+  return generateLocationMetadata({ params: props.params, pathPrefix: `/sites/${siteSlug}` });
+}
+
+export default async function Page(props: Props) {
+  const { siteSlug } = await props.params;
+  return <LocationPage params={props.params} pathPrefix={`/sites/${siteSlug}`} />;
 }

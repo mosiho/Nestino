@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { isLang, type Lang } from "./lib/i18n";
 import { resolveRequestOrigin } from "./lib/site-origin";
 import { getSiteBySubdomain, getActiveLangs } from "./lib/tenant";
+import { SITE_LOGO } from "./lib/silyan-images";
 import { villaPath } from "./lib/villa-path";
 import SiteHeader from "./components/site-header";
 import StickyCtaBar from "./components/sticky-cta-bar";
@@ -83,6 +84,7 @@ export async function VillaLangLayout({
         activeLangs={activeLangs}
         phone={ctx.tenant.ownerPhone ?? ""}
         pathPrefix={pathPrefix}
+        logoSrc={ctx.tenant.slug === "silyan" ? SITE_LOGO : undefined}
       />
       <StickyCtaBar
         phone={ctx.tenant.ownerPhone ?? ""}

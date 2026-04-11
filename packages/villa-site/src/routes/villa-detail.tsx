@@ -56,6 +56,25 @@ const VILLAS: Record<string, VillaData> = {
       ru: "Здравствуйте, хочу узнать о бронировании виллы Дефне.",
     },
   },
+  hurma: {
+    slug: "hurma",
+    name: "Villa Hurma",
+    bedrooms: 2,
+    baths: 1,
+    maxGuests: 4,
+    desc: {
+      en: "Villa Hurma — named after the date palm — is a cosy two-bedroom retreat for couples or small families of up to four. One shared bathroom, a private pool, and a quiet garden where the mountains frame every evening. Compact yet fully equipped, it's the most intimate option at Silyan.",
+      tr: "Toplamda 2 adet odası bulunan villamızda 1 adet banyo mevcut olup, maksimum 4 kişilik konaklama imkanıyla çekirdek aileler ve küçük arkadaş grupları için mükemmel bir tatil deneyimi sunar. Özel havuz ve bahçe ile huzurlu bir konaklama sizi bekliyor.",
+      ar: "فيلا حرمة — سميت على اسم شجرة النخيل — ملاذ مريح من غرفتي نوم للأزواج أو العائلات الصغيرة حتى أربعة أشخاص. حمام مشترك واحد، مسبح خاص، وحديقة هادئة تحيط بها الجبال.",
+      ru: "Вилла Хурма — названная в честь финиковой пальмы — уютный двухспальный отдых для пар или небольших семей до четырёх человек. Одна общая ванная, частный бассейн и тихий сад с горными видами.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Hurma at Silyan Villas.",
+      tr: "Merhaba, Villa Hurma hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا حرمة.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Хурма.",
+    },
+  },
   incir: {
     slug: "incir",
     name: "Villa İncir",
@@ -73,6 +92,139 @@ const VILLAS: Record<string, VillaData> = {
       tr: "Merhaba, Villa İncir hakkında bilgi almak istiyorum.",
       ar: "مرحباً، أريد الاستفسار عن حجز فيلا إنجير.",
       ru: "Здравствуйте, хочу узнать о бронировании виллы Инджир.",
+    },
+  },
+  kayisi: {
+    slug: "kayisi",
+    name: "Villa Kayısı",
+    bedrooms: 3,
+    baths: 3,
+    maxGuests: 6,
+    desc: {
+      en: "Named after the apricot tree, Villa Kayısı is a three-bedroom villa with en-suite bathrooms throughout, sleeping up to six. A private pool and garden provide the perfect setting for families and friend groups looking for comfort and privacy in the mountains above Antalya.",
+      tr: "Toplamda 3 adet odası bulunan villamızın her odasında banyo mevcut olup, maksimum 6 kişilik konaklama imkanıyla standart aileler ve arkadaş grupları için mükemmel bir tatil deneyimi sunar. Özel havuz ve bahçe ile doğanın içinde huzurlu bir konaklama.",
+      ar: "سميت على اسم شجرة المشمش، فيلا كايسي هي فيلا من ثلاث غرف نوم مع حمام خاص في كل غرفة، تتسع لستة أشخاص. مسبح خاص وحديقة توفران الإطار المثالي للعائلات ومجموعات الأصدقاء.",
+      ru: "Названная в честь абрикосового дерева, вилла Кайысы — трёхспальная вилла с собственными ванными в каждой комнате, вместимостью до шести человек. Частный бассейн и сад создают идеальные условия для семей и компаний друзей.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Kayısı at Silyan Villas.",
+      tr: "Merhaba, Villa Kayısı hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا كايسي.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Кайысы.",
+    },
+  },
+  limon: {
+    slug: "limon",
+    name: "Villa Limon",
+    bedrooms: 3,
+    baths: 3,
+    maxGuests: 6,
+    desc: {
+      en: "Villa Limon — named for the lemon tree — offers three en-suite bedrooms for up to six guests. A private pool, a lush garden, and mountain views set the scene for a relaxed stay. Fully equipped kitchen, parking on site, and Antalya's coast a short drive away.",
+      tr: "Toplamda 3 adet odası bulunan villamızın her odasında banyo mevcut olup, maksimum 6 kişilik konaklama imkanıyla standart aileler ve arkadaş grupları için mükemmel bir tatil deneyimi sunar. Özel havuz, bahçe ve dağ manzarasıyla huzurlu bir konaklama.",
+      ar: "فيلا ليمون — سميت على اسم شجرة الليمون — توفر ثلاث غرف نوم مع حمام خاص لستة ضيوف. مسبح خاص وحديقة خضراء وإطلالة جبلية لإقامة هادئة ومريحة.",
+      ru: "Вилла Лимон — названная в честь лимонного дерева — предлагает три спальни с собственными ванными для шести гостей. Частный бассейн, зелёный сад и горные виды создают атмосферу спокойного отдыха.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Limon at Silyan Villas.",
+      tr: "Merhaba, Villa Limon hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا ليمون.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Лимон.",
+    },
+  },
+  mandalina: {
+    slug: "mandalina",
+    name: "Villa Mandalina",
+    bedrooms: 3,
+    baths: 3,
+    maxGuests: 6,
+    desc: {
+      en: "Villa Mandalina — named after the mandarin tree — is a three-bedroom villa with en-suite bathrooms, sleeping six. A private pool and garden sit against a mountain backdrop. Everything you need for a self-contained holiday: full kitchen, parking, and Konyaaltı Beach within easy reach.",
+      tr: "Toplamda 3 adet odası bulunan villamızın her odasında banyo mevcut olup, maksimum 6 kişilik konaklama imkanıyla standart aileler ve arkadaş grupları için mükemmel bir tatil deneyimi sunar. Dağ manzarasına karşı özel havuz ve bahçe ile unutulmaz bir konaklama.",
+      ar: "فيلا ماندالينا — سميت على اسم شجرة اليوسفي — فيلا من ثلاث غرف نوم مع حمام خاص، تتسع لستة أشخاص. مسبح خاص وحديقة أمام خلفية جبلية رائعة.",
+      ru: "Вилла Мандалина — названная в честь мандаринового дерева — трёхспальная вилла с собственными ванными, вместимостью шесть человек. Частный бассейн и сад на фоне горного пейзажа.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Mandalina at Silyan Villas.",
+      tr: "Merhaba, Villa Mandalina hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا ماندالينا.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Мандалина.",
+    },
+  },
+  portakal: {
+    slug: "portakal",
+    name: "Villa Portakal",
+    bedrooms: 5,
+    baths: 5,
+    maxGuests: 10,
+    desc: {
+      en: "Villa Portakal — named after the orange tree — is a spacious five-bedroom villa with en-suite bathrooms in every room, sleeping up to ten. Ideal for large families or multi-family holidays, it offers a private pool, generous garden, and mountain views. Fully equipped for self-catering with private parking on site.",
+      tr: "Toplamda 5 adet odası bulunan villamızın her odasında banyo mevcut olup, maksimum 10 kişilik konaklama imkanıyla geniş aileler için mükemmel bir tatil deneyimi sunar. Özel havuz, geniş bahçe ve dağ manzarası ile unutulmaz bir konaklama.",
+      ar: "فيلا بورتاكال — سميت على اسم شجرة البرتقال — فيلا فسيحة من خمس غرف نوم مع حمام خاص في كل غرفة، تتسع لعشرة أشخاص. مثالية للعائلات الكبيرة مع مسبح خاص وحديقة واسعة وإطلالة جبلية.",
+      ru: "Вилла Портакал — названная в честь апельсинового дерева — просторная пятиспальная вилла с собственными ванными в каждой комнате, вместимостью до десяти человек. Идеальна для больших семей с частным бассейном, просторным садом и горными видами.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Portakal at Silyan Villas.",
+      tr: "Merhaba, Villa Portakal hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا بورتاكال.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Портакал.",
+    },
+  },
+  turunc: {
+    slug: "turunc",
+    name: "Villa Turunç",
+    bedrooms: 3,
+    baths: 3,
+    maxGuests: 6,
+    desc: {
+      en: "Villa Turunç — named for the bitter orange — is a three-bedroom villa with en-suite bathrooms, sleeping up to six guests. A private pool and garden with mountain views make it a peaceful base for families or friend groups. Full kitchen, private parking, and easy access to the coast.",
+      tr: "Toplamda 3 adet odası bulunan villamızın her odasında banyo mevcut olup, maksimum 6 kişilik konaklama imkanıyla standart aileler ve arkadaş grupları için mükemmel bir tatil deneyimi sunar. Özel havuz ve dağ manzaralı bahçe ile huzurlu bir tatil.",
+      ar: "فيلا تورونج — سميت على اسم البرتقال المر — فيلا من ثلاث غرف نوم مع حمام خاص، تتسع لستة ضيوف. مسبح خاص وحديقة بإطلالة جبلية لإقامة هادئة.",
+      ru: "Вилла Турунч — названная в честь горького апельсина — трёхспальная вилла с собственными ванными, вместимостью до шести гостей. Частный бассейн и сад с горными видами для спокойного отдыха.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Turunç at Silyan Villas.",
+      tr: "Merhaba, Villa Turunç hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا تورونج.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Турунч.",
+    },
+  },
+  uzum: {
+    slug: "uzum",
+    name: "Villa Üzüm",
+    bedrooms: 2,
+    baths: 1,
+    maxGuests: 4,
+    desc: {
+      en: "Villa Üzüm — named after the grape vine — is a compact two-bedroom villa with one shared bathroom, sleeping up to four. Perfect for couples or a small family looking for an affordable, private escape with its own pool and garden surrounded by nature.",
+      tr: "Toplamda 2 adet odası bulunan villamızda 1 adet banyo mevcut olup, maksimum 4 kişilik konaklama imkanıyla çekirdek aileler ve küçük arkadaş grupları için mükemmel bir tatil deneyimi sunar. Özel havuz ve doğayla iç içe bahçe ile huzurlu bir kaçamak.",
+      ar: "فيلا أوزوم — سميت على اسم شجرة العنب — فيلا مريحة من غرفتي نوم مع حمام مشترك واحد، تتسع لأربعة أشخاص. مثالية للأزواج أو العائلات الصغيرة مع مسبح خاص وحديقة محاطة بالطبيعة.",
+      ru: "Вилла Юзюм — названная в честь виноградной лозы — компактная двухспальная вилла с одной общей ванной, вместимостью до четырёх человек. Идеальна для пар или небольших семей с частным бассейном и садом среди природы.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Üzüm at Silyan Villas.",
+      tr: "Merhaba, Villa Üzüm hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا أوزوم.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Юзюм.",
+    },
+  },
+  zeytin: {
+    slug: "zeytin",
+    name: "Villa Zeytin",
+    bedrooms: 2,
+    baths: 1,
+    maxGuests: 4,
+    desc: {
+      en: "Villa Zeytin — named for the olive tree — is an intimate two-bedroom villa with one bathroom, sleeping up to four. A private pool and garden offer quiet seclusion for couples or a small family. Simple, well-equipped, and close to nature.",
+      tr: "Toplamda 2 adet odası bulunan villamızda 1 adet banyo mevcut olup, maksimum 4 kişilik konaklama imkanıyla çekirdek aileler ve küçük arkadaş grupları için mükemmel bir tatil deneyimi sunar. Özel havuz ve bahçe ile doğayla iç içe sakin bir konaklama.",
+      ar: "فيلا زيتين — سميت على اسم شجرة الزيتون — فيلا حميمة من غرفتي نوم مع حمام واحد، تتسع لأربعة أشخاص. مسبح خاص وحديقة توفران عزلة هادئة للأزواج أو العائلات الصغيرة.",
+      ru: "Вилла Зейтин — названная в честь оливкового дерева — уютная двухспальная вилла с одной ванной, вместимостью до четырёх человек. Частный бассейн и сад для тихого уединения пар или небольших семей.",
+    },
+    whatsappMsg: {
+      en: "Hello, I'm interested in booking Villa Zeytin at Silyan Villas.",
+      tr: "Merhaba, Villa Zeytin hakkında bilgi almak istiyorum.",
+      ar: "مرحباً، أريد الاستفسار عن حجز فيلا زيتين.",
+      ru: "Здравствуйте, хочу узнать о бронировании виллы Зейтин.",
     },
   },
 };
@@ -167,7 +319,7 @@ export default async function VillaDetailPage({ params, pathPrefix = "" }: { par
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
-              { label: l.bedrooms!, value: `${villa.bedrooms} (en-suite)` },
+              { label: l.bedrooms!, value: villa.baths === villa.bedrooms ? `${villa.bedrooms} (en-suite)` : `${villa.bedrooms}` },
               { label: l.bathrooms!, value: `${villa.baths}` },
               { label: l.maxGuests!, value: `${villa.maxGuests}` },
               { label: l.pool!, value: l.private! },
@@ -258,7 +410,7 @@ export default async function VillaDetailPage({ params, pathPrefix = "" }: { par
           <h2 className="font-serif font-semibold text-h3 text-[var(--color-text-primary)] mb-4">
             {l.otherVillas}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {otherVillas.map((v) => {
               const img = VILLA_IMAGES[v.slug]?.card;
               return (
