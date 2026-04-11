@@ -144,14 +144,15 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   const waHref = digits ? `https://wa.me/${digits}` : "#";
 
   const ctaBase =
-    "inline-flex items-center justify-center gap-2.5 min-h-[48px] px-6 sm:px-8 rounded-xl text-[15px] sm:text-sm font-semibold tracking-wide transition-all duration-300 ease-smooth active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80";
+    "inline-flex items-center justify-center gap-2.5 min-h-[48px] px-6 sm:px-7 rounded-xl text-[15px] sm:text-sm font-semibold tracking-wide transition-all duration-300 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80";
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden"
       style={{ backgroundColor: "#0f0d0a" }}
     >
+      {/* ── Media layer ── */}
       <motion.div
         className="absolute inset-0"
         style={enableParallax ? { scale: mediaScale } : undefined}
@@ -189,30 +190,27 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         )}
       </motion.div>
 
+      {/* ── Overlays (simplified — image breathes) ── */}
       <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
+        {/* Top gradient: header legibility */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-x-0 top-0 h-32 sm:h-40"
           style={{
-            background: `
-              linear-gradient(180deg, rgba(15,13,10,0.5) 0%, rgba(15,13,10,0.1) 26%, rgba(15,13,10,0.18) 52%, rgba(8,6,4,0.78) 86%, rgba(5,4,3,0.93) 100%),
-              linear-gradient(118deg, rgba(139,115,85,0.14) 0%, transparent 45%)
-            `,
+            background:
+              "linear-gradient(to bottom, rgba(15,13,10,0.55), transparent)",
           }}
         />
+        {/* Desktop: subtle vignette for depth */}
         <div
-          className="absolute inset-0"
+          className="hidden sm:block absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 88% 72% at 50% 42%, transparent 0%, rgba(5,4,3,0.38) 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-x-0 bottom-0 h-[48%]"
-          style={{
-            background: "linear-gradient(to top, rgba(0,0,0,0.58), transparent)",
+            background:
+              "radial-gradient(ellipse 90% 70% at 50% 40%, transparent 0%, rgba(5,4,3,0.22) 100%)",
           }}
         />
       </div>
 
+      {/* ── Film-grain texture ── */}
       <div
         className="pointer-events-none absolute inset-0 z-[2] opacity-[0.04] mix-blend-overlay"
         style={{
@@ -221,6 +219,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         aria-hidden
       />
 
+      {/* ── Video play button (mobile save-data) ── */}
       {!videoLoaded && !prefersReducedMotion && (isCoarse === true || saveData) && (
         <button
           type="button"
@@ -236,76 +235,78 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         </button>
       )}
 
+      {/* ── Spacer: image shows through this transparent area ── */}
+      <div className="relative z-10 flex-1" />
+
+      {/* ── Content zone ── */}
       <motion.div
-        className="relative z-10 w-full px-0 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(6.5rem,env(safe-area-inset-top))] sm:pb-10 sm:pt-36 md:pb-14 md:pt-40"
+        className="relative z-10 w-full"
         style={enableParallax ? { y: textY, opacity: textOpacity } : undefined}
       >
-        <div className="content-wrapper">
-          <div className="mx-auto max-w-[52rem] text-center sm:max-w-[58rem]">
-            <p
-              className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/58 sm:mb-4 sm:text-xs sm:tracking-[0.34em]"
-              style={{ textShadow: "0 1px 14px rgba(0,0,0,0.45)" }}
-            >
-              {copy.kicker}
-            </p>
+        {/* Mobile: gradient transition from image into solid dark band */}
+        <div
+          className="h-28 sm:hidden"
+          style={{
+            background: "linear-gradient(to bottom, transparent, #0f0d0a)",
+          }}
+        />
 
-            <h1
-              className="mx-auto mb-5 font-serif text-balance font-semibold text-white sm:mb-6"
-              style={{
-                fontSize: "clamp(1.9rem, 1.1rem + 5vw, 4rem)",
-                lineHeight: "1.05",
-                letterSpacing: "-0.02em",
-                textShadow: "0 2px 48px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.35)",
-              }}
-            >
-              {copy.headline}
-            </h1>
+        {/* Mobile: solid dark bg. Desktop: transparent (frosted panel handles readability) */}
+        <div className="bg-[#0f0d0a] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:bg-transparent sm:pb-[5.5rem] md:pb-24">
+          <div className="content-wrapper">
+            {/* Desktop: frosted glass panel, start-aligned. Mobile: content flows naturally */}
+            <div className="sm:max-w-[36rem] sm:rounded-2xl sm:border sm:border-white/[0.12] sm:bg-black/35 sm:p-8 sm:shadow-[0_32px_80px_-12px_rgba(0,0,0,0.5)] sm:backdrop-blur-2xl md:max-w-[38rem] md:p-10">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55 sm:text-xs sm:tracking-[0.34em]">
+                {copy.kicker}
+              </p>
 
-            <div
-              className="mx-auto mb-5 h-px w-16 sm:mb-7 sm:w-[4.5rem]"
-              style={{
-                background: "linear-gradient(90deg, transparent, var(--gold-accent), transparent)",
-                opacity: 0.88,
-              }}
-            />
-
-            <p
-              className="mx-auto mb-8 max-w-[34rem] text-pretty text-base leading-relaxed text-white/84 sm:mb-11 sm:max-w-[38rem] sm:text-lg sm:leading-[1.65]"
-              style={{ textShadow: "0 1px 22px rgba(0,0,0,0.38)" }}
-            >
-              {copy.subhead}
-            </p>
-
-            <div className="mx-auto flex max-w-md flex-col gap-3 rounded-2xl border border-white/[0.14] bg-black/30 p-3.5 shadow-[0_28px_90px_-16px_rgba(0,0,0,0.62)] backdrop-blur-2xl sm:max-w-none sm:flex-row sm:justify-center sm:gap-4 sm:bg-black/22 sm:p-4 md:rounded-3xl">
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${ctaBase} order-1 w-full border-0 text-white shadow-[0_10px_36px_rgba(0,0,0,0.28)] hover:brightness-110 hover:shadow-[0_14px_40px_rgba(37,211,102,0.35)] sm:order-2 sm:w-auto sm:min-w-[210px]`}
-                style={{ backgroundColor: WHATSAPP_BRAND_GREEN }}
+              <h1
+                className="mb-4 font-serif text-balance font-semibold text-white sm:mb-5"
+                style={{
+                  fontSize: "clamp(1.75rem, 0.9rem + 4.5vw, 3.25rem)",
+                  lineHeight: "1.08",
+                  letterSpacing: "-0.02em",
+                }}
               >
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" className="opacity-95" aria-hidden>
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                </svg>
-                {copy.cta2}
-              </a>
-              <Link
-                href={villaPath(pathPrefix, `/${lang}/villas`)}
-                className={`${ctaBase} order-2 w-full text-white shadow-[0_10px_36px_rgba(0,0,0,0.28)] hover:shadow-[var(--shadow-glow)] hover:brightness-[1.07] sm:order-1 sm:w-auto sm:min-w-[210px]`}
-                style={{ backgroundColor: "var(--accent-500)" }}
-              >
-                {copy.cta1}
-              </Link>
+                {copy.headline}
+              </h1>
+
+              <p className="mb-7 max-w-[34rem] text-pretty text-[15px] leading-relaxed text-white/75 sm:mb-8 sm:text-base sm:leading-[1.65]">
+                {copy.subhead}
+              </p>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:gap-3.5">
+                <Link
+                  href={villaPath(pathPrefix, `/${lang}/villas`)}
+                  className={`${ctaBase} w-full text-white hover:shadow-[var(--shadow-glow)] hover:brightness-[1.07] sm:w-auto`}
+                  style={{ backgroundColor: "var(--accent-500)" }}
+                >
+                  {copy.cta1}
+                </Link>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${ctaBase} w-full border-0 text-white hover:brightness-110 hover:shadow-[0_14px_40px_rgba(37,211,102,0.35)] sm:w-auto`}
+                  style={{ backgroundColor: WHATSAPP_BRAND_GREEN }}
+                >
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" className="opacity-95" aria-hidden>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                  {copy.cta2}
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </motion.div>
 
+      {/* ── Scroll indicator (desktop only — mobile scrolls naturally) ── */}
       <div
-        className="pointer-events-none absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-white/42 sm:bottom-6 sm:gap-1.5 sm:text-white/48"
+        className="pointer-events-none absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-white/48 sm:flex"
         aria-hidden
       >
-        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] sm:text-[11px] sm:tracking-[0.28em]">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.28em]">
           {copy.scroll}
         </span>
         <svg width="22" height="30" viewBox="0 0 22 30" fill="none" className="motion-safe:animate-gentle-pulse opacity-85">

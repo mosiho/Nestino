@@ -2,6 +2,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { Fraunces, Inter, Noto_Naskh_Arabic, Noto_Sans_Arabic } from "next/font/google";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Suspense } from "react";
+
+import { VillaHtmlDirSync } from "@nestino/villa-site/components/villa-html-dir-sync";
 
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { htmlLang, isLocale, type Locale } from "@/lib/i18n/config";
@@ -102,6 +105,9 @@ export default async function RootLayout({
           ) : null}
         </head>
         <body className="min-h-dvh flex flex-col">
+          <Suspense fallback={null}>
+            <VillaHtmlDirSync pattern="sites-prefixed" />
+          </Suspense>
           <PostHogProvider>{children}</PostHogProvider>
           <Analytics />
         </body>

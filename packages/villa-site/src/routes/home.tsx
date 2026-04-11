@@ -85,6 +85,7 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
         "Three private villas with pools in Hisarçandır, Konyaaltı, Antalya — boutique mountain retreat 8 km from the sea.",
       telephone: "+905316960953",
       email: "info@silyanvillas.com",
+      sameAs: ["https://www.instagram.com/silyanvillalari/"],
       address: {
         "@type": "PostalAddress",
         streetAddress: "Hisarçandır Mah. Çandır Cad. No:182",

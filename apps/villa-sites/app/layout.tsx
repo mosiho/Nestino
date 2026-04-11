@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Fraunces, Inter, Noto_Naskh_Arabic, Noto_Sans_Arabic } from "next/font/google";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/react";
 
+import { VillaHtmlDirSync } from "@nestino/villa-site/components/villa-html-dir-sync";
 import { isLang, isRtl, htmlLang, type Lang } from "@nestino/villa-site/lib/i18n";
 import { getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
 import "./globals.css";
@@ -91,6 +93,9 @@ export default async function RootLayout({
         )}
       </head>
       <body className="min-h-dvh flex flex-col font-sans">
+        <Suspense fallback={null}>
+          <VillaHtmlDirSync pattern="path-lang" />
+        </Suspense>
         {children}
         <Analytics />
       </body>
