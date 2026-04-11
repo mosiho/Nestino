@@ -23,7 +23,6 @@ export default function StickyCtaBar({ phone, lang, pathPrefix = "" }: Props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Show after scrolling 300px past top — roughly hero bottom on mobile
     const onScroll = () => setVisible(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -39,17 +38,19 @@ export default function StickyCtaBar({ phone, lang, pathPrefix = "" }: Props) {
     }
   };
 
-  if (!visible) return null;
-
   return (
     <div
-      style={{ zIndex: "var(--z-sticky-cta)" }}
-      className="fixed inset-x-0 bottom-0 bg-[var(--color-surface)]/95 backdrop-blur-md border-t border-[var(--color-border)] shadow-[var(--shadow-md)] px-4 py-3 flex items-center justify-center gap-3 md:hidden"
+      style={{
+        zIndex: "var(--z-sticky-cta)",
+        transform: visible ? "translateY(0)" : "translateY(100%)",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      }}
+      className="fixed inset-x-0 bottom-0 bg-[var(--color-surface)]/90 backdrop-blur-xl border-t border-[var(--color-border)] shadow-[var(--shadow-lg)] px-4 py-3 flex items-center justify-center gap-3 md:hidden transition-transform duration-400 ease-smooth"
       aria-label="Quick actions"
     >
       <Link
         href={villaPath(pathPrefix, `/${lang}/contact`)}
-        className="flex-1 max-w-xs text-center py-2.5 px-4 rounded-md text-sm font-medium text-white transition-colors"
+        className="flex-1 max-w-xs text-center py-3 px-4 rounded-lg text-sm font-medium text-white transition-all duration-200 active:scale-[0.97]"
         style={{ backgroundColor: "var(--accent-500)" }}
         onClick={() => {
           if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).posthog) {
@@ -64,7 +65,7 @@ export default function StickyCtaBar({ phone, lang, pathPrefix = "" }: Props) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleWhatsApp}
-        className="flex items-center justify-center w-11 h-11 rounded-md border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--accent-500)] transition-colors"
+        className="flex items-center justify-center w-12 h-12 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--accent-500)] transition-colors duration-200 active:scale-[0.97]"
         aria-label="WhatsApp"
       >
         <svg viewBox="0 0 24 24" width="20" height="20" fill="#25D366" aria-hidden="true">

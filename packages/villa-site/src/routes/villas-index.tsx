@@ -320,74 +320,79 @@ export default async function VillasIndexPage({ params, pathPrefix }: Props) {
   const aiLabel = AI_LABEL[lang] ?? AI_LABEL.en!;
 
   return (
-    <div className="pt-24 section-y">
-      <div className="content-wrapper">
-        <h1 className="font-serif font-semibold text-h1 text-[var(--color-text-primary)] mb-4">
-          {c.title}
-        </h1>
-        <p className="text-[var(--color-text-secondary)] mb-12 max-w-2xl leading-relaxed">
-          {c.sub}
-        </p>
+    <div className="pt-20 pb-16">
+      <div className="section-y">
+        <div className="content-wrapper">
+          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-500)" }}>
+            Silyan Villas
+          </p>
+          <h1 className="font-serif font-semibold text-h1 text-[var(--color-text-primary)] mb-4">
+            {c.title}
+          </h1>
+          <p className="text-base text-[var(--color-text-secondary)] mb-10 max-w-2xl leading-relaxed">
+            {c.sub}
+          </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {VILLAS.map((villa) => {
-            const imgSrc = VILLA_IMAGES[villa.slug]?.card;
-            const tagline = villa.tagline[lang as keyof typeof villa.tagline] ?? villa.tagline.en;
-            const desc = villa.desc[lang as keyof typeof villa.desc] ?? villa.desc.en;
-            const idealFor = IDEAL_FOR[villa.slug]?.[lang] ?? IDEAL_FOR[villa.slug]?.en;
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {VILLAS.map((villa) => {
+              const imgSrc = VILLA_IMAGES[villa.slug]?.card;
+              const tagline = villa.tagline[lang as keyof typeof villa.tagline] ?? villa.tagline.en;
+              const desc = villa.desc[lang as keyof typeof villa.desc] ?? villa.desc.en;
+              const idealFor = IDEAL_FOR[villa.slug]?.[lang] ?? IDEAL_FOR[villa.slug]?.en;
 
-            return (
-              <Link
-                key={villa.slug}
-                href={villaPath(pathPrefix, `/${lang}/villas/${villa.slug}`)}
-                className="group rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--accent-500)] hover:shadow-[var(--shadow-md)] transition-all bg-[var(--color-surface)]"
-              >
-                <div className="aspect-[4/3] relative overflow-hidden bg-[var(--color-border)]">
-                  {imgSrc ? (
-                    <Image
-                      src={imgSrc}
-                      alt={villa.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)] text-sm">
+              return (
+                <Link
+                  key={villa.slug}
+                  href={villaPath(pathPrefix, `/${lang}/villas/${villa.slug}`)}
+                  className="group rounded-xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--accent-400)] hover:shadow-[var(--shadow-glow)] transition-all duration-500 bg-[var(--color-surface)] active:scale-[0.98]"
+                >
+                  <div className="aspect-[3/2] relative overflow-hidden bg-[var(--color-border)]">
+                    {imgSrc ? (
+                      <Image
+                        src={imgSrc}
+                        alt={villa.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)] text-sm">
+                        {villa.name}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {idealFor && (
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-white backdrop-blur-md" style={{ backgroundColor: "rgba(0,0,0,0.45)" }}>
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style={{ color: "var(--gold-accent)" }} aria-hidden="true">
+                          <path d="M8 1l1.545 4.955L14.5 7.5l-4.955 1.545L8 14l-1.545-4.955L1.5 7.5l4.955-1.545L8 1z" />
+                        </svg>
+                        {aiLabel}: {idealFor}
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <h2 className="font-serif font-semibold text-lg text-[var(--color-text-primary)] mb-1">
                       {villa.name}
-                    </div>
-                  )}
-                </div>
-                <div className="p-5">
-                  <h2 className="font-serif font-semibold text-lg text-[var(--color-text-primary)] mb-1">
-                    {villa.name}
-                  </h2>
-                  <p className="text-xs font-medium mb-2" style={{ color: "var(--accent-500)" }}>
-                    {tagline}
-                  </p>
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-3 leading-relaxed">
-                    {desc}
-                  </p>
-                  {idealFor && (
-                    <div className="flex items-start gap-1.5 mb-4 px-2.5 py-2 rounded-md bg-[var(--accent-muted)] border border-[var(--accent-500)]/10">
-                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-px" style={{ color: "var(--accent-500)" }}>
-                        <path d="M8 1l1.545 4.955L14.5 7.5l-4.955 1.545L8 14l-1.545-4.955L1.5 7.5l4.955-1.545L8 1z" fill="currentColor" />
-                      </svg>
-                      <p className="text-xs leading-snug text-[var(--color-text-secondary)]">
-                        <span className="font-semibold" style={{ color: "var(--accent-500)" }}>{aiLabel}:</span>{" "}
-                        {idealFor}
-                      </p>
-                    </div>
-                  )}
-                  <span
-                    className="inline-block text-sm font-medium transition-colors group-hover:underline"
-                    style={{ color: "var(--accent-500)" }}
-                  >
-                    {c.view} →
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+                    </h2>
+                    <p className="text-xs font-medium mb-2" style={{ color: "var(--accent-500)" }}>
+                      {tagline}
+                    </p>
+                    <p className="text-sm text-[var(--color-text-secondary)] mb-4 leading-relaxed line-clamp-2">
+                      {desc}
+                    </p>
+                    <span
+                      className="inline-flex items-center gap-1 text-sm font-medium transition-all duration-300 group-hover:gap-2"
+                      style={{ color: "var(--accent-500)" }}
+                    >
+                      {c.view}
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
