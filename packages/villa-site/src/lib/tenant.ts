@@ -83,54 +83,62 @@ export const getSiteBySubdomain = unstable_cache(
       return null;
     }
 
-    const db = getDb();
+    try {
+      const db = getDb();
 
-    const rows = await db
-      .select({
-        site: {
-          id: sites.id,
-          tenantId: sites.tenantId,
-          subdomain: sites.subdomain,
-          status: sites.status,
-          defaultLanguage: sites.defaultLanguage,
-          theme: sites.theme,
-          accentHex: sites.accentHex,
-          robotsTemplate: sites.robotsTemplate,
-          gscVerificationToken: sites.gscVerificationToken,
-          cmsApiKeyHash: sites.cmsApiKeyHash,
-        },
-        tenant: {
-          id: tenants.id,
-          name: tenants.name,
-          slug: tenants.slug,
-          destination: tenants.destination,
-          locationLabel: tenants.locationLabel,
-          ownerPhone: tenants.ownerPhone,
-          writingStyle: tenants.writingStyle,
-        },
-      })
-      .from(sites)
-      .innerJoin(tenants, eq(sites.tenantId, tenants.id))
-      .where(eq(sites.subdomain, subdomain))
-      .limit(1);
+      const rows = await db
+        .select({
+          site: {
+            id: sites.id,
+            tenantId: sites.tenantId,
+            subdomain: sites.subdomain,
+            status: sites.status,
+            defaultLanguage: sites.defaultLanguage,
+            theme: sites.theme,
+            accentHex: sites.accentHex,
+            robotsTemplate: sites.robotsTemplate,
+            gscVerificationToken: sites.gscVerificationToken,
+            cmsApiKeyHash: sites.cmsApiKeyHash,
+          },
+          tenant: {
+            id: tenants.id,
+            name: tenants.name,
+            slug: tenants.slug,
+            destination: tenants.destination,
+            locationLabel: tenants.locationLabel,
+            ownerPhone: tenants.ownerPhone,
+            writingStyle: tenants.writingStyle,
+          },
+        })
+        .from(sites)
+        .innerJoin(tenants, eq(sites.tenantId, tenants.id))
+        .where(eq(sites.subdomain, subdomain))
+        .limit(1);
 
-    const row = rows[0];
-    if (!row) return null;
+      const row = rows[0];
+      if (!row) return null;
 
-    const langs = await db
-      .select({
-        languageCode: siteLanguages.languageCode,
-        tier: siteLanguages.tier,
-        status: siteLanguages.status,
-      })
-      .from(siteLanguages)
-      .where(eq(siteLanguages.siteId, row.site.id));
+      const langs = await db
+        .select({
+          languageCode: siteLanguages.languageCode,
+          tier: siteLanguages.tier,
+          status: siteLanguages.status,
+        })
+        .from(siteLanguages)
+        .where(eq(siteLanguages.siteId, row.site.id));
 
-    return {
-      site: row.site,
-      tenant: row.tenant,
-      languages: langs,
-    };
+      return {
+        site: row.site,
+        tenant: row.tenant,
+        languages: langs,
+      };
+    } catch {
+      // Bad DATABASE_URL, cold start timeouts, SSL, etc. — avoid 500 on marketing /sites/* .
+      if (subdomain === DEV_FALLBACK_CTX.site.subdomain) {
+        return DEV_FALLBACK_CTX;
+      }
+      return null;
+    }
   },
   ["site-by-subdomain"],
   { revalidate: 60, tags: ["sites"] }

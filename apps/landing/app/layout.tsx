@@ -23,7 +23,6 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
-  axes: ["opsz", "SOFT", "WONK"],
 });
 
 const interVilla = Inter({
@@ -53,7 +52,12 @@ export default async function RootLayout({
   const villaLangHeader = h.get("x-nestino-villa-lang");
 
   if (isVillaUi && slug) {
-    const ctx = await getSiteBySubdomain(slug);
+    let ctx: Awaited<ReturnType<typeof getSiteBySubdomain>> = null;
+    try {
+      ctx = await getSiteBySubdomain(slug);
+    } catch {
+      ctx = null;
+    }
     const rawVillaLang = villaLangHeader && isLang(villaLangHeader) ? villaLangHeader : "en";
     const vLang: Lang = rawVillaLang;
     const accentHex = ctx?.site.accentHex ?? null;

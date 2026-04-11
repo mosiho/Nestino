@@ -11,8 +11,6 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
-  // Optical sizing + variable weight
-  axes: ["opsz", "SOFT", "WONK"],
 });
 
 const inter = Inter({

@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import Script from "next/script";
 
 import { isLang, type Lang } from "../lib/i18n";
+import { resolveRequestOrigin } from "../lib/site-origin";
 import { getSiteBySubdomain } from "../lib/tenant";
 import { villaPath } from "../lib/villa-path";
 
@@ -54,8 +55,8 @@ export async function generateVillaHomeMetadata({
   const meta = META[lang] ?? META.en!;
 
   const h = await headers();
-  const host = h.get("host") ?? "";
-  const protocol = host.includes("localhost") ? "http" : "https";
+  const origin = resolveRequestOrigin(h.get("host"));
+  const ogPath = villaPath(pathPrefix, `/${lang}`);
 
   return {
     title: meta.title,
@@ -63,15 +64,15 @@ export async function generateVillaHomeMetadata({
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: `${protocol}://${host}${villaPath(pathPrefix, `/${lang}`)}`,
+      url: `${origin.origin}${ogPath}`,
       type: "website",
     },
   };
 }
 
-function buildJsonLd(host: string, lang: string, pathPrefix: string) {
-  const protocol = host.includes("localhost") ? "http" : "https";
-  const base = `${protocol}://${host}${pathPrefix}`;
+function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string) {
+  const origin = resolveRequestOrigin(hostHeader);
+  const base = `${origin.origin}${pathPrefix}`;
 
   return [
     {
@@ -161,12 +162,11 @@ export default async function VillaHomePage({ params, pathPrefix }: HomeProps) {
 
   const h = await headers();
   const slug = h.get("x-nestino-slug") ?? "";
-  const host = h.get("host") ?? "";
 
   const ctx = slug ? await getSiteBySubdomain(slug) : null;
   const phone = ctx?.tenant.ownerPhone ?? "+905316960953";
 
-  const jsonLd = buildJsonLd(host, safeLang, pathPrefix);
+  const jsonLd = buildJsonLd(h.get("host"), safeLang, pathPrefix);
 
   return (
     <>

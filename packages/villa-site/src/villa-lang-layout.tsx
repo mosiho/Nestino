@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
 import { isLang, type Lang } from "./lib/i18n";
+import { resolveRequestOrigin } from "./lib/site-origin";
 import { getSiteBySubdomain, getActiveLangs } from "./lib/tenant";
 import { villaPath } from "./lib/villa-path";
 import SiteHeader from "./components/site-header";
@@ -27,17 +28,14 @@ export async function generateVillaLangMetadata({
   const { lang, siteSlug: slugFromParams } = await params;
   const h = await headers();
   const slug = slugFromParams ?? h.get("x-nestino-slug") ?? "";
-  const host = h.get("host") ?? "";
   const ctx = slug ? await getSiteBySubdomain(slug) : null;
-  const protocol = host.includes("localhost") ? "http" : "https";
-  const siteUrl = `${protocol}://${host}`;
 
   const activeLangs = ctx ? getActiveLangs(ctx) : ["en"];
 
   const canonical = villaPath(pathPrefix, `/${lang}`);
 
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: resolveRequestOrigin(h.get("host")),
     alternates: {
       languages: Object.fromEntries(
         activeLangs.map((l) => [l, villaPath(pathPrefix, `/${l}`)])
