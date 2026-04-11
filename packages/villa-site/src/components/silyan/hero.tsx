@@ -23,6 +23,14 @@ type HeroCopy = {
   cta2: string;
   scroll: string;
   videoHint: string;
+  /** Poster / hero still — locale-specific for image SEO and accessibility */
+  heroImageAlt: string;
+  /** Short factual phrases aligned with on-page JSON-LD (desktop strip) */
+  facts: string[];
+  /** Accessible name for the facts list */
+  factsSummary: string;
+  /** Internal link anchor to /location */
+  locationLink: string;
 };
 
 const HERO_COPY: Record<string, HeroCopy> = {
@@ -35,6 +43,11 @@ const HERO_COPY: Record<string, HeroCopy> = {
     cta2: "WhatsApp",
     scroll: "Scroll",
     videoHint: "Play video",
+    heroImageAlt:
+      "Private pool and pine-covered hills at Silyan Villas — Hisarçandır, Konyaaltı, Antalya, Turkey",
+    facts: ["3 independent villas", "Private pool each", "8 km to the sea", "22 km to AYT airport"],
+    factsSummary: "Key facts about Silyan Villas",
+    locationLink: "Distances & neighbourhood",
   },
   tr: {
     kicker: "Hisarçandır · Antalya",
@@ -45,6 +58,11 @@ const HERO_COPY: Record<string, HeroCopy> = {
     cta2: "WhatsApp",
     scroll: "Kaydır",
     videoHint: "Videoyu oynat",
+    heroImageAlt:
+      "Silyan Villas'ta özel havuz ve çam ormanlı yamaç — Hisarçandır, Konyaaltı, Antalya, Türkiye",
+    facts: ["3 bağımsız villa", "Her villa özel havuz", "Denize 8 km", "AYT havalimanına 22 km"],
+    factsSummary: "Silyan Villas hakkında öne çıkan bilgiler",
+    locationLink: "Mesafeler ve mahalle",
   },
   ar: {
     kicker: "هيسارتشاندير · أنطاليا",
@@ -55,6 +73,11 @@ const HERO_COPY: Record<string, HeroCopy> = {
     cta2: "واتساب",
     scroll: "مرر للأسفل",
     videoHint: "تشغيل الفيديو",
+    heroImageAlt:
+      "مسبح خاص ومنحدرات مغطاة بالأشجار في سيليان فيلاز — هيسارتشاندير، كونيالتي، أنطاليا، تركيا",
+    facts: ["3 فيلات مستقلة", "مسبح خاص لكل فيلا", "8 كم إلى البحر", "22 كم إلى مطار AYT"],
+    factsSummary: "حقائق رئيسية عن سيليان فيلاز",
+    locationLink: "المسافات والحي",
   },
   ru: {
     kicker: "Хисарчандыре · Анталия",
@@ -65,6 +88,11 @@ const HERO_COPY: Record<string, HeroCopy> = {
     cta2: "WhatsApp",
     scroll: "Вниз",
     videoHint: "Включить видео",
+    heroImageAlt:
+      "Частный бассейн и лесистый склон в Silyan Villas — Хисарчандыре, Коньяалты, Анталия, Турция",
+    facts: ["3 отдельные виллы", "Свой бассейн в каждой", "8 км до моря", "22 км до аэропорта AYT"],
+    factsSummary: "Кратко о Silyan Villas",
+    locationLink: "Расстояния и район",
   },
 };
 
@@ -93,8 +121,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
     offset: ["start start", "end start"],
   });
 
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 52]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.52], [1, 0]);
+  /** Do not fade the hero content layer: `opacity` on a parent breaks `backdrop-filter` (frosted panel “pops”). */
   const mediaScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
   const enableParallax = Boolean(!prefersReducedMotion && isCoarse === false);
@@ -149,7 +176,8 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[100svh] flex-col overflow-hidden"
+      aria-labelledby="hero-heading"
+      className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden sm:min-h-[100svh]"
       style={{ backgroundColor: "#0f0d0a" }}
     >
       {/* ── Media layer ── */}
@@ -177,13 +205,12 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
             >
               <Image
                 src={HERO_POSTER}
-                alt=""
+                alt={copy.heroImageAlt}
                 fill
                 priority
                 quality={80}
                 sizes="100vw"
                 className="object-cover"
-                aria-hidden
               />
             </div>
           </div>
@@ -238,11 +265,8 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
       {/* ── Spacer: image shows through this transparent area ── */}
       <div className="relative z-10 flex-1" />
 
-      {/* ── Content zone ── */}
-      <motion.div
-        className="relative z-10 w-full"
-        style={enableParallax ? { y: textY, opacity: textOpacity } : undefined}
-      >
+      {/* ── Content zone (no scroll opacity — keeps desktop frosted panel stable) ── */}
+      <div className="relative z-10 w-full">
         {/* Mobile: gradient transition from image into solid dark band */}
         <div
           className="h-28 sm:hidden"
@@ -261,6 +285,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
               </p>
 
               <h1
+                id="hero-heading"
                 className="mb-4 font-serif text-balance font-semibold text-white sm:mb-5"
                 style={{
                   fontSize: "clamp(1.75rem, 0.9rem + 4.5vw, 3.25rem)",
@@ -270,6 +295,18 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
               >
                 {copy.headline}
               </h1>
+
+              <ul
+                className="mb-5 hidden max-w-[36rem] list-none flex-wrap gap-x-0 gap-y-1.5 ps-0 sm:mb-6 sm:flex"
+                aria-label={copy.factsSummary}
+              >
+                {copy.facts.map((fact, i) => (
+                  <li key={fact} className="inline-flex items-center text-[11px] font-medium leading-snug text-white/58 sm:text-xs">
+                    {i > 0 ? <span className="mx-2 text-white/25 select-none" aria-hidden>·</span> : null}
+                    <span>{fact}</span>
+                  </li>
+                ))}
+              </ul>
 
               <p className="mb-7 max-w-[34rem] text-pretty text-[15px] leading-relaxed text-white/75 sm:mb-8 sm:text-base sm:leading-[1.65]">
                 {copy.subhead}
@@ -296,14 +333,23 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
                   {copy.cta2}
                 </a>
               </div>
+
+              <div className="mt-6 hidden sm:block">
+                <Link
+                  href={villaPath(pathPrefix, `/${lang}/location`)}
+                  className="text-sm font-medium text-white/55 underline-offset-4 transition-colors hover:text-white/90 hover:underline"
+                >
+                  {copy.locationLink}
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* ── Scroll indicator (desktop only — mobile scrolls naturally) ── */}
+      {/* ── Scroll indicator ── */}
       <div
-        className="pointer-events-none absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-white/48 sm:flex"
+        className="pointer-events-none absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white/48 sm:bottom-6"
         aria-hidden
       >
         <span className="text-[11px] font-semibold uppercase tracking-[0.28em]">
