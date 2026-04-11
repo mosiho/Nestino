@@ -44,10 +44,10 @@ const VILLAS: Record<string, VillaData> = {
     baths: 5,
     maxGuests: 10,
     desc: {
-      en: "The largest of the three, Villa Defne sleeps up to ten guests across five en-suite bedrooms — ideal for extended families, two-family trips, or larger groups who want privacy without sacrificing proximity. The private pool and garden face the mountain ridge. Antalya Airport is 22 km; Konyaaltı Beach is 8.",
-      tr: "Üç villanın en büyüğü olan Villa Defne, beş suit yatak odasıyla on misafir kapasitelidir. Geniş aileler, iki aile grupları veya mahremiyet isteyen büyük gruplar için idealdir. Özel havuz ve bahçe dağ sırasına bakar.",
-      ar: "أكبر الفيلات الثلاث، فيلا دفني تتسع لعشرة ضيوف في خمس غرف نوم مع حمام خاص — مثالية للعائلات الممتدة أو المجموعات الكبيرة. المسبح الخاص والحديقة يطلان على سلسلة الجبال.",
-      ru: "Самая большая из трёх, вилла Дефне вмещает до десяти гостей в пяти спальнях с собственными ванными — идеальна для больших семей или групп. Частный бассейн и сад с видом на горный хребет.",
+      en: "Villa Defne sleeps up to ten guests across five en-suite bedrooms — ideal for extended families, two-family trips, or larger groups who want privacy without sacrificing proximity. The private pool and garden face the mountain ridge. Antalya Airport is 22 km; Konyaaltı Beach is 8.",
+      tr: "Villa Defne, beş suit yatak odasıyla on misafir kapasitelidir. Geniş aileler, iki aile grupları veya mahremiyet isteyen büyük gruplar için idealdir. Özel havuz ve bahçe dağ sırasına bakar.",
+      ar: "فيلا دفني تتسع لعشرة ضيوف في خمس غرف نوم مع حمام خاص — مثالية للعائلات الممتدة أو المجموعات الكبيرة. المسبح الخاص والحديقة يطلان على سلسلة الجبال.",
+      ru: "Вилла Дефне вмещает до десяти гостей в пяти спальнях с собственными ванными — идеальна для больших семей или групп. Частный бассейн и сад с видом на горный хребет.",
     },
     whatsappMsg: {
       en: "Hello, I'm interested in booking Villa Defne at Silyan Villas.",
