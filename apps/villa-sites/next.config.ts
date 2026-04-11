@@ -7,6 +7,8 @@ const csp = [
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.posthog.com https://us.i.posthog.com https://eu.i.posthog.com https://va.vercel-scripts.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
+  // <video> uses media-src (falls back to default-src otherwise — blocks tenant CDN / WP uploads)
+  "media-src 'self' https: blob:",
   "font-src 'self' data:",
   "connect-src 'self' https://*.posthog.com https://us.i.posthog.com https://eu.i.posthog.com wss://*.posthog.com https://maps.googleapis.com",
   "frame-src https://www.google.com https://maps.google.com",
