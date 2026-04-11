@@ -49,6 +49,8 @@ export function Navbar() {
 
   const [activeId, setActiveId] =
     useState<(typeof SECTION_IDS)[number]>("hero");
+  const [heroBehindNav, setHeroBehindNav] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
@@ -65,15 +67,29 @@ export function Navbar() {
     setActiveId((prev) => (prev === next ? prev : next));
   }, []);
 
+  const syncHeroBehindNav = useCallback(() => {
+    const hero = document.getElementById("hero");
+    const header = headerRef.current;
+    if (!hero || !header) return;
+    const hr = hero.getBoundingClientRect();
+    const navBottom = header.getBoundingClientRect().bottom;
+    setHeroBehindNav(hr.top < navBottom && hr.bottom > 0);
+  }, []);
+
   useEffect(() => {
     updateActive();
-    window.addEventListener("scroll", updateActive, { passive: true });
-    window.addEventListener("resize", updateActive);
-    return () => {
-      window.removeEventListener("scroll", updateActive);
-      window.removeEventListener("resize", updateActive);
+    syncHeroBehindNav();
+    const onScroll = () => {
+      updateActive();
+      syncHeroBehindNav();
     };
-  }, [updateActive]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [updateActive, syncHeroBehindNav]);
 
   useEffect(() => {
     const link = linkRefs.current.get(activeId);
@@ -92,7 +108,15 @@ export function Navbar() {
   const homeHref = localizedPath(locale, "/");
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/90 bg-background/90 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+    <header
+      ref={headerRef}
+      className={[
+        "sticky top-0 z-50 border-b shadow-sm backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150",
+        heroBehindNav
+          ? "border-border/95 bg-background/96 supports-[backdrop-filter]:bg-background/92 ring-1 ring-black/[0.06]"
+          : "border-border/90 bg-background/90 supports-[backdrop-filter]:bg-background/80",
+      ].join(" ")}
+    >
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-2.5">
         <Link
           href={homeHref}
@@ -129,7 +153,9 @@ export function Navbar() {
                     "shrink-0 rounded-full px-2.5 py-1.5 text-xs font-semibold transition-[color,background-color,box-shadow] duration-200 sm:px-3.5 sm:py-2 sm:text-sm",
                     isActive
                       ? "bg-accent/14 text-accent shadow-[inset_0_0_0_1px_rgb(13_148_136/0.28)]"
-                      : "text-muted hover:bg-foreground/[0.04] hover:text-foreground",
+                      : heroBehindNav
+                        ? "text-foreground/78 hover:bg-foreground/[0.07] hover:text-foreground"
+                        : "text-muted hover:bg-foreground/[0.04] hover:text-foreground",
                   ].join(" ")}
                   aria-current={isActive ? "true" : undefined}
                   onClick={(e) => {
@@ -150,7 +176,12 @@ export function Navbar() {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-foreground/[0.04] hover:text-foreground sm:inline-flex"
+            className={[
+              "hidden rounded-full px-3 py-2 text-sm font-semibold transition-colors sm:inline-flex",
+              heroBehindNav
+                ? "text-foreground/78 hover:bg-foreground/[0.07] hover:text-foreground"
+                : "text-muted hover:bg-foreground/[0.04] hover:text-foreground",
+            ].join(" ")}
             onClick={() => captureEvent("whatsapp_click")}
           >
             {nav.whatsapp}
@@ -159,7 +190,10 @@ export function Navbar() {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-muted transition-colors hover:bg-accent/12 hover:text-accent sm:hidden"
+            className={[
+              "inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-colors hover:bg-accent/12 hover:text-accent sm:hidden",
+              heroBehindNav ? "text-foreground/78" : "text-muted",
+            ].join(" ")}
             aria-label={nav.whatsapp}
             onClick={() => captureEvent("whatsapp_click")}
           >

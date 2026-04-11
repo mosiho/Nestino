@@ -268,24 +268,30 @@ const VIEW_LABEL: Record<string, string> = {
   ru: "Смотреть виллу",
 };
 
-const SECTION_TITLE: Record<string, { heading: string; sub: string }> = {
+const SECTION_TITLE: Record<string, { heading: string; sub: string; showAll: string }> = {
   en: {
     heading: "Our Villas",
     sub: "Eleven independent villas, each with its own private pool and garden.",
+    showAll: "View all 11 villas",
   },
   tr: {
     heading: "Villalarımız",
     sub: "Her biri özel havuzlu ve bahçeli, on bir bağımsız villa.",
+    showAll: "Tüm 11 villayı görüntüle",
   },
   ar: {
     heading: "فيلاتنا",
     sub: "إحدى عشرة فيلا مستقلة، لكل منها مسبح خاص وحديقة خاصة.",
+    showAll: "عرض جميع الفيلات الـ 11",
   },
   ru: {
     heading: "Наши виллы",
     sub: "Одиннадцать независимых вилл, каждая с частным бассейном и садом.",
+    showAll: "Смотреть все 11 вилл",
   },
 };
+
+const PREVIEW_COUNT = 3;
 
 export default function VillaCards({ lang, pathPrefix = "" }: Props) {
   const viewLabel = VIEW_LABEL[lang] ?? VIEW_LABEL.en!;
@@ -303,7 +309,7 @@ export default function VillaCards({ lang, pathPrefix = "" }: Props) {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {VILLAS.map((villa) => {
+          {VILLAS.slice(0, PREVIEW_COUNT).map((villa) => {
             const hook = villa.hook[lang as keyof typeof villa.hook] ?? villa.hook.en;
             const desc = villa.desc[lang as keyof typeof villa.desc] ?? villa.desc.en;
             const imgSrc = VILLA_IMAGES[villa.slug]?.card;
@@ -365,6 +371,16 @@ export default function VillaCards({ lang, pathPrefix = "" }: Props) {
               </Link>
             );
           })}
+        </div>
+
+        <div className="mt-10 text-center">
+          <Link
+            href={villaPath(pathPrefix, `/${lang}/villas`)}
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-md text-sm font-medium text-white transition-colors hover:brightness-110"
+            style={{ backgroundColor: "var(--accent-500)" }}
+          >
+            {titles.showAll} →
+          </Link>
         </div>
       </div>
     </section>
