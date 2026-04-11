@@ -9,8 +9,8 @@ import { villaPath } from "../../lib/villa-path";
 import { WHATSAPP_BRAND_GREEN } from "../../lib/whatsapp-brand";
 import { HERO_VIDEO, HERO_POSTER } from "../../lib/silyan-images";
 
-/** Skip first / last N seconds when looping hero background. */
-const HERO_LOOP_TRIM_SEC = 10;
+/** Skip first / last N seconds on every play (incl. first) and when looping. */
+const HERO_LOOP_TRIM_SEC = 13;
 
 type Props = {
   lang: Lang;
@@ -130,50 +130,74 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   }, [prefersReducedMotion]);
 
   /**
-   * Autoplay: browsers require muted + playsInline. React can hydrate `muted` late on
-   * `<video>`; setting `muted` / `defaultMuted` on the element before `play()` avoids
-   * silent NotAllowedError on Safari/WebKit (especially iOS).
+   * Muted autoplay + trim: first frame never shows 0…HERO_LOOP_TRIM_SEC — we seek first,
+   * then play after `seeked` (with timeout fallback). Loop skips first/last trim window.
    */
   useEffect(() => {
     if (prefersReducedMotion) return;
     const v = videoRef.current;
     if (!v) return;
-    const kick = () => {
+
+    let trimFallbackTimer: number | undefined;
+    let metaApplied = false;
+
+    const ensureMuted = () => {
       v.defaultMuted = true;
       v.muted = true;
+    };
+
+    const startPlay = () => {
+      ensureMuted();
       void v.play().catch(() => {});
     };
-    kick();
-    v.addEventListener("loadeddata", kick);
-    v.addEventListener("canplay", kick);
-    return () => {
-      v.removeEventListener("loadeddata", kick);
-      v.removeEventListener("canplay", kick);
-    };
-  }, [prefersReducedMotion]);
-
-  /** Loop only the middle segment (omit first & last `HERO_LOOP_TRIM_SEC`). */
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const v = videoRef.current;
-    if (!v) return;
 
     const onMeta = () => {
+      ensureMuted();
       const d = v.duration;
-      if (!Number.isFinite(d) || d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) {
+      if (!Number.isFinite(d) || d <= 0) return;
+      if (metaApplied) return;
+      metaApplied = true;
+
+      if (d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) {
         v.loop = true;
+        startPlay();
         return;
       }
       v.loop = false;
-      if (v.currentTime < HERO_LOOP_TRIM_SEC) v.currentTime = HERO_LOOP_TRIM_SEC;
+
+      let started = false;
+      const startOnce = () => {
+        if (started) return;
+        started = true;
+        if (trimFallbackTimer !== undefined) {
+          window.clearTimeout(trimFallbackTimer);
+          trimFallbackTimer = undefined;
+        }
+        startPlay();
+      };
+
+      trimFallbackTimer = window.setTimeout(startOnce, 280);
+      v.addEventListener(
+        "seeked",
+        () => {
+          if (trimFallbackTimer !== undefined) {
+            window.clearTimeout(trimFallbackTimer);
+            trimFallbackTimer = undefined;
+          }
+          startOnce();
+        },
+        { once: true },
+      );
+      v.currentTime = HERO_LOOP_TRIM_SEC;
     };
 
     const onTime = () => {
+      ensureMuted();
       const d = v.duration;
       if (!Number.isFinite(d) || d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) return;
       if (v.currentTime >= d - HERO_LOOP_TRIM_SEC - 0.04) {
         v.currentTime = HERO_LOOP_TRIM_SEC;
-        void v.play().catch(() => {});
+        startPlay();
       }
     };
 
@@ -181,13 +205,16 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
       const d = v.duration;
       if (!Number.isFinite(d) || d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) return;
       v.currentTime = HERO_LOOP_TRIM_SEC;
-      void v.play().catch(() => {});
+      startPlay();
     };
 
     v.addEventListener("loadedmetadata", onMeta);
     v.addEventListener("timeupdate", onTime);
     v.addEventListener("ended", onEnded);
+    if (v.readyState >= 1) queueMicrotask(onMeta);
+
     return () => {
+      if (trimFallbackTimer !== undefined) window.clearTimeout(trimFallbackTimer);
       v.removeEventListener("loadedmetadata", onMeta);
       v.removeEventListener("timeupdate", onTime);
       v.removeEventListener("ended", onEnded);
@@ -205,7 +232,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
     <section
       ref={sectionRef}
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[calc(68svh-4rem)] flex-col overflow-hidden sm:min-h-[min(82svh,880px)]"
+      className="relative flex min-h-[calc(min(108.8svh,100svh)-4rem)] flex-col overflow-hidden sm:min-h-[min(82svh,880px)]"
       style={{ backgroundColor: "#0f0d0a" }}
     >
       {/* ── Media layer ── */}
@@ -295,7 +322,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         <div className="bg-[#0f0d0a] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:bg-transparent sm:pb-[5.5rem] md:pb-24">
           <div className="content-wrapper">
             {/* Desktop: frosted glass panel, start-aligned. Mobile: content flows naturally */}
-            <div className="sm:max-w-[36rem] sm:rounded-2xl sm:border sm:border-white/[0.12] sm:bg-black/35 sm:p-8 sm:shadow-[0_32px_80px_-12px_rgba(0,0,0,0.5)] sm:backdrop-blur-2xl md:max-w-[38rem] md:p-10">
+            <div className="sm:max-w-[36rem] sm:rounded-2xl sm:border sm:border-white/[0.12] sm:bg-black/35 sm:p-8 sm:shadow-[0_32px_80px_-12px_rgba(0,0,0,0.5)] sm:backdrop-blur-[32px] md:max-w-[38rem] md:p-10">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/72 sm:text-xs sm:tracking-[0.34em]">
                 {copy.kicker}
               </p>
