@@ -20,6 +20,12 @@ export function localizedHomeHref(locale: Locale, queryAndHash: string): string 
 
 const ORDER: Locale[] = ["en", "tr"];
 
+/** Regional flag shown next to each locale label (emoji, no extra assets). */
+const LOCALE_FLAG: Record<Locale, string> = {
+  en: "🇬🇧",
+  tr: "🇹🇷",
+};
+
 export function LanguageSwitcher() {
   const pathname = usePathname();
   const { locale, messages } = useLocaleContext();
@@ -40,7 +46,7 @@ export function LanguageSwitcher() {
             key={code}
             href={href}
             className={[
-              "relative min-w-[4.25rem] rounded-full px-3 py-1.5 text-center text-xs font-semibold transition-[color,background-color,box-shadow] duration-200 sm:min-w-[5rem] sm:text-sm",
+              "relative min-w-[5.25rem] rounded-full px-2.5 py-1.5 text-center text-xs font-semibold transition-[color,background-color,box-shadow] duration-200 sm:min-w-[6rem] sm:px-3 sm:text-sm",
               active
                 ? "bg-accent text-accent-foreground shadow-sm"
                 : "text-muted hover:bg-foreground/[0.06] hover:text-foreground",
@@ -57,7 +63,12 @@ export function LanguageSwitcher() {
                 : `${ls.label}: ${label}`
             }
           >
-            {code === "en" ? "EN" : "TR"}
+            <span className="inline-flex items-center justify-center gap-1 sm:gap-1.5">
+              <span className="text-[1.05rem] leading-none sm:text-lg" aria-hidden>
+                {LOCALE_FLAG[code]}
+              </span>
+              <span>{code === "en" ? "EN" : "TR"}</span>
+            </span>
           </a>
         );
       })}

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import { LANG_LABELS, type Lang } from "../lib/i18n";
+import { LANG_FLAGS, LANG_LABELS, isLang, type Lang } from "../lib/i18n";
 import { villaPath } from "../lib/villa-path";
 
 type Props = {
@@ -119,14 +119,19 @@ export default function SiteHeader({
                   <Link
                     key={l}
                     href={villaPath(pathPrefix, `/${l}`)}
-                    className={`text-xs font-medium px-2.5 py-1 rounded-md transition-colors duration-200 ${
+                    className={`inline-flex items-center justify-center gap-1 text-xs font-medium px-2 py-1 rounded-md transition-colors duration-200 ${
                       l === lang
                         ? "text-[var(--accent-500)] bg-[var(--accent-muted)]"
                         : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
                     }`}
                     aria-label={LANG_LABELS[l as Lang] ?? l}
                   >
-                    {l.toUpperCase().slice(0, 2)}
+                    {isLang(l) ? (
+                      <span className="text-sm leading-none" aria-hidden>
+                        {LANG_FLAGS[l]}
+                      </span>
+                    ) : null}
+                    <span>{l.toUpperCase().slice(0, 2)}</span>
                   </Link>
                 ))}
               </div>
@@ -237,14 +242,19 @@ export default function SiteHeader({
                   <Link
                     key={l}
                     href={villaPath(pathPrefix, `/${l}`)}
-                    className={`text-sm font-medium px-3 py-2 rounded-md border transition-colors duration-200 ${
+                    className={`inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-md border transition-colors duration-200 ${
                       l === lang
                         ? "border-[var(--accent-500)] text-[var(--accent-500)] bg-[var(--accent-muted)]"
                         : "border-[var(--color-border)] text-[var(--color-text-muted)]"
                     }`}
                     onClick={closeDrawer}
                   >
-                    {LANG_LABELS[l as Lang] ?? l}
+                    {isLang(l) ? (
+                      <span className="text-base leading-none shrink-0" aria-hidden>
+                        {LANG_FLAGS[l]}
+                      </span>
+                    ) : null}
+                    <span>{LANG_LABELS[l as Lang] ?? l}</span>
                   </Link>
                 ))}
               </div>

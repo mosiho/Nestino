@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LANG_LABELS, type Lang } from "../lib/i18n";
+import { LANG_FLAGS, LANG_LABELS, isLang, type Lang } from "../lib/i18n";
 import { villaPath } from "../lib/villa-path";
 import { WHATSAPP_BRAND_GREEN } from "../lib/whatsapp-brand";
 
@@ -151,13 +151,18 @@ export default function Footer({
                     <Link
                       key={l}
                       href={villaPath(pathPrefix, `/${l}`)}
-                      className={`text-xs px-3 py-1.5 rounded-md border transition-colors duration-200 ${
+                      className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border transition-colors duration-200 ${
                         l === lang
                           ? "border-[var(--accent-500)] text-[var(--accent-500)] bg-[var(--accent-muted)]"
                           : "border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-border-strong)]"
                       }`}
                     >
-                      {LANG_LABELS[l as Lang] ?? l}
+                      {isLang(l) ? (
+                        <span className="text-sm leading-none shrink-0" aria-hidden>
+                          {LANG_FLAGS[l]}
+                        </span>
+                      ) : null}
+                      <span>{LANG_LABELS[l as Lang] ?? l}</span>
                     </Link>
                   ))}
                 </div>

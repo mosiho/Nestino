@@ -57,6 +57,24 @@ export const LANG_LABELS: Record<Lang, string> = {
   pt: "Português",
 };
 
+/** Emoji flags for language switcher UI. */
+export const LANG_FLAGS: Record<Lang, string> = {
+  en: "🇬🇧",
+  tr: "🇹🇷",
+  ar: "🇸🇦",
+  ru: "🇷🇺",
+  de: "🇩🇪",
+  fr: "🇫🇷",
+  "zh-Hans": "🇨🇳",
+  ko: "🇰🇷",
+  ja: "🇯🇵",
+  it: "🇮🇹",
+  nl: "🇳🇱",
+  es: "🇪🇸",
+  ms: "🇲🇾",
+  pt: "🇵🇹",
+};
+
 // Build hreflang alternate URLs for a given page across active languages
 export function buildHreflangAlternates(
   host: string,
