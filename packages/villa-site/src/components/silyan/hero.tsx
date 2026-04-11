@@ -9,6 +9,9 @@ import { villaPath } from "../../lib/villa-path";
 import { WHATSAPP_BRAND_GREEN } from "../../lib/whatsapp-brand";
 import { HERO_VIDEO, HERO_POSTER } from "../../lib/silyan-images";
 
+/** Skip first / last N seconds when looping hero background. */
+const HERO_LOOP_TRIM_SEC = 10;
+
 type Props = {
   lang: Lang;
   phone: string;
@@ -149,6 +152,48 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
     };
   }, [prefersReducedMotion]);
 
+  /** Loop only the middle segment (omit first & last `HERO_LOOP_TRIM_SEC`). */
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const v = videoRef.current;
+    if (!v) return;
+
+    const onMeta = () => {
+      const d = v.duration;
+      if (!Number.isFinite(d) || d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) {
+        v.loop = true;
+        return;
+      }
+      v.loop = false;
+      if (v.currentTime < HERO_LOOP_TRIM_SEC) v.currentTime = HERO_LOOP_TRIM_SEC;
+    };
+
+    const onTime = () => {
+      const d = v.duration;
+      if (!Number.isFinite(d) || d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) return;
+      if (v.currentTime >= d - HERO_LOOP_TRIM_SEC - 0.04) {
+        v.currentTime = HERO_LOOP_TRIM_SEC;
+        void v.play().catch(() => {});
+      }
+    };
+
+    const onEnded = () => {
+      const d = v.duration;
+      if (!Number.isFinite(d) || d <= HERO_LOOP_TRIM_SEC * 2 + 0.5) return;
+      v.currentTime = HERO_LOOP_TRIM_SEC;
+      void v.play().catch(() => {});
+    };
+
+    v.addEventListener("loadedmetadata", onMeta);
+    v.addEventListener("timeupdate", onTime);
+    v.addEventListener("ended", onEnded);
+    return () => {
+      v.removeEventListener("loadedmetadata", onMeta);
+      v.removeEventListener("timeupdate", onTime);
+      v.removeEventListener("ended", onEnded);
+    };
+  }, [prefersReducedMotion]);
+
   const copy = HERO_COPY[lang] ?? HERO_COPY.en!;
   const digits = phone.replace(/\D/g, "");
   const waHref = digits ? `https://wa.me/${digits}` : "#";
@@ -160,7 +205,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
     <section
       ref={sectionRef}
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden sm:min-h-[100svh]"
+      className="relative flex min-h-[calc(68svh-4rem)] flex-col overflow-hidden sm:min-h-[min(82svh,880px)]"
       style={{ backgroundColor: "#0f0d0a" }}
     >
       {/* ── Media layer ── */}
@@ -170,7 +215,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
       >
         {prefersReducedMotion ? (
           <div className="absolute inset-0 overflow-hidden">
-            <div className="relative h-full w-full">
+            <div className="absolute inset-x-0 top-[-10%] h-[110%]">
               <Image
                 src={HERO_POSTER}
                 alt={copy.heroImageAlt}
@@ -178,23 +223,28 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
                 priority
                 quality={80}
                 sizes="100vw"
-                className="object-cover"
+                className="object-cover object-[center_52%]"
               />
             </div>
           </div>
         ) : (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="h-full w-full object-cover"
-            aria-hidden="true"
-          >
-            <source src={HERO_VIDEO} type="video/webm" />
-          </video>
+          <div className="absolute inset-0 overflow-hidden">
+            {/*
+              Desktop: ~10% top crop via taller-than-viewport frame.
+              Mobile: wider than viewport so object-cover favors a more horizontal slice.
+            */}
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              className="absolute left-1/2 top-0 h-full w-[128%] max-w-none -translate-x-1/2 object-cover object-center sm:inset-x-0 sm:top-[-10%] sm:h-[110%] sm:w-full sm:max-w-full sm:translate-x-0 sm:object-[center_52%]"
+              aria-hidden="true"
+            >
+              <source src={HERO_VIDEO} type="video/webm" />
+            </video>
+          </div>
         )}
       </motion.div>
 
@@ -232,11 +282,12 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
 
       {/* ── Content zone (no scroll opacity — keeps desktop frosted panel stable) ── */}
       <div className="relative z-10 w-full">
-        {/* Mobile: gradient transition from image into solid dark band */}
+        {/* Mobile: long soft blend from hero media into the solid content band */}
         <div
-          className="h-28 sm:hidden"
+          className="h-44 sm:hidden"
           style={{
-            background: "linear-gradient(to bottom, transparent, #0f0d0a)",
+            background:
+              "linear-gradient(to bottom, transparent 0%, rgba(15,13,10,0.12) 22%, rgba(15,13,10,0.38) 48%, rgba(15,13,10,0.72) 76%, #0f0d0a 100%)",
           }}
         />
 
