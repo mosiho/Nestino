@@ -1,4 +1,6 @@
+import Image from "next/image";
 import type { Lang } from "../../lib/i18n";
+import { THE_STAY_IMAGE } from "../../lib/silyan-images";
 
 type Props = { lang: Lang };
 
@@ -32,7 +34,6 @@ export default function TheStay({ lang }: Props) {
     <section className="section-y">
       <div className="content-wrapper">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-          {/* Text */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-widest mb-4"
@@ -47,7 +48,6 @@ export default function TheStay({ lang }: Props) {
               {c.body}
             </p>
 
-            {/* Key facts */}
             <ul className="mt-6 space-y-2">
               {[
                 { label: "22 km", detail: lang === "tr" ? "Havalimanına" : lang === "ar" ? "إلى المطار" : lang === "ru" ? "до аэропорта" : "to the airport" },
@@ -67,17 +67,14 @@ export default function TheStay({ lang }: Props) {
             </ul>
           </div>
 
-          {/* Image placeholder — replaced by real image once CDN is set up */}
-          <div
-            className="relative aspect-[4/3] rounded-lg overflow-hidden bg-[var(--color-border)]"
-            aria-hidden="true"
-          >
-            <div
-              className="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)] text-sm"
-            >
-              {/* Hero image goes here — pool + mountain view */}
-              Pool view photo
-            </div>
+          <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-[var(--shadow-md)]">
+            <Image
+              src={THE_STAY_IMAGE}
+              alt="Silyan Villas — pool and mountain view"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </div>

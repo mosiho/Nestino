@@ -14,6 +14,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function Page({ params }: Props) {
-  const { lang, slug } = await params;
-  return <VillaDetailPage params={Promise.resolve({ lang, slug })} />;
+  const { siteSlug, lang, slug } = await params;
+  const pathPrefix = `/sites/${siteSlug}`;
+  return <VillaDetailPage params={{ lang, slug }} pathPrefix={pathPrefix} />;
 }

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Lang } from "../../lib/i18n";
 import { villaPath } from "../../lib/villa-path";
+import { HERO_VIDEO, HERO_POSTER } from "../../lib/silyan-images";
 
 type Props = {
   lang: Lang;
@@ -42,7 +43,6 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // Respect prefers-reduced-motion — pause video if user prefers
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches && videoRef.current) {
       videoRef.current.pause();
@@ -54,8 +54,10 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   const waHref = digits ? `https://wa.me/${digits}` : "#";
 
   return (
-    <section className="relative flex items-center justify-center min-h-dvh overflow-hidden">
-      {/* Video background */}
+    <section
+      className="relative flex items-center justify-center min-h-dvh overflow-hidden"
+      style={{ backgroundColor: "#1a1610" }}
+    >
       <video
         ref={videoRef}
         autoPlay
@@ -64,15 +66,11 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
         aria-hidden="true"
-        // Poster = best static image for this property (add once CDN is set up)
-        poster="/images/silyan-hero-poster.jpg"
+        poster={HERO_POSTER}
       >
-        {/* Source will point to CDN once images are uploaded.
-            For demo, falls back gracefully to poster/gradient. */}
-        <source src="https://www.silyanvillas.com/wp-content/uploads/2024/06/06293.webm" type="video/webm" />
+        <source src={HERO_VIDEO} type="video/webm" />
       </video>
 
-      {/* Gradient overlay — dark at bottom for text, lighter at top */}
       <div
         className="absolute inset-0"
         style={{
@@ -82,7 +80,6 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         aria-hidden="true"
       />
 
-      {/* Content */}
       <div className="relative content-wrapper text-center text-white z-10 pt-24 pb-16">
         <h1
           className="font-serif font-semibold mb-5 animate-fade-up"
@@ -108,14 +105,8 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         >
           <Link
             href={villaPath(pathPrefix, `/${lang}/villas`)}
-            className="inline-flex items-center justify-center px-7 py-3.5 rounded-md text-sm font-medium text-white transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3.5 rounded-md text-sm font-medium text-white transition-colors hover:brightness-110"
             style={{ backgroundColor: "var(--accent-500)" }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--accent-600)")
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = "var(--accent-500)")
-            }
           >
             {copy.cta1}
           </Link>
@@ -133,7 +124,6 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
         </div>
       </div>
 
-      {/* Scroll hint */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 animate-bounce z-10" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
           <path d="M10 4v12M5 11l5 5 5-5" />

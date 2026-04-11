@@ -15,6 +15,19 @@ const csp = [
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@nestino/db", "@nestino/villa-site"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.silyanvillas.com",
+      },
+    ],
+  },
   async headers() {
     return [
       {

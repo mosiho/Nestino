@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Lang } from "../../lib/i18n";
 import { villaPath } from "../../lib/villa-path";
+import { VILLA_IMAGES } from "../../lib/silyan-images";
 
 type Props = { lang: Lang; pathPrefix?: string };
 
@@ -62,29 +64,44 @@ const VIEW_LABEL: Record<string, string> = {
   ru: "Смотреть виллу",
 };
 
+const SECTION_TITLE: Record<string, { heading: string; sub: string }> = {
+  en: {
+    heading: "Our Villas",
+    sub: "Each villa is fully independent — its own private pool, its own garden.",
+  },
+  tr: {
+    heading: "Villalarımız",
+    sub: "Her villa tamamen bağımsız — özel havuzlu, özel bahçeli.",
+  },
+  ar: {
+    heading: "فيلاتنا",
+    sub: "كل فيلا مستقلة تماماً — مع مسبح خاص وحديقة خاصة.",
+  },
+  ru: {
+    heading: "Наши виллы",
+    sub: "Каждая вилла полностью независима — с частным бассейном и садом.",
+  },
+};
+
 export default function VillaCards({ lang, pathPrefix = "" }: Props) {
   const viewLabel = VIEW_LABEL[lang] ?? VIEW_LABEL.en!;
+  const titles = SECTION_TITLE[lang] ?? SECTION_TITLE.en!;
 
   return (
     <section className="section-y bg-[var(--color-surface)]">
       <div className="content-wrapper">
         <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-3">
-          {lang === "tr" ? "Villalarımız" : lang === "ar" ? "فيلاتنا" : lang === "ru" ? "Наши виллы" : "Our Villas"}
+          {titles.heading}
         </h2>
         <p className="text-[var(--color-text-secondary)] mb-10 max-w-xl">
-          {lang === "tr"
-            ? "Her villa tamamen bağımsız — özel havuzlu, özel bahçeli."
-            : lang === "ar"
-            ? "كل فيلا مستقلة تماماً — مع مسبح خاص وحديقة خاصة."
-            : lang === "ru"
-            ? "Каждая вилла полностью независима — с частным бассейном и садом."
-            : "Each villa is fully independent — its own private pool, its own garden."}
+          {titles.sub}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {VILLAS.map((villa) => {
             const hook = villa.hook[lang as keyof typeof villa.hook] ?? villa.hook.en;
             const desc = villa.desc[lang as keyof typeof villa.desc] ?? villa.desc.en;
+            const imgSrc = VILLA_IMAGES[villa.slug]?.card;
 
             return (
               <Link
@@ -92,11 +109,20 @@ export default function VillaCards({ lang, pathPrefix = "" }: Props) {
                 href={villaPath(pathPrefix, `/${lang}/villas/${villa.slug}`)}
                 className="group rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--accent-500)] hover:shadow-[var(--shadow-md)] transition-all bg-[var(--color-bg)]"
               >
-                {/* Image placeholder */}
-                <div className="aspect-[4/3] bg-[var(--color-border)] relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)] text-xs">
-                    {villa.name} photo
-                  </div>
+                <div className="aspect-[4/3] relative overflow-hidden bg-[var(--color-border)]">
+                  {imgSrc ? (
+                    <Image
+                      src={imgSrc}
+                      alt={villa.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)] text-xs">
+                      {villa.name}
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-5">
