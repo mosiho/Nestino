@@ -210,6 +210,82 @@ const VILLAS = [
   },
 ] as const;
 
+const IDEAL_FOR: Record<string, Record<string, string>> = {
+  portakal: {
+    en: "Large families & group reunions",
+    tr: "Geniş aileler ve grup buluşmaları",
+    ar: "العائلات الكبيرة ولقاءات المجموعات",
+    ru: "Большие семьи и групповые встречи",
+  },
+  incir: {
+    en: "Families & friend groups",
+    tr: "Aileler ve arkadaş grupları",
+    ar: "العائلات ومجموعات الأصدقاء",
+    ru: "Семьи и компании друзей",
+  },
+  kayisi: {
+    en: "Families seeking comfort & privacy",
+    tr: "Konfor ve mahremiyet arayan aileler",
+    ar: "العائلات الباحثة عن الراحة والخصوصية",
+    ru: "Семьи, ценящие комфорт и уединение",
+  },
+  hurma: {
+    en: "Couples & small families",
+    tr: "Çiftler ve küçük aileler",
+    ar: "الأزواج والعائلات الصغيرة",
+    ru: "Пары и небольшие семьи",
+  },
+  defne: {
+    en: "Extended families & two-family trips",
+    tr: "Geniş aileler ve iki aile tatilleri",
+    ar: "العائلات الممتدة ورحلات الأسرتين",
+    ru: "Большие семьи и отдых двумя семьями",
+  },
+  mandalina: {
+    en: "Families who love mountain views",
+    tr: "Dağ manzarasını seven aileler",
+    ar: "العائلات المحبة لإطلالات الجبال",
+    ru: "Семьи, любящие горные виды",
+  },
+  turunc: {
+    en: "Peace seekers & nature lovers",
+    tr: "Huzur arayanlar ve doğa severler",
+    ar: "الباحثون عن الهدوء ومحبو الطبيعة",
+    ru: "Любители тишины и природы",
+  },
+  zeytin: {
+    en: "Romantic getaways & quiet retreats",
+    tr: "Romantik kaçamaklar ve sessiz tatiller",
+    ar: "العطلات الرومانسية والخلوات الهادئة",
+    ru: "Романтические поездки и тихий отдых",
+  },
+  badem: {
+    en: "Families & small friend groups",
+    tr: "Aileler ve küçük arkadaş grupları",
+    ar: "العائلات ومجموعات الأصدقاء الصغيرة",
+    ru: "Семьи и небольшие компании друзей",
+  },
+  limon: {
+    en: "Garden lovers & relaxed families",
+    tr: "Bahçe severler ve rahat aileler",
+    ar: "محبو الحدائق والعائلات المسترخية",
+    ru: "Любители садов и спокойные семьи",
+  },
+  uzum: {
+    en: "Budget-friendly couple escapes",
+    tr: "Bütçe dostu çift kaçamakları",
+    ar: "عطلات اقتصادية للأزواج",
+    ru: "Бюджетный отдых для пар",
+  },
+};
+
+const AI_LABEL: Record<string, string> = {
+  en: "Best for",
+  tr: "En uygun",
+  ar: "الأنسب لـ",
+  ru: "Подходит для",
+};
+
 const COPY: Record<string, { title: string; sub: string; view: string }> = {
   en: {
     title: "Our Villas",
@@ -241,6 +317,7 @@ type Props = {
 export default async function VillasIndexPage({ params, pathPrefix }: Props) {
   const { lang } = await params;
   const c = COPY[lang] ?? COPY.en!;
+  const aiLabel = AI_LABEL[lang] ?? AI_LABEL.en!;
 
   return (
     <div className="pt-24 section-y">
@@ -257,6 +334,7 @@ export default async function VillasIndexPage({ params, pathPrefix }: Props) {
             const imgSrc = VILLA_IMAGES[villa.slug]?.card;
             const tagline = villa.tagline[lang as keyof typeof villa.tagline] ?? villa.tagline.en;
             const desc = villa.desc[lang as keyof typeof villa.desc] ?? villa.desc.en;
+            const idealFor = IDEAL_FOR[villa.slug]?.[lang] ?? IDEAL_FOR[villa.slug]?.en;
 
             return (
               <Link
@@ -286,9 +364,20 @@ export default async function VillasIndexPage({ params, pathPrefix }: Props) {
                   <p className="text-xs font-medium mb-2" style={{ color: "var(--accent-500)" }}>
                     {tagline}
                   </p>
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-4 leading-relaxed">
+                  <p className="text-sm text-[var(--color-text-secondary)] mb-3 leading-relaxed">
                     {desc}
                   </p>
+                  {idealFor && (
+                    <div className="flex items-start gap-1.5 mb-4 px-2.5 py-2 rounded-md bg-[var(--accent-muted)] border border-[var(--accent-500)]/10">
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-px" style={{ color: "var(--accent-500)" }}>
+                        <path d="M8 1l1.545 4.955L14.5 7.5l-4.955 1.545L8 14l-1.545-4.955L1.5 7.5l4.955-1.545L8 1z" fill="currentColor" />
+                      </svg>
+                      <p className="text-xs leading-snug text-[var(--color-text-secondary)]">
+                        <span className="font-semibold" style={{ color: "var(--accent-500)" }}>{aiLabel}:</span>{" "}
+                        {idealFor}
+                      </p>
+                    </div>
+                  )}
                   <span
                     className="inline-block text-sm font-medium transition-colors group-hover:underline"
                     style={{ color: "var(--accent-500)" }}
