@@ -134,7 +134,7 @@ export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
               {DISTANCES.map(({ icon, label, value, detail }) => (
                 <div
                   key={value}
-                  className="flex items-center gap-4 p-4 rounded-lg border-l-2 border-[var(--accent-400)]/40 bg-[var(--color-surface)] shadow-[var(--shadow-sm)]"
+                  className="flex items-center gap-4 p-4 rounded-lg border-s-2 border-[var(--accent-400)]/40 bg-[var(--color-surface)] shadow-[var(--shadow-sm)]"
                 >
                   <span style={{ color: "var(--accent-500)" }}>{icon}</span>
                   <div className="flex-1 min-w-0">

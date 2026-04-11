@@ -62,7 +62,7 @@ export default function GallerySection({ images, villaName, galleryLabel }: Prop
               />
               {/* Photo count badge on first image */}
               {i === 0 && (
-                <span className="absolute bottom-2 right-2 px-2 py-1 rounded-md text-xs font-medium text-white backdrop-blur-md" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                <span className="absolute bottom-2 end-2 px-2 py-1 rounded-md text-xs font-medium text-white backdrop-blur-md" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                   1/{gallery.length}
                 </span>
               )}
@@ -107,7 +107,7 @@ export default function GallerySection({ images, villaName, galleryLabel }: Prop
           aria-label="Photo gallery"
         >
           <button
-            className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors z-10"
+            className="absolute top-4 end-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors z-10"
             onClick={closeLightbox}
             aria-label="Close"
           >
@@ -118,18 +118,18 @@ export default function GallerySection({ images, villaName, galleryLabel }: Prop
 
           {/* Nav arrows — hidden on mobile (swipe instead) */}
           <button
-            className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors z-10"
+            className="hidden sm:flex absolute start-4 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors z-10"
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 4l-6 6 6 6" /></svg>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="rtl:rotate-180"><path d="M12 4l-6 6 6 6" /></svg>
           </button>
           <button
-            className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors z-10"
+            className="hidden sm:flex absolute end-4 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors z-10"
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 4l6 6-6 6" /></svg>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="rtl:rotate-180"><path d="M8 4l6 6-6 6" /></svg>
           </button>
 
           <div className="relative max-w-5xl w-full aspect-video mx-4" onClick={(e) => e.stopPropagation()}>

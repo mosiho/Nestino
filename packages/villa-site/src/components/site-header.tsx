@@ -93,7 +93,7 @@ export default function SiteHeader({
                 alt={siteName}
                 width={250}
                 height={53}
-                className="h-7 md:h-9 w-auto max-w-[min(180px,50vw)] object-contain object-left"
+                className="h-7 md:h-9 w-auto max-w-[min(180px,50vw)] object-contain object-start"
                 sizes="(max-width: 768px) 50vw, 200px"
                 priority
               />
@@ -108,7 +108,7 @@ export default function SiteHeader({
               <Link
                 key={href}
                 href={villaPath(pathPrefix, `/${lang}${href}`)}
-                className="relative text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors duration-300 after:absolute after:bottom-[-4px] after:left-0 after:h-[1.5px] after:w-0 after:bg-[var(--accent-500)] after:transition-all after:duration-300 hover:after:w-full"
+                className="relative text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors duration-300 after:absolute after:bottom-[-4px] after:start-0 after:h-[1.5px] after:w-0 after:bg-[var(--accent-500)] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {navLabel(lang, labelKey)}
               </Link>
@@ -148,7 +148,7 @@ export default function SiteHeader({
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden flex items-center justify-center w-10 h-10 -mr-1"
+            className="md:hidden flex items-center justify-center w-10 h-10 -me-1"
             aria-label={drawerOpen ? "Close menu" : "Open menu"}
             onClick={() => setDrawerOpen((o) => !o)}
           >
@@ -193,15 +193,15 @@ export default function SiteHeader({
 
       {/* Mobile drawer panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 w-[min(320px,85vw)] bg-[var(--color-surface)] md:hidden flex flex-col transition-transform duration-350 ease-smooth safe-bottom ${
-          drawerOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 end-0 bottom-0 w-[min(320px,85vw)] bg-[var(--color-surface)] md:hidden flex flex-col transition-transform duration-350 ease-smooth safe-bottom ${
+          drawerOpen ? "translate-x-0" : "ltr:translate-x-full rtl:-translate-x-full"
         }`}
         style={{ zIndex: "var(--z-drawer)" }}
         role="dialog"
         aria-modal="true"
         aria-label="Navigation"
       >
-        <div className="h-14 flex items-center justify-end px-4 border-b border-[var(--color-border)]">
+        <div className="h-14 flex items-center justify-end rtl:justify-start px-4 border-b border-[var(--color-border)]">
           <button
             onClick={closeDrawer}
             className="flex items-center justify-center w-10 h-10"

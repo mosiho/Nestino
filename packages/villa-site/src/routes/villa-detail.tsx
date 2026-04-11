@@ -146,7 +146,7 @@ export default async function VillaDetailPage({ params, pathPrefix = "" }: { par
 
       <div className="content-wrapper pt-8">
         {/* Description with drop-cap */}
-        <p className="text-base text-[var(--color-text-secondary)] leading-relaxed max-w-3xl mb-10 first-letter:text-4xl first-letter:font-serif first-letter:font-semibold first-letter:float-left first-letter:mr-2 first-letter:mt-1 first-letter:text-[var(--accent-500)]">
+        <p className="text-base text-[var(--color-text-secondary)] leading-relaxed max-w-3xl mb-10 first-letter:text-4xl first-letter:font-serif first-letter:font-semibold first-letter:float-start first-letter:me-2 first-letter:mt-1 first-letter:text-[var(--accent-500)]">
           {desc}
         </p>
 

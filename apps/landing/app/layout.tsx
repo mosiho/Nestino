@@ -1,5 +1,5 @@
 import { Analytics } from "@vercel/analytics/react";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Inter, Noto_Naskh_Arabic, Noto_Sans_Arabic } from "next/font/google";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -28,6 +28,18 @@ const fraunces = Fraunces({
 const interVilla = Inter({
   subsets: ["latin", "latin-ext", "cyrillic"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const notoSansArabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-noto-arabic",
+  display: "swap",
+});
+
+const notoNaskhArabic = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-noto-naskh-arabic",
   display: "swap",
 });
 
@@ -73,7 +85,7 @@ export default async function RootLayout({
       }`
       : "";
 
-    const fontVars = `${fraunces.variable} ${interVilla.variable}`;
+    const fontVars = `${fraunces.variable} ${interVilla.variable} ${notoSansArabic.variable} ${notoNaskhArabic.variable}`;
 
     return (
       <html

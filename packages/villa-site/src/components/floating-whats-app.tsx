@@ -29,7 +29,7 @@ export default function FloatingWhatsApp({ phone, message }: Props) {
       onClick={handleClick}
       aria-label="Chat on WhatsApp"
       style={{ zIndex: "var(--z-floating-whatsapp)" }}
-      className="fixed bottom-6 right-6 flex items-center justify-center w-14 h-14 rounded-full shadow-[var(--shadow-md)] transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="fixed bottom-6 end-6 flex items-center justify-center w-14 h-14 rounded-full shadow-[var(--shadow-md)] transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2"
       // WhatsApp green — not an accent colour, always fixed
       css-data-wa="true"
     >

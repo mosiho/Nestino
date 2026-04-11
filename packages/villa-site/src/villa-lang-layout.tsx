@@ -89,7 +89,7 @@ export async function VillaLangLayout({
       <StickyCtaBar
         phone={ctx.tenant.ownerPhone ?? ""}
         lang={lang as Lang}
-        pathPrefix={pathPrefix}
+        siteName={ctx.tenant.name}
       />
       <main className="flex-1">{children}</main>
       <FloatingWhatsApp phone={ctx.tenant.ownerPhone ?? ""} />

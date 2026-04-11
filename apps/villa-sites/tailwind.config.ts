@@ -30,8 +30,18 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["var(--font-fraunces)", "Georgia", "serif"],
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: [
+          "var(--font-fraunces)",
+          "var(--font-noto-naskh-arabic)",
+          "Georgia",
+          "serif",
+        ],
+        sans: [
+          "var(--font-inter)",
+          "var(--font-noto-arabic)",
+          "system-ui",
+          "sans-serif",
+        ],
       },
       fontSize: {
         display: ["clamp(2.25rem, 5vw, 3.5rem)", { lineHeight: "1.1", fontWeight: "600" }],

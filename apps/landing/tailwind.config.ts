@@ -92,6 +92,15 @@ const config: Config = {
           "0%, 100%": { opacity: "0.6", transform: "translateY(0)" },
           "50%": { opacity: "1", transform: "translateY(6px)" },
         },
+        "hero-ken": {
+          "0%": { transform: "scale(1) translate3d(0, 0, 0)" },
+          "100%": { transform: "scale(1.06) translate3d(-0.75%, -0.35%, 0)" },
+        },
+        "hero-wheel": {
+          "0%, 100%": { transform: "translateY(0)", opacity: "1" },
+          "45%": { transform: "translateY(8px)", opacity: "0.35" },
+          "55%": { transform: "translateY(0)", opacity: "1" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards",
@@ -101,6 +110,8 @@ const config: Config = {
         "slide-out-right":
           "slide-out-right 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "gentle-pulse": "gentle-pulse 2.5s ease-in-out infinite",
+        "hero-ken": "hero-ken 22s ease-in-out infinite alternate",
+        "hero-wheel": "hero-wheel 2.2s ease-in-out infinite",
       },
     },
   },

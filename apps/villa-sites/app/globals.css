@@ -89,17 +89,13 @@
     }
   }
 
-  /* RTL support — Arabic */
-  [dir="rtl"] {
-    text-align: right;
-  }
-
   body {
     background-color: var(--color-bg);
     color: var(--color-text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100dvh;
+    text-align: start;
   }
 
   :focus-visible {

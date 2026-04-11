@@ -363,7 +363,7 @@ export default async function VillasIndexPage({ params, pathPrefix }: Props) {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     {idealFor && (
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-white backdrop-blur-md" style={{ backgroundColor: "rgba(0,0,0,0.45)" }}>
+                      <div className="absolute top-3 start-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-white backdrop-blur-md" style={{ backgroundColor: "rgba(0,0,0,0.45)" }}>
                         <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style={{ color: "var(--gold-accent)" }} aria-hidden="true">
                           <path d="M8 1l1.545 4.955L14.5 7.5l-4.955 1.545L8 14l-1.545-4.955L1.5 7.5l4.955-1.545L8 1z" />
                         </svg>
@@ -386,7 +386,7 @@ export default async function VillasIndexPage({ params, pathPrefix }: Props) {
                       style={{ color: "var(--accent-500)" }}
                     >
                       {c.view}
-                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" className="rtl:rotate-180"><path d="M6 3l5 5-5 5" /></svg>
                     </span>
                   </div>
                 </Link>

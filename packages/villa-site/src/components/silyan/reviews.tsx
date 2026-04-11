@@ -40,7 +40,7 @@ function ReviewCard({ review, large }: { review: Review; large?: boolean }) {
     >
       {/* Decorative quote mark */}
       <span
-        className="absolute -top-3 left-5 font-serif text-4xl leading-none select-none"
+        className="absolute -top-3 start-5 font-serif text-4xl leading-none select-none"
         style={{ color: "var(--gold-accent)", opacity: 0.35 }}
         aria-hidden="true"
       >

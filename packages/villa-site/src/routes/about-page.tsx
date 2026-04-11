@@ -114,12 +114,12 @@ export default async function AboutPage({ params, pathPrefix }: Props) {
 
       <div className="section-y">
         <div className="content-wrapper max-w-3xl">
-          <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-6 first-letter:text-3xl first-letter:font-serif first-letter:font-semibold first-letter:float-left first-letter:mr-2 first-letter:mt-0.5 first-letter:text-[var(--accent-500)]">
+          <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-6 first-letter:text-3xl first-letter:font-serif first-letter:font-semibold first-letter:float-start first-letter:me-2 first-letter:mt-0.5 first-letter:text-[var(--accent-500)]">
             {c.p1}
           </p>
 
           {/* Pull quote */}
-          <blockquote className="my-8 pl-4 border-l-2 border-[var(--gold-accent)]/40">
+          <blockquote className="my-8 ps-4 border-s-2 border-[var(--gold-accent)]/40">
             <p className="font-serif italic text-lg text-[var(--color-text-secondary)]">{c.pullQuote}</p>
           </blockquote>
 

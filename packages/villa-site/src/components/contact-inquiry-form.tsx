@@ -119,7 +119,7 @@ export default function ContactInquiryForm({ lang, pathPrefix, phone, siteSlug, 
             <p className="text-sm font-medium text-[var(--color-text-primary)]">{labels.waCta}</p>
             <p className="text-xs text-[var(--color-text-muted)]">{phone}</p>
           </div>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="ml-auto text-[var(--color-text-muted)]" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="ms-auto text-[var(--color-text-muted)]" aria-hidden="true">
             <path d="M6 3l5 5-5 5" />
           </svg>
         </a>

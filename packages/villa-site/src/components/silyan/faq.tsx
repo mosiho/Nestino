@@ -81,7 +81,7 @@ export default function FAQ({ lang }: { lang: Lang }) {
                   }`}
                 >
                   <button
-                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left text-base font-medium text-[var(--color-text-primary)] transition-colors duration-200 min-h-[var(--tap-target)]"
+                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-start text-base font-medium text-[var(--color-text-primary)] transition-colors duration-200 min-h-[var(--tap-target)]"
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
                   >

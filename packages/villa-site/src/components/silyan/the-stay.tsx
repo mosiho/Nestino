@@ -50,7 +50,7 @@ export default function TheStay({ lang }: Props) {
             <div className="relative">
               {/* Decorative offset frame (hidden on mobile) */}
               <div
-                className="hidden md:block absolute -right-3 -bottom-3 w-full h-full rounded-lg border-2"
+                className="hidden md:block absolute -end-3 -bottom-3 w-full h-full rounded-lg border-2"
                 style={{ borderColor: "var(--gold-accent)", opacity: 0.2 }}
               />
               <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-[var(--shadow-lg)]">
@@ -78,7 +78,7 @@ export default function TheStay({ lang }: Props) {
             </h2>
 
             {/* Pull quote */}
-            <blockquote className="my-6 pl-4 border-l-2 border-[var(--gold-accent)]/40">
+            <blockquote className="my-6 ps-4 border-s-2 border-[var(--gold-accent)]/40">
               <p className="font-serif italic text-base text-[var(--color-text-secondary)]">
                 {c.pullQuote}
               </p>

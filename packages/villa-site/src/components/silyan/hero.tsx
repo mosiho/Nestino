@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import type { Lang } from "../../lib/i18n";
@@ -13,187 +14,301 @@ type Props = {
   pathPrefix?: string;
 };
 
-const HERO_COPY: Record<string, { headline: string; subhead: string; cta1: string; cta2: string }> = {
+type HeroCopy = {
+  kicker: string;
+  headline: string;
+  subhead: string;
+  cta1: string;
+  cta2: string;
+  scroll: string;
+  videoHint: string;
+};
+
+const HERO_COPY: Record<string, HeroCopy> = {
   en: {
+    kicker: "Hisarçandır · Antalya",
     headline: "Three private villas in the mountains above Antalya",
-    subhead: "Private pools, mountain air, 8 km from the sea — your retreat near one of Turkey's most-visited cities.",
+    subhead:
+      "Private pools, mountain air, 8 km from the sea — your retreat near one of Turkey's most-visited cities.",
     cta1: "Explore Villas",
-    cta2: "WhatsApp Us",
+    cta2: "WhatsApp",
+    scroll: "Scroll",
+    videoHint: "Play video",
   },
   tr: {
+    kicker: "Hisarçandır · Antalya",
     headline: "Antalya'nın doğasında üç özel villa",
-    subhead: "Özel havuzlar, dağ havası, denize 8 km — Türkiye'nin en gözde şehrine yakın, sakin bir kaçış noktanız.",
+    subhead:
+      "Özel havuzlar, dağ havası, denize 8 km — Türkiye'nin en gözde şehrine yakın, sakin bir kaçış noktanız.",
     cta1: "Villaları Keşfet",
     cta2: "WhatsApp",
+    scroll: "Kaydır",
+    videoHint: "Videoyu oynat",
   },
   ar: {
+    kicker: "هيسارتشاندير · أنطاليا",
     headline: "ثلاث فيلات خاصة في جبال أنطاليا",
-    subhead: "مسابح خاصة، هواء جبلي نقي، 8 كيلومترات من البحر — ملاذك الهادئ بالقرب من أكثر مدن تركيا زيارةً.",
+    subhead:
+      "مسابح خاصة، هواء جبلي نقي، 8 كيلومترات من البحر — ملاذك الهادئ بالقرب من أكثر مدن تركيا زيارةً.",
     cta1: "استكشف الفيلات",
     cta2: "واتساب",
+    scroll: "مرر للأسفل",
+    videoHint: "تشغيل الفيديو",
   },
   ru: {
+    kicker: "Хисарчандыре · Анталия",
     headline: "Три частные виллы в горах над Анталией",
-    subhead: "Частные бассейны, горный воздух, 8 км от моря — ваш уединённый отдых рядом с одним из самых популярных городов Турции.",
+    subhead:
+      "Частные бассейны, горный воздух, 8 км от моря — ваш уединённый отдых рядом с одним из самых популярных городов Турции.",
     cta1: "Смотреть виллы",
     cta2: "WhatsApp",
+    scroll: "Вниз",
+    videoHint: "Включить видео",
   },
 };
+
+function useMediaQuery(query: string): boolean | null {
+  const [matches, setMatches] = useState<boolean | null>(null);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const fn = () => setMatches(mq.matches);
+    fn();
+    mq.addEventListener("change", fn);
+    return () => mq.removeEventListener("change", fn);
+  }, [query]);
+  return matches;
+}
 
 export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [saveData, setSaveData] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const isCoarse = useMediaQuery("(pointer: coarse)");
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
 
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 52]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.52], [1, 0]);
+  const mediaScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches && videoRef.current) {
-      videoRef.current.pause();
-    }
-  }, []);
+  const enableParallax = Boolean(!prefersReducedMotion && isCoarse === false);
 
-  useEffect(() => {
-    const isCoarse = window.matchMedia("(pointer: coarse)").matches;
-    if (isCoarse) {
-      const onInteract = () => {
-        setVideoLoaded(true);
-        window.removeEventListener("scroll", onInteract);
-        window.removeEventListener("touchstart", onInteract);
-      };
-      window.addEventListener("scroll", onInteract, { once: true, passive: true });
-      window.addEventListener("touchstart", onInteract, { once: true, passive: true });
-      return () => {
-        window.removeEventListener("scroll", onInteract);
-        window.removeEventListener("touchstart", onInteract);
-      };
-    }
+  const tryLoadVideo = useCallback(() => {
     setVideoLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion && videoRef.current) {
+      videoRef.current.pause();
+    }
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    if (isCoarse === null) return;
+
+    const sd = Boolean(
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData,
+    );
+    setSaveData(sd);
+
+    if (isCoarse === false) {
+      if (!sd) tryLoadVideo();
+      return;
+    }
+
+    const onInteract = () => {
+      tryLoadVideo();
+      window.removeEventListener("scroll", onInteract);
+      window.removeEventListener("touchstart", onInteract);
+      window.removeEventListener("pointerdown", onInteract);
+    };
+    window.addEventListener("scroll", onInteract, { once: true, passive: true });
+    window.addEventListener("touchstart", onInteract, { once: true, passive: true });
+    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
+    return () => {
+      window.removeEventListener("scroll", onInteract);
+      window.removeEventListener("touchstart", onInteract);
+      window.removeEventListener("pointerdown", onInteract);
+    };
+  }, [prefersReducedMotion, isCoarse, tryLoadVideo]);
 
   const copy = HERO_COPY[lang] ?? HERO_COPY.en!;
   const digits = phone.replace(/\D/g, "");
   const waHref = digits ? `https://wa.me/${digits}` : "#";
-  const isCoarsePointer = typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
+
+  const ctaBase =
+    "inline-flex items-center justify-center gap-2.5 min-h-[48px] px-6 sm:px-8 rounded-xl text-[15px] sm:text-sm font-semibold tracking-wide transition-all duration-300 ease-smooth active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80";
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-end justify-center overflow-hidden"
-      style={{ backgroundColor: "#1a1610", minHeight: "100svh" }}
+      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden"
+      style={{ backgroundColor: "#0f0d0a" }}
     >
-      {videoLoaded && (
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          aria-hidden="true"
-          poster={HERO_POSTER}
-        >
-          <source src={HERO_VIDEO} type="video/webm" />
-        </video>
-      )}
+      <motion.div
+        className="absolute inset-0"
+        style={enableParallax ? { scale: mediaScale } : undefined}
+      >
+        {videoLoaded ? (
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+            aria-hidden="true"
+            poster={HERO_POSTER}
+          >
+            <source src={HERO_VIDEO} type="video/webm" />
+          </video>
+        ) : (
+          <div className="absolute inset-0 overflow-hidden">
+            <div
+              className={`relative h-full w-full ${prefersReducedMotion ? "" : "motion-safe:animate-hero-ken"}`}
+            >
+              <Image
+                src={HERO_POSTER}
+                alt=""
+                fill
+                priority
+                quality={80}
+                sizes="100vw"
+                className="object-cover"
+                aria-hidden
+              />
+            </div>
+          </div>
+        )}
+      </motion.div>
 
-      {!videoLoaded && (
-        <img
-          src={HERO_POSTER}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          aria-hidden="true"
+      <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(180deg, rgba(15,13,10,0.5) 0%, rgba(15,13,10,0.1) 26%, rgba(15,13,10,0.18) 52%, rgba(8,6,4,0.78) 86%, rgba(5,4,3,0.93) 100%),
+              linear-gradient(118deg, rgba(139,115,85,0.14) 0%, transparent 45%)
+            `,
+          }}
         />
-      )}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse 88% 72% at 50% 42%, transparent 0%, rgba(5,4,3,0.38) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-x-0 bottom-0 h-[48%]"
+          style={{
+            background: "linear-gradient(to top, rgba(0,0,0,0.58), transparent)",
+          }}
+        />
+      </div>
 
       <div
-        className="absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-[2] opacity-[0.04] mix-blend-overlay"
         style={{
-          background:
-            "linear-gradient(to top, rgba(10,8,5,0.78) 0%, rgba(10,8,5,0.40) 40%, rgba(10,8,5,0.15) 70%, rgba(10,8,5,0.25) 100%)",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }}
-        aria-hidden="true"
+        aria-hidden
       />
 
-      <motion.div
-        className="relative content-wrapper text-center text-white z-10 pb-16 pt-32 sm:pb-20 sm:pt-40 md:pb-24"
-        style={
-          !prefersReducedMotion && !isCoarsePointer
-            ? { y: textY, opacity: textOpacity }
-            : undefined
-        }
-      >
-        <h1
-          className="font-serif font-semibold mb-4 animate-fade-up"
-          style={{ fontSize: "clamp(1.75rem, 6vw, 3.5rem)", lineHeight: "1.08", letterSpacing: "-0.01em" }}
+      {!videoLoaded && !prefersReducedMotion && (isCoarse === true || saveData) && (
+        <button
+          type="button"
+          onClick={tryLoadVideo}
+          className="absolute end-3 top-[calc(env(safe-area-inset-top,0px)+4.25rem)] z-20 flex items-center gap-2 rounded-full border border-white/25 bg-black/40 px-3.5 py-2.5 text-xs font-semibold text-white/95 shadow-lg backdrop-blur-md transition hover:bg-black/55 active:scale-[0.97] sm:end-5 sm:top-[calc(env(safe-area-inset-top,0px)+5.5rem)]"
         >
-          {copy.headline}
-        </h1>
-
-        {/* Gold decorative divider */}
-        <div
-          className="mx-auto mb-5 animate-fade-up"
-          style={{
-            width: "48px",
-            height: "1.5px",
-            background: "var(--gold-accent)",
-            opacity: 0.6,
-            animationDelay: "60ms",
-          }}
-        />
-
-        <p
-          className="mx-auto mb-10 text-white/80 animate-fade-up"
-          style={{
-            maxWidth: "580px",
-            fontSize: "clamp(0.9375rem, 2vw, 1.125rem)",
-            lineHeight: "1.65",
-            animationDelay: "100ms",
-          }}
-        >
-          {copy.subhead}
-        </p>
-
-        <div
-          className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-up"
-          style={{ animationDelay: "180ms" }}
-        >
-          {/* On mobile, WhatsApp first (higher intent) */}
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-md text-sm font-medium backdrop-blur-md border border-white/20 text-white hover:bg-white/15 transition-all duration-300 active:scale-[0.97] order-2 sm:order-2 w-full sm:w-auto"
-            style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/18 ring-1 ring-white/20">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" className="ms-0.5" aria-hidden>
+              <path d="M2 1.5v9l8-4.5-8-4.5z" />
             </svg>
-            {copy.cta2}
-          </a>
-          <Link
-            href={villaPath(pathPrefix, `/${lang}/villas`)}
-            className="inline-flex items-center justify-center px-7 py-3.5 rounded-md text-sm font-medium text-white transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:brightness-110 active:scale-[0.97] order-1 sm:order-1 w-full sm:w-auto"
-            style={{ backgroundColor: "var(--accent-500)" }}
-          >
-            {copy.cta1}
-          </Link>
+          </span>
+          {copy.videoHint}
+        </button>
+      )}
+
+      <motion.div
+        className="relative z-10 w-full px-0 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(6.5rem,env(safe-area-inset-top))] sm:pb-10 sm:pt-36 md:pb-14 md:pt-40"
+        style={enableParallax ? { y: textY, opacity: textOpacity } : undefined}
+      >
+        <div className="content-wrapper">
+          <div className="mx-auto max-w-[52rem] text-center sm:max-w-[58rem]">
+            <p
+              className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/58 sm:mb-4 sm:text-xs sm:tracking-[0.34em]"
+              style={{ textShadow: "0 1px 14px rgba(0,0,0,0.45)" }}
+            >
+              {copy.kicker}
+            </p>
+
+            <h1
+              className="mx-auto mb-5 font-serif text-balance font-semibold text-white sm:mb-6"
+              style={{
+                fontSize: "clamp(1.9rem, 1.1rem + 5vw, 4rem)",
+                lineHeight: "1.05",
+                letterSpacing: "-0.02em",
+                textShadow: "0 2px 48px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.35)",
+              }}
+            >
+              {copy.headline}
+            </h1>
+
+            <div
+              className="mx-auto mb-5 h-px w-16 sm:mb-7 sm:w-[4.5rem]"
+              style={{
+                background: "linear-gradient(90deg, transparent, var(--gold-accent), transparent)",
+                opacity: 0.88,
+              }}
+            />
+
+            <p
+              className="mx-auto mb-8 max-w-[34rem] text-pretty text-base leading-relaxed text-white/84 sm:mb-11 sm:max-w-[38rem] sm:text-lg sm:leading-[1.65]"
+              style={{ textShadow: "0 1px 22px rgba(0,0,0,0.38)" }}
+            >
+              {copy.subhead}
+            </p>
+
+            <div className="mx-auto flex max-w-md flex-col gap-3 rounded-2xl border border-white/[0.14] bg-black/30 p-3.5 shadow-[0_28px_90px_-16px_rgba(0,0,0,0.62)] backdrop-blur-2xl sm:max-w-none sm:flex-row sm:justify-center sm:gap-4 sm:bg-black/22 sm:p-4 md:rounded-3xl">
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${ctaBase} order-1 w-full border border-white/28 bg-white/[0.1] text-white hover:border-[var(--gold-accent)]/45 hover:bg-white/[0.16] sm:order-2 sm:w-auto sm:min-w-[210px]`}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" className="opacity-95" aria-hidden>
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                {copy.cta2}
+              </a>
+              <Link
+                href={villaPath(pathPrefix, `/${lang}/villas`)}
+                className={`${ctaBase} order-2 w-full text-white shadow-[0_10px_36px_rgba(0,0,0,0.28)] hover:shadow-[var(--shadow-glow)] hover:brightness-[1.07] sm:order-1 sm:w-auto sm:min-w-[210px]`}
+                style={{ backgroundColor: "var(--accent-500)" }}
+              >
+                {copy.cta1}
+              </Link>
+            </div>
+          </div>
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 z-10 hidden sm:block" aria-hidden="true">
-        <svg width="20" height="28" viewBox="0 0 20 28" fill="none" className="animate-gentle-pulse">
-          <rect x="1" y="1" width="18" height="26" rx="9" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="10" cy="8" r="2" fill="currentColor" />
+      <div
+        className="pointer-events-none absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-white/42 sm:bottom-6 sm:gap-1.5 sm:text-white/48"
+        aria-hidden
+      >
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] sm:text-[11px] sm:tracking-[0.28em]">
+          {copy.scroll}
+        </span>
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" className="motion-safe:animate-gentle-pulse opacity-85">
+          <rect x="1.5" y="1.5" width="19" height="27" rx="9.5" stroke="currentColor" strokeWidth="1.25" />
+          <circle cx="11" cy="9" r="2" fill="currentColor" className="motion-safe:animate-hero-wheel" />
         </svg>
       </div>
     </section>
