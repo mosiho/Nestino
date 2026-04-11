@@ -3,7 +3,8 @@ const BASE = "https://www.silyanvillas.com/wp-content/uploads/2024/07";
 /** Official site wordmark (same file as silyanvillas.com header logo). */
 export const SITE_LOGO = `${BASE}/logoweb-e1719838038700.png`;
 
-export const HERO_VIDEO = `${BASE}/06293.webm`;
+/** Same-origin hero loop (served from each app’s `/public`). */
+export const HERO_VIDEO = "/silyan-hero.webm";
 export const HERO_POSTER = `${BASE}/DSC00636-1.webp`;
 
 export const THE_STAY_IMAGE = `${BASE}/DSC00636-1.webp`;
