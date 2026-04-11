@@ -1,7 +1,8 @@
 import Link from "next/link";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../../lib/i18n";
+import { villaPath } from "../../lib/villa-path";
 
-type Props = { lang: Lang };
+type Props = { lang: Lang; pathPrefix?: string };
 
 const VILLAS = [
   {
@@ -61,7 +62,7 @@ const VIEW_LABEL: Record<string, string> = {
   ru: "Смотреть виллу",
 };
 
-export default function VillaCards({ lang }: Props) {
+export default function VillaCards({ lang, pathPrefix = "" }: Props) {
   const viewLabel = VIEW_LABEL[lang] ?? VIEW_LABEL.en!;
 
   return (
@@ -88,7 +89,7 @@ export default function VillaCards({ lang }: Props) {
             return (
               <Link
                 key={villa.slug}
-                href={`/${lang}/villas/${villa.slug}`}
+                href={villaPath(pathPrefix, `/${lang}/villas/${villa.slug}`)}
                 className="group rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--accent-500)] hover:shadow-[var(--shadow-md)] transition-all bg-[var(--color-bg)]"
               >
                 {/* Image placeholder */}

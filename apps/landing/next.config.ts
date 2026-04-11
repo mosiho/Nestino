@@ -7,14 +7,14 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://*.posthog.com https://us.i.posthog.com https://eu.i.posthog.com wss://*.posthog.com https://vitals.vercel-insights.com",
-  "frame-src https://*.nestino.com https:",
+  "frame-src https://*.nestino.com https://nestino-main.vercel.app https://*.nestino-main.vercel.app https:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
 ].join("; ");
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@nestino/db"],
+  transpilePackages: ["@nestino/db", "@nestino/villa-site"],
   async headers() {
     return [
       {

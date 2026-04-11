@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../../lib/i18n";
 
 type FAQItem = { q: string; a: string };
 

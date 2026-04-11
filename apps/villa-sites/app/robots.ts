@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
-import { getSiteBySubdomain } from "@/lib/tenant";
+import { getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const h = await headers();

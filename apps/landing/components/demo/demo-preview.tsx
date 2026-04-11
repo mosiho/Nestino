@@ -7,7 +7,7 @@ import { captureEvent } from "@/components/analytics/track-event";
 import { localizedHomeHref } from "@/components/i18n/language-switcher";
 import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
-import { getVillaBaseDomain } from "@/lib/constants";
+import { getVillaSiteEntryUrl } from "@/lib/constants";
 
 type DemoPreviewProps = {
   slug: string;
@@ -16,8 +16,7 @@ type DemoPreviewProps = {
 
 export function DemoPreview({ slug, destination }: DemoPreviewProps) {
   const [compact, setCompact] = useState(false);
-  const domain = getVillaBaseDomain();
-  const src = `https://${slug}.${domain}/en`;
+  const src = getVillaSiteEntryUrl(slug);
   const { locale, messages } = useLocaleContext();
   const d = messages.demo;
 
@@ -48,7 +47,7 @@ export function DemoPreview({ slug, destination }: DemoPreviewProps) {
             <p className="sr-only">{d.previewSr}</p>
           )}
           <p className="truncate text-xs text-muted">
-            {slug}.{domain} · {destination}
+            sites/{slug} · {destination}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">

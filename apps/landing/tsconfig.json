@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@nestino/villa-site/*": ["../../packages/villa-site/src/*"],
       "@/*": ["./*"]
     }
   },

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 import { getDb, isDatabaseConfigured, contentPages, contentVersions } from "@nestino/db";
-import { getSiteBySubdomain, getActiveLangs } from "@/lib/tenant";
+import { getSiteBySubdomain, getActiveLangs } from "@nestino/villa-site/lib/tenant";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const h = await headers();

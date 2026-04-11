@@ -11,11 +11,17 @@ export const DESTINATIONS = [
 export type DestinationValue = (typeof DESTINATIONS)[number]["value"];
 
 export function getSiteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://nestino.ai";
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://nestino-main.vercel.app";
 }
 
 export function getVillaBaseDomain(): string {
   return process.env.NEXT_PUBLIC_VILLA_BASE_DOMAIN ?? "nestino.com";
+}
+
+/** Public URL for a property site when served under the marketing host (`/sites/{slug}/…`). */
+export function getVillaSiteEntryUrl(subdomain: string, lang = "en"): string {
+  const base = getSiteUrl().replace(/\/$/, "");
+  return `${base}/sites/${subdomain}/${lang}`;
 }
 
 /** Default Nestino marketing WhatsApp (overridable via NEXT_PUBLIC_WHATSAPP_E164). */

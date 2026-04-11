@@ -1,7 +1,8 @@
 import Link from "next/link";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../../lib/i18n";
+import { villaPath } from "../../lib/villa-path";
 
-type Props = { lang: Lang };
+type Props = { lang: Lang; pathPrefix?: string };
 
 const COPY: Record<string, { headline: string; sub: string; cta: string }> = {
   en: {
@@ -32,7 +33,7 @@ const DISTANCES = [
   { icon: "🏖", label: { en: "Beach", tr: "Sahil", ar: "الشاطئ", ru: "Пляж" }, value: "8 km" },
 ] as const;
 
-export default function LocationTeaser({ lang }: Props) {
+export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
   const c = COPY[lang] ?? COPY.en!;
 
   return (
@@ -71,7 +72,7 @@ export default function LocationTeaser({ lang }: Props) {
               {c.sub}
             </p>
             <Link
-              href={`/${lang}/location`}
+              href={villaPath(pathPrefix, `/${lang}/location`)}
               className="inline-flex items-center gap-1 text-sm font-medium transition-colors hover:underline underline-offset-4"
               style={{ color: "var(--accent-500)" }}
             >

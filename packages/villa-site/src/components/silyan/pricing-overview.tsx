@@ -1,7 +1,8 @@
 import Link from "next/link";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../../lib/i18n";
+import { villaPath } from "../../lib/villa-path";
 
-type Props = { lang: Lang };
+type Props = { lang: Lang; pathPrefix?: string };
 
 const COPY: Record<string, { headline: string; note: string; cta: string; low: string; mid: string; high: string; lowSeason: string; midSeason: string; highSeason: string }> = {
   en: {
@@ -57,7 +58,7 @@ const SEASON_MONTHS: Record<string, { low: string; mid: string; high: string }> 
   ru: { low: "Ноя – Мар", mid: "Апр – Июн, Окт", high: "Июл – Сен" },
 };
 
-export default function PricingOverview({ lang }: Props) {
+export default function PricingOverview({ lang, pathPrefix = "" }: Props) {
   const c = COPY[lang] ?? COPY.en!;
   const months = SEASON_MONTHS[lang] ?? SEASON_MONTHS.en!;
 
@@ -102,7 +103,7 @@ export default function PricingOverview({ lang }: Props) {
         </div>
 
         <Link
-          href={`/${lang}/contact`}
+          href={villaPath(pathPrefix, `/${lang}/contact`)}
           className="inline-flex items-center justify-center px-6 py-3 rounded-md text-sm font-medium text-white transition-colors"
           style={{ backgroundColor: "var(--accent-500)" }}
           onMouseEnter={(e) =>

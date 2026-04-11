@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { LANG_LABELS, type Lang } from "@/lib/i18n";
+import { LANG_LABELS, type Lang } from "../lib/i18n";
+import { villaPath } from "../lib/villa-path";
 
 type Props = {
   siteName: string;
   lang: Lang;
   activeLangs: string[];
   phone: string;
+  /** e.g. `/sites/silyan` when embedded on the marketing host; empty for subdomain deployments */
+  pathPrefix?: string;
 };
 
 const NAV_LINKS = [
@@ -31,7 +34,13 @@ function navLabel(lang: string, key: string): string {
   return NAV_LABELS[lang]?.[key] ?? NAV_LABELS["en"]?.[key] ?? key;
 }
 
-export default function SiteHeader({ siteName, lang, activeLangs, phone }: Props) {
+export default function SiteHeader({
+  siteName,
+  lang,
+  activeLangs,
+  phone,
+  pathPrefix = "",
+}: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -57,7 +66,7 @@ export default function SiteHeader({ siteName, lang, activeLangs, phone }: Props
       <div className="content-wrapper flex items-center justify-between h-16 md:h-18">
         {/* Logo / wordmark */}
         <Link
-          href={`/${lang}`}
+          href={villaPath(pathPrefix, `/${lang}`)}
           className="font-serif font-semibold text-lg tracking-tight text-[var(--color-text-primary)] hover:text-[var(--accent-500)] transition-colors"
         >
           {siteName}
@@ -68,7 +77,7 @@ export default function SiteHeader({ siteName, lang, activeLangs, phone }: Props
           {NAV_LINKS.map(({ labelKey, href }) => (
             <Link
               key={href}
-              href={`/${lang}${href}`}
+              href={villaPath(pathPrefix, `/${lang}${href}`)}
               className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
             >
               {navLabel(lang, labelKey)}
@@ -83,7 +92,7 @@ export default function SiteHeader({ siteName, lang, activeLangs, phone }: Props
               {activeLangs.map((l) => (
                 <Link
                   key={l}
-                  href={`/${l}`}
+                  href={villaPath(pathPrefix, `/${l}`)}
                   className={`text-xs font-medium px-2 py-1 rounded-sm transition-colors ${
                     l === lang
                       ? "text-[var(--accent-500)] bg-[var(--accent-muted)]"
@@ -140,7 +149,7 @@ export default function SiteHeader({ siteName, lang, activeLangs, phone }: Props
             {NAV_LINKS.map(({ labelKey, href }) => (
               <Link
                 key={href}
-                href={`/${lang}${href}`}
+                href={villaPath(pathPrefix, `/${lang}${href}`)}
                 className="py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
@@ -154,7 +163,7 @@ export default function SiteHeader({ siteName, lang, activeLangs, phone }: Props
               {activeLangs.map((l) => (
                 <Link
                   key={l}
-                  href={`/${l}`}
+                  href={villaPath(pathPrefix, `/${l}`)}
                   className={`text-xs font-medium px-2 py-1 rounded-sm transition-colors ${
                     l === lang
                       ? "text-[var(--accent-500)] bg-[var(--accent-muted)]"

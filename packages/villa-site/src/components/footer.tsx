@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { LANG_LABELS, type Lang } from "@/lib/i18n";
+import { LANG_LABELS, type Lang } from "../lib/i18n";
+import { villaPath } from "../lib/villa-path";
 
 type Props = {
   siteName: string;
@@ -7,6 +8,7 @@ type Props = {
   phone: string;
   lang: Lang;
   activeLangs: string[];
+  pathPrefix?: string;
 };
 
 export default function Footer({
@@ -15,6 +17,7 @@ export default function Footer({
   phone,
   lang,
   activeLangs,
+  pathPrefix = "",
 }: Props) {
   return (
     <footer
@@ -50,10 +53,10 @@ export default function Footer({
             </p>
             <ul className="space-y-2">
               {[
-                { label: "Villas", href: `/${lang}/villas` },
-                { label: "Location", href: `/${lang}/location` },
-                { label: "About", href: `/${lang}/about` },
-                { label: "Contact", href: `/${lang}/contact` },
+                { label: "Villas", href: villaPath(pathPrefix, `/${lang}/villas`) },
+                { label: "Location", href: villaPath(pathPrefix, `/${lang}/location`) },
+                { label: "About", href: villaPath(pathPrefix, `/${lang}/about`) },
+                { label: "Contact", href: villaPath(pathPrefix, `/${lang}/contact`) },
               ].map(({ label, href }) => (
                 <li key={href}>
                   <Link
@@ -78,7 +81,7 @@ export default function Footer({
                   {activeLangs.map((l) => (
                     <Link
                       key={l}
-                      href={`/${l}`}
+                      href={villaPath(pathPrefix, `/${l}`)}
                       className={`text-xs px-2 py-1 rounded-sm border transition-colors ${
                         l === lang
                           ? "border-[var(--accent-500)] text-[var(--accent-500)]"
@@ -92,7 +95,7 @@ export default function Footer({
               </>
             )}
             <Link
-              href={`/${lang}/privacy`}
+              href={villaPath(pathPrefix, `/${lang}/privacy`)}
               className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors"
             >
               Privacy Policy
@@ -108,7 +111,7 @@ export default function Footer({
           <p className="text-xs text-[var(--color-text-muted)]">
             Powered by{" "}
             <a
-              href="https://nestino.com"
+              href="https://nestino-main.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[var(--accent-500)] transition-colors"

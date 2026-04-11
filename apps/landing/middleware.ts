@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
+import { isLang } from "@nestino/villa-site/lib/i18n";
 
 function localeFromPathname(pathname: string): Locale | null {
   for (const loc of locales) {
@@ -14,14 +15,6 @@ function localeFromPathname(pathname: string): Locale | null {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    const nextUrl = request.nextUrl.clone();
-    const stripped =
-      pathname === "/en" ? "/" : pathname.slice("/en".length) || "/";
-    nextUrl.pathname = stripped;
-    return NextResponse.redirect(nextUrl, 308);
-  }
 
   if (
     pathname.startsWith("/api") ||
@@ -36,6 +29,35 @@ export function middleware(request: NextRequest) {
 
   if (/\.[^/]+$/.test(pathname)) {
     return NextResponse.next();
+  }
+
+  // Property sites on the same host: /sites/{subdomain}/{lang}/...
+  if (pathname.startsWith("/sites/")) {
+    const parts = pathname.split("/").filter(Boolean);
+    const siteSlug = parts[1];
+    const maybeLang = parts[2];
+    const requestHeaders = new Headers(request.headers);
+    if (siteSlug) {
+      requestHeaders.set("x-nestino-slug", siteSlug);
+    }
+    requestHeaders.set("x-nestino-villa-ui", "1");
+    if (maybeLang && isLang(maybeLang)) {
+      requestHeaders.set("x-nestino-villa-lang", maybeLang);
+    }
+    if (parts.length === 2 && siteSlug) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/sites/${siteSlug}/en`;
+      return NextResponse.redirect(url, 308);
+    }
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
+
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    const nextUrl = request.nextUrl.clone();
+    const stripped =
+      pathname === "/en" ? "/" : pathname.slice("/en".length) || "/";
+    nextUrl.pathname = stripped;
+    return NextResponse.redirect(nextUrl, 308);
   }
 
   const existing = localeFromPathname(pathname);

@@ -3,8 +3,8 @@ import { Fraunces, Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/react";
 
-import { isLang, isRtl, htmlLang, type Lang } from "@/lib/i18n";
-import { getSiteBySubdomain } from "@/lib/tenant";
+import { isLang, isRtl, htmlLang, type Lang } from "@nestino/villa-site/lib/i18n";
+import { getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
 import "./globals.css";
 
 const fraunces = Fraunces({

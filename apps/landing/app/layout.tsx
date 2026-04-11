@@ -1,5 +1,5 @@
 import { Analytics } from "@vercel/analytics/react";
-import { Inter } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -7,11 +7,28 @@ import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { htmlLang, isLocale, type Locale } from "@/lib/i18n/config";
 import { getSiteUrl } from "@/lib/constants";
 
-import "./globals.css";
+import { isLang, isRtl, htmlLang as villaHtmlLang, type Lang } from "@nestino/villa-site/lib/i18n";
+import { getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
 
-const inter = Inter({
+import "./globals.css";
+import "./sites/villa-site-tokens.css";
+
+const interMarketing = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-geist-sans",
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  axes: ["opsz", "SOFT", "WONK"],
+});
+
+const interVilla = Inter({
+  subsets: ["latin", "latin-ext", "cyrillic"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -33,13 +50,58 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const h = await headers();
+  const isVillaUi = h.get("x-nestino-villa-ui") === "1";
+  const slug = h.get("x-nestino-slug") ?? "";
+  const villaLangHeader = h.get("x-nestino-villa-lang");
+
+  if (isVillaUi && slug) {
+    const ctx = await getSiteBySubdomain(slug);
+    const rawVillaLang = villaLangHeader && isLang(villaLangHeader) ? villaLangHeader : "en";
+    const vLang: Lang = rawVillaLang;
+    const accentHex = ctx?.site.accentHex ?? null;
+    const isDark = ctx?.site.theme === "dark";
+    const themeClass = isDark ? "theme-dark" : "";
+    const accentStyles = accentHex
+      ? `.villa-site-root {
+        --accent-500: ${accentHex};
+        --accent-600: color-mix(in srgb, ${accentHex} 88%, black);
+        --accent-400: color-mix(in srgb, ${accentHex} 72%, white);
+        --accent-muted: color-mix(in srgb, ${accentHex} 20%, transparent);
+        --ring-accent: color-mix(in srgb, ${accentHex} 40%, transparent);
+      }`
+      : "";
+
+    const fontVars = `${fraunces.variable} ${interVilla.variable}`;
+
+    return (
+      <html
+        lang={villaHtmlLang(vLang)}
+        dir={isRtl(vLang) ? "rtl" : "ltr"}
+        className={`villa-site-root ${fontVars} font-sans ${themeClass}`.trim()}
+      >
+        <head>
+          {ctx?.site.gscVerificationToken && (
+            <meta name="google-site-verification" content={ctx.site.gscVerificationToken} />
+          )}
+          {accentStyles ? (
+            <style dangerouslySetInnerHTML={{ __html: accentStyles }} />
+          ) : null}
+        </head>
+        <body className="min-h-dvh flex flex-col">
+          <PostHogProvider>{children}</PostHogProvider>
+          <Analytics />
+        </body>
+      </html>
+    );
+  }
+
   const raw = h.get("x-nestino-locale");
   const locale: Locale = raw && isLocale(raw) ? raw : "en";
   const lang = htmlLang(locale);
   const htmlClass =
     locale === "tr"
-      ? `${inter.variable} font-sans is-locale-tr`
-      : `${inter.variable} font-sans`;
+      ? `${interMarketing.variable} font-sans is-locale-tr`
+      : `${interMarketing.variable} font-sans`;
 
   return (
     <html lang={lang} className={htmlClass}>

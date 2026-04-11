@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../lib/i18n";
+import { villaPath } from "../lib/villa-path";
 
 type Props = {
   phone: string;
   lang: Lang;
+  pathPrefix?: string;
 };
 
 const CTA_LABELS: Partial<Record<Lang, { cta: string; whatsapp: string }>> = {
@@ -17,7 +19,7 @@ const CTA_LABELS: Partial<Record<Lang, { cta: string; whatsapp: string }>> = {
   de: { cta: "Verfügbarkeit prüfen", whatsapp: "WhatsApp" },
 };
 
-export default function StickyCtaBar({ phone, lang }: Props) {
+export default function StickyCtaBar({ phone, lang, pathPrefix = "" }: Props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function StickyCtaBar({ phone, lang }: Props) {
       aria-label="Quick actions"
     >
       <Link
-        href={`/${lang}/contact`}
+        href={villaPath(pathPrefix, `/${lang}/contact`)}
         className="flex-1 max-w-xs text-center py-2.5 px-4 rounded-md text-sm font-medium text-white transition-colors"
         style={{ backgroundColor: "var(--accent-500)" }}
         onClick={() => {

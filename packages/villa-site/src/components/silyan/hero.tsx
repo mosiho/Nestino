@@ -2,11 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../../lib/i18n";
+import { villaPath } from "../../lib/villa-path";
 
 type Props = {
   lang: Lang;
   phone: string;
+  pathPrefix?: string;
 };
 
 const HERO_COPY: Record<string, { headline: string; subhead: string; cta1: string; cta2: string }> = {
@@ -36,7 +38,7 @@ const HERO_COPY: Record<string, { headline: string; subhead: string; cta1: strin
   },
 };
 
-export default function Hero({ lang, phone }: Props) {
+export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function Hero({ lang, phone }: Props) {
           style={{ animationDelay: "160ms" }}
         >
           <Link
-            href={`/${lang}/villas`}
+            href={villaPath(pathPrefix, `/${lang}/villas`)}
             className="inline-flex items-center justify-center px-7 py-3.5 rounded-md text-sm font-medium text-white transition-colors"
             style={{ backgroundColor: "var(--accent-500)" }}
             onMouseEnter={(e) =>

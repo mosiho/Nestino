@@ -13,7 +13,7 @@ import {
 } from "@nestino/db";
 
 import { hashCmsApiKey, generateCmsApiKey } from "@/lib/cms-key";
-import { getInternalNotifyEmail, getVillaBaseDomain } from "@/lib/constants";
+import { getInternalNotifyEmail, getVillaSiteEntryUrl } from "@/lib/constants";
 import { enqueueCrawlSiteJob } from "@/lib/engine-trigger";
 import {
   rateLimitTrialByEmailHash,
@@ -128,8 +128,7 @@ export async function POST(req: Request) {
   const trialEnds = new Date();
   trialEnds.setUTCDate(trialEnds.getUTCDate() + 30);
 
-  const villaDomain = getVillaBaseDomain();
-  const demoUrl = `https://${subdomain}.${villaDomain}/en`;
+  const demoUrl = getVillaSiteEntryUrl(subdomain);
 
   try {
     const result = await db.transaction(async (tx) => {

@@ -10,14 +10,14 @@ const csp = [
   "font-src 'self' data:",
   "connect-src 'self' https://*.posthog.com https://us.i.posthog.com https://eu.i.posthog.com wss://*.posthog.com https://maps.googleapis.com",
   "frame-src https://www.google.com https://maps.google.com",
-  // Allow nestino.com to embed demo sites in iframes
-  "frame-ancestors 'self' https://nestino.com https://*.nestino.com",
+  // Allow marketing site to embed demo villa pages in iframes
+  "frame-ancestors 'self' https://nestino.com https://*.nestino.com https://nestino-main.vercel.app",
   "base-uri 'self'",
   "form-action 'self'",
 ].join("; ");
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@nestino/db"],
+  transpilePackages: ["@nestino/db", "@nestino/villa-site"],
   images: {
     remotePatterns: [
       // Supabase Storage CDN

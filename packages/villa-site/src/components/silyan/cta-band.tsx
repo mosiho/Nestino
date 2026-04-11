@@ -1,7 +1,8 @@
 import Link from "next/link";
-import type { Lang } from "@/lib/i18n";
+import type { Lang } from "../../lib/i18n";
+import { villaPath } from "../../lib/villa-path";
 
-type Props = { lang: Lang; phone: string };
+type Props = { lang: Lang; phone: string; pathPrefix?: string };
 
 const COPY: Record<string, { headline: string; body: string; cta1: string; cta2: string }> = {
   en: {
@@ -30,7 +31,7 @@ const COPY: Record<string, { headline: string; body: string; cta1: string; cta2:
   },
 };
 
-export default function CtaBand({ lang, phone }: Props) {
+export default function CtaBand({ lang, phone, pathPrefix = "" }: Props) {
   const c = COPY[lang] ?? COPY.en!;
   const digits = phone.replace(/\D/g, "");
   const waHref = digits ? `https://wa.me/${digits}` : "#";
@@ -68,7 +69,7 @@ export default function CtaBand({ lang, phone }: Props) {
             {c.cta1}
           </a>
           <Link
-            href={`/${lang}/contact`}
+            href={villaPath(pathPrefix, `/${lang}/contact`)}
             className="inline-flex items-center justify-center px-7 py-3.5 rounded-md text-sm font-medium border border-[var(--color-border-strong)] text-[var(--color-text-primary)] hover:border-[var(--accent-500)] transition-colors bg-[var(--color-surface)]"
           >
             {c.cta2}

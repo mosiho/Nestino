@@ -21,7 +21,6 @@ const InquirySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  // Resolve site from request host
   const host = request.headers.get("host") ?? "";
   const referer = request.headers.get("referer");
   const slug =
@@ -36,7 +35,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Parse + validate body
   let body: unknown;
   try {
     body = await request.json();
@@ -94,7 +92,6 @@ export async function POST(request: NextRequest) {
     })
     .returning({ id: inquiries.id });
 
-  // Send email notification (non-blocking — fire and forget)
   if (process.env.RESEND_API_KEY && email) {
     void sendNotificationEmail({
       siteName: ctx.tenant.name,

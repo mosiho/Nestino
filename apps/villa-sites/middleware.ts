@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { isLang } from "@/lib/i18n";
+import { isLang } from "@nestino/villa-site/lib/i18n";
 
 const VILLA_BASE_DOMAIN =
   process.env.NEXT_PUBLIC_VILLA_BASE_DOMAIN ?? "nestino.com";
