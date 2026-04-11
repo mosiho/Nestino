@@ -9,44 +9,123 @@ type FAQItem = { q: string; a: string };
 
 const FAQ_ITEMS: Record<string, FAQItem[]> = {
   en: [
-    { q: "How many villas are there?", a: "Three — Villa Badem, Villa Defne, and Villa İncir. Each is a fully independent villa with its own private pool, garden, and entrance." },
-    { q: "How many guests can Silyan Villas accommodate in total?", a: "All three villas together sleep up to 22 guests: Badem and İncir each sleep 6, Defne sleeps 10." },
-    { q: "Can I book more than one villa at once?", a: "Yes. Contact us directly if you'd like to book two or all three villas simultaneously for a group." },
-    { q: "What is the minimum stay?", a: "2 nights minimum for all villas." },
-    { q: "Is there a private pool at each villa?", a: "Yes. Every villa has its own private pool and garden — you will not share with other guests." },
-    { q: "How far is Silyan Villas from Antalya Airport?", a: "22 km — approximately 25–30 minutes by car depending on traffic." },
-    { q: "Are pets allowed?", a: "No pets are permitted at Silyan Villas." },
-    { q: "Is the property suitable for families with children?", a: "Yes. All three villas are designed for families and groups, with private gardens and pools. Children must be supervised around pool areas at all times." },
+    {
+      q: "How many villas are there?",
+      a: "Eleven independent villas — including Villa Portakal, Villa Defne, Villa İncir, Villa Badem, and more. Each is a fully separate home with its own private pool, garden, and entrance.",
+    },
+    {
+      q: "How many guests can Silyan Villas accommodate in total?",
+      a: "Each villa sleeps between 4 and 10 guests depending on the property. With all eleven villas booked at full occupancy, the estate can host large groups — contact us with your dates and group size for a tailored plan.",
+    },
+    {
+      q: "Can I book more than one villa at once?",
+      a: "Yes. Message us on WhatsApp or use the inquiry form if you would like to reserve several villas together for a celebration, retreat, or extended family trip.",
+    },
+    {
+      q: "What is the minimum stay?",
+      a: "2 nights minimum for all villas.",
+    },
+    {
+      q: "Is there a private pool at each villa?",
+      a: "Yes. Every villa has its own private pool and garden — you will not share pools with other guests.",
+    },
+    {
+      q: "How far is Silyan Villas from Antalya Airport?",
+      a: "22 km — approximately 25–30 minutes by car depending on traffic.",
+    },
+    {
+      q: "Are pets allowed?",
+      a: "No pets are permitted at Silyan Villas.",
+    },
+    {
+      q: "Is the property suitable for families with children?",
+      a: "Yes. All eleven villas are designed for families and groups, with private gardens and pools. Children must be supervised around pool areas at all times.",
+    },
+    {
+      q: "Is Silyan Villas quiet — away from city noise?",
+      a: "The villas sit on a forested hillside in Hisarçandır above Konyaaltı, where nights are calm and the setting feels immersed in nature. Antalya's centre and beaches are a short drive when you want city energy or the sea.",
+    },
   ],
   tr: [
-    { q: "Kaç villa var?", a: "Üç — Villa Badem, Villa Defne ve Villa İncir. Her biri kendi özel havuzu, bahçesi ve girişiyle tamamen bağımsız bir villadır." },
-    { q: "Silyan Villas toplamda kaç misafir ağırlayabilir?", a: "Üç villa birlikte toplam 22 misafir kapasitesine sahiptir: Badem ve İncir 6'şar, Defne ise 10 kişiliktir." },
-    { q: "Birden fazla villa birden rezerve edilebilir mi?", a: "Evet. Büyük gruplar için iki veya üç villayı aynı anda rezerve etmek isterseniz doğrudan bizimle iletişime geçin." },
+    {
+      q: "Kaç villa var?",
+      a: "On bir bağımsız villa — Villa Portakal, Villa Defne, Villa İncir, Villa Badem ve diğerleri. Her biri kendi özel havuzu, bahçesi ve girişiyle tamamen ayrı bir konuttur.",
+    },
+    {
+      q: "Silyan Villas toplamda kaç misafir ağırlayabilir?",
+      a: "Villaya göre 4 ila 10 kişi arası konaklama sunulur. Birden fazla villa ile büyük gruplar için plan yapılabilir — tarih ve kişi sayınızı yazın, size uygun kombinasyonu önerelim.",
+    },
+    {
+      q: "Birden fazla villa birden rezerve edilebilir mi?",
+      a: "Evet. Kutlama, toplantı veya geniş aile tatili için birden fazla villayı birlikte ayırtmak isterseniz WhatsApp veya talep formu üzerinden bize ulaşın.",
+    },
     { q: "Minimum konaklama süresi nedir?", a: "Tüm villalar için minimum 2 gece." },
-    { q: "Her villanın özel havuzu var mı?", a: "Evet. Her villanın kendi özel havuzu ve bahçesi vardır — diğer misafirlerle paylaşmazsınız." },
+    {
+      q: "Her villanın özel havuzu var mı?",
+      a: "Evet. Her villanın kendi özel havuzu ve bahçesi vardır — havuzları diğer misafirlerle paylaşmazsınız.",
+    },
     { q: "Silyan Villas, Antalya Havalimanı'na ne kadar uzak?", a: "22 km — trafiğe bağlı olarak yaklaşık 25–30 dakika." },
     { q: "Evcil hayvanlar kabul ediliyor mu?", a: "Silyan Villas'ta evcil hayvanlara izin verilmemektedir." },
-    { q: "Mülk çocuklu aileler için uygun mu?", a: "Evet. Üç villa da özel bahçeleri ve havuzlarıyla aileler ve gruplar için tasarlanmıştır. Çocuklar her zaman havuz başında gözetim altında olmalıdır." },
+    {
+      q: "Mülk çocuklu aileler için uygun mu?",
+      a: "Evet. On bir villa da özel bahçe ve havuzlarıyla aileler ve gruplar için tasarlanmıştır. Çocuklar havuz başında her zaman gözetim altında olmalıdır.",
+    },
+    {
+      q: "Silyan Villas sessiz mi — şehir gürültüsünden uzak mı?",
+      a: "Villalar Hisarçandır'da Konyaaltı üzerinde ormanlık bir yamaçta; akşamlar sakin, ortam doğanın içinde hissedilir. Şehir merkezi ve sahiller istediğinizde kısa bir sürüşle ulaşılabilir.",
+    },
   ],
   ar: [
-    { q: "كم عدد الفيلات؟", a: "ثلاث — فيلا بادم، وفيلا دفني، وفيلا إنجير. كل فيلا مستقلة تماماً بمسبحها وحديقتها ومدخلها الخاص." },
-    { q: "كم عدد الضيوف الذين يمكن استيعابهم؟", a: "يمكن لجميع الفيلات الثلاث معاً استيعاب ما يصل إلى 22 ضيفاً." },
-    { q: "هل يمكن حجز أكثر من فيلا؟", a: "نعم. تواصل معنا مباشرة إذا كنت ترغب في حجز فيلتين أو الثلاث معاً." },
+    {
+      q: "كم عدد الفيلات؟",
+      a: "أحد عشر فيلا مستقلة — من بينها فيلا بورتاكال، وفيلا دفني، وفيلا إنجير، وفيلا بادم وغيرها. كل منزل منفصل بالكامل بمسبحه وحديقته ومدخله الخاص.",
+    },
+    {
+      q: "كم عدد الضيوف الذين يمكن استيعابهم؟",
+      a: "تتسع كل فيلا لما بين 4 و10 ضيوف حسب الوحدة. للمجموعات الكبيرة عند حجز عدة فيلات معاً — أرسل التواريخ وعدد الضيوف لنقترح التوليفة المناسبة.",
+    },
+    {
+      q: "هل يمكن حجز أكثر من فيلا؟",
+      a: "نعم. راسلنا عبر واتساب أو نموذج الاستفسار إذا أردتم حجز عدة فيلات معاً لمناسبة أو عائلة موسعة.",
+    },
     { q: "ما هو الحد الأدنى لمدة الإقامة؟", a: "ليلتان كحد أدنى لجميع الفيلات." },
-    { q: "هل يوجد مسبح خاص في كل فيلا؟", a: "نعم. لكل فيلا مسبحها وحديقتها الخاصين." },
-    { q: "كم تبعد عن مطار أنطاليا؟", a: "22 كيلومتراً — ما يقارب 25-30 دقيقة بالسيارة." },
+    { q: "هل يوجد مسبح خاص في كل فيلا؟", a: "نعم. لكل فيلا مسبحها وحديقتها الخاصان — لا تتشاركون المسابح مع ضيوف آخرين." },
+    { q: "كم تبعد عن مطار أنطاليا؟", a: "22 كيلومتراً — ما يقارب 25–30 دقيقة بالسيارة." },
     { q: "هل الحيوانات الأليفة مسموح بها؟", a: "لا يُسمح بالحيوانات الأليفة في سيليان فيلاز." },
-    { q: "هل المكان مناسب للعائلات ذات الأطفال؟", a: "نعم. جميع الفيلات مصممة للعائلات والمجموعات. يجب الإشراف على الأطفال دائماً في منطقة المسبح." },
+    {
+      q: "هل المكان مناسب للعائلات ذات الأطفال؟",
+      a: "نعم. الفيلات الـ11 مصممة للعائلات والمجموعات مع حدائق ومسابح خاصة. يجب الإشراف على الأطفال دائماً حول المسبح.",
+    },
+    {
+      q: "هل سيليان فيلاز هادئة — بعيدة عن ضجيج المدينة؟",
+      a: "تقع الفيلات على تلة مشجرة في هيسارتشاندير فوق كونيالتي؛ الليالٍ هادئة والجو يشعرك بالطبيعة. وسط أنطاليا والشواطئ على بعد قصير بالسيارة عند الحاجة.",
+    },
   ],
   ru: [
-    { q: "Сколько здесь вилл?", a: "Три — Villa Badem, Villa Defne и Villa İncir. Каждая полностью независима." },
-    { q: "Сколько гостей вмещают?", a: "Все три виллы вместе вмещают до 22 гостей." },
-    { q: "Можно забронировать несколько вилл?", a: "Да. Свяжитесь с нами напрямую." },
+    {
+      q: "Сколько здесь вилл?",
+      a: "Одиннадцать независимых вилл — в том числе Villa Portakal, Villa Defne, Villa İncir, Villa Badem и другие. Каждая — отдельный дом со своим бассейном, садом и входом.",
+    },
+    {
+      q: "Сколько гостей можно разместить?",
+      a: "В каждой вилле от 4 до 10 гостей в зависимости от объекта. Для больших групп можно бронировать несколько вилл — напишите даты и состав, мы предложим вариант.",
+    },
+    {
+      q: "Можно забронировать несколько вилл?",
+      a: "Да. Напишите в WhatsApp или через форму запроса, если хотите снять несколько вилл для праздника, ретрита или большой семьи.",
+    },
     { q: "Минимальный срок?", a: "Минимум 2 ночи для всех вилл." },
-    { q: "У каждой виллы есть бассейн?", a: "Да. У каждой виллы свой частный бассейн и сад." },
+    { q: "У каждой виллы есть бассейн?", a: "Да. У каждой виллы свой частный бассейн и сад — бассейны не общие с другими гостями." },
     { q: "Как далеко от аэропорта?", a: "22 км — примерно 25–30 минут езды." },
     { q: "Разрешены животные?", a: "Нет, домашние животные не допускаются." },
-    { q: "Подходит для семей с детьми?", a: "Да. Все виллы рассчитаны на семьи. Дети должны быть под присмотром у бассейна." },
+    {
+      q: "Подходит для семей с детьми?",
+      a: "Да. Все одиннадцать вилл рассчитаны на семьи и группы. Дети должны быть под присмотром у бассейна.",
+    },
+    {
+      q: "Тихо ли здесь — далеко от городского шума?",
+      a: "Виллы стоят на лесистом склоне в Хисарчандыре над Конъяалты: вечера спокойные, ощущение близости к природе. Центр Анталии и пляжи — короткая поездка, когда нужен город или море.",
+    },
   ],
 };
 

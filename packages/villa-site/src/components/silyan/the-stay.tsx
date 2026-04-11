@@ -5,30 +5,69 @@ import AnimateOnScroll from "../animate-on-scroll";
 
 type Props = { lang: Lang };
 
-const COPY: Record<string, { headline: string; body: string; label: string; pullQuote: string }> = {
+type StayCopy = {
+  label: string;
+  introLead: string;
+  awayBand: string;
+  headline: string;
+  pullQuote: string;
+  body: string;
+  bodySecond: string;
+  imageAlt: string;
+};
+
+const COPY: Record<string, StayCopy> = {
   en: {
-    headline: "A place between the mountain and the sea",
-    body: "Silyan Villas sits in Hisarçandır, a forested hillside above Konyaaltı — quiet enough to hear the trees, close enough to reach Antalya's restaurants and beaches in minutes. Three independent villas, each with its own private pool and garden, designed for families and groups who want space without compromise.",
     label: "About Silyan Villas",
+    introLead:
+      "Pine forest, private pools, and mountain light — captivating scenery that invites you to slow down and breathe deeply.",
+    awayBand: "Away from the noise of city life",
+    headline: "A place between the mountain and the sea",
     pullQuote: "Quiet enough to hear the trees, close enough to reach the sea.",
+    body: "Silyan Villas is the natural choice for guests who want to immerse themselves in the atmosphere of nature without giving up comfort. Eleven independent villas sit on a forested hillside above Konyaaltı, Hisarçandır — each with its own pool and garden, designed for families and groups who value privacy and space.",
+    bodySecond:
+      "Working with experienced architects, we shaped each home to be modern, comfortable, and functional: generous layouts, full kitchens, and private outdoor living so you can settle in and truly unwind.",
+    imageAlt:
+      "Private pool, pine forest, and mountain views at Silyan Villas — Hisarçandır nature retreat near Antalya, Turkey",
   },
   tr: {
-    headline: "Dağ ile deniz arasında bir kaçış noktası",
-    body: "Silyan Villas, Konyaaltı'nın üzerindeki ormanla kaplı yamaçlarda, Hisarçandır'da yer alıyor. Ağaç seslerini duyabilecek kadar sessiz, dakikalar içinde Antalya'nın restoranlarına ve sahillerine ulaşabilecek kadar yakın. Her biri özel havuzu ve bahçesiyle tam bağımsız olan üç villa, uzlaşıdan vazgeçmek istemeyen aileler ve gruplar için tasarlandı.",
     label: "Silyan Villas Hakkında",
+    introLead:
+      "Çam ormanı, özel havuzlar ve dağ ışığı — sizi yavaşlatmaya ve derin nefes almaya davet eden büyüleyici bir manzara.",
+    awayBand: "Şehir hayatının gürültüsünden uzakta",
+    headline: "Dağ ile deniz arasında bir kaçış noktası",
     pullQuote: "Ağaçları duyabilecek kadar sessiz, denize ulaşabilecek kadar yakın.",
+    body: "Silyan Villas, konfordan ödün vermeden doğanın atmosferine kendini bırakmak isteyen misafirler için doğal bir tercihtir. Hisarçandır'da Konyaaltı üzerindeki ormanlık yamaçta on bir bağımsız villa yer alır — her biri mahremiyet ve alan arayan aileler ve gruplar için özel havuzu ve bahçesiyle tasarlandı.",
+    bodySecond:
+      "Deneyimli mimarlarla birlikte her evi modern, konforlu ve işlevsel kıldık: geniş planlar, tam donanımlı mutfaklar ve gerçekten dinlenebileceğiniz özel açık yaşam alanları.",
+    imageAlt:
+      "Silyan Villas'ta özel havuz, çam ormanı ve dağ manzarası — Antalya yakınında Hisarçandır doğa kaçamağı, Türkiye",
   },
   ar: {
-    headline: "ملجأ بين الجبل والبحر",
-    body: "تقع سيليان فيلاز في هيسارتشاندير، على تلة مشجرة فوق كونيالتي — هادئة بما يكفي لتسمع أصوات الطبيعة، وقريبة بما يكفي للوصول إلى مطاعم أنطاليا وشواطئها في دقائق. ثلاث فيلات مستقلة، لكل منها مسبح خاص وحديقة، مصممة للعائلات والمجموعات التي تريد المساحة دون تنازلات.",
     label: "عن سيليان فيلاز",
+    introLead:
+      "غابة صنوبر ومسابح خاصة وضوء جبلي — منظر آسِر يدعوك إلى التهدئة والتنفس بعمق.",
+    awayBand: "بعيدًا عن ضجيج الحياة في المدينة",
+    headline: "ملجأ بين الجبل والبحر",
     pullQuote: "هادئة بما يكفي لتسمع الأشجار، قريبة بما يكفي للوصول إلى البحر.",
+    body: "سيليان فيلاز الخيار الطبيعي للضيوف الذين يريدون الانغماس في أجواء الطبيعة دون التفريط في الراحة. أحد عشر فيلا مستقلة على تلة مشجرة فوق كونيالتي في هيسارتشاندير — لكل منها مسبح وحديقة خاصة، مصممة للعائلات والمجموعات التي تقدر الخصوصية والمساحة.",
+    bodySecond:
+      "بالتعاون مع مهندسين معماريين ذوي خبرة، صممنا كل منزلاً ليكون عصرياً ومريحاً وعملياً: مخططات سخية، مطابخ كاملة، ومساحات خارجية خاصة لتستريح حقاً.",
+    imageAlt:
+      "مسبح خاص وغابة صنوبر وإطلالة جبلية في سيليان فيلاز — ملاذ طبيعي في هيسارتشاندير قرب أنطاليا، تركيا",
   },
   ru: {
-    headline: "Место между горой и морем",
-    body: "Silyan Villas расположен в Хисарчандыре — на лесистом склоне над Конъяалты. Достаточно тихо, чтобы слышать деревья, и достаточно близко, чтобы добраться до ресторанов и пляжей Анталии за считанные минуты. Три независимые виллы, каждая со своим частным бассейном и садом, созданы для семей и групп, которые хотят простора без компромиссов.",
     label: "О Silyan Villas",
+    introLead:
+      "Сосновый лес, частные бассейны и горный свет — настолько живописно, что хочется замедлиться и глубоко вдохнуть.",
+    awayBand: "Вдали от городского шума",
+    headline: "Место между горой и морем",
     pullQuote: "Достаточно тихо, чтобы слышать деревья, достаточно близко до моря.",
+    body: "Silyan Villas — естественный выбор для гостей, которые хотят раствориться в атмосфере природы, не отказываясь от комфорта. Одиннадцать независимых вилл на лесистом склоне над Конъяалты в Хисарчандыре — у каждой свой бассейн и сад, для семей и групп, ценящих уединение и простор.",
+    bodySecond:
+      "Вместе с опытными архитекторами мы создали современные, удобные и практичные дома: продуманные планировки, полноценные кухни и приватные зоны на улице — чтобы можно было по-настоящему отдохнуть.",
+    imageAlt:
+      "Частный бассейн, сосновый лес и горные виды в Silyan Villas — природный отдых в Хисарчандыре у Анталии, Турция",
   },
 };
 
@@ -56,7 +95,7 @@ export default function TheStay({ lang }: Props) {
               <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-[var(--shadow-lg)]">
                 <Image
                   src={THE_STAY_IMAGE}
-                  alt="Silyan Villas — pool and mountain view"
+                  alt={c.imageAlt}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
@@ -73,9 +112,20 @@ export default function TheStay({ lang }: Props) {
             >
               {c.label}
             </p>
-            <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-5">
+            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-5">
+              {c.introLead}
+            </p>
+            <h2 className="font-serif font-semibold text-h2 text-[var(--color-text-primary)] mb-4">
               {c.headline}
             </h2>
+            <p
+              className={`mb-5 text-[11px] font-semibold leading-snug sm:text-xs ${
+                lang === "en" ? "uppercase tracking-[0.2em] sm:tracking-[0.22em]" : "tracking-wide"
+              }`}
+              style={{ color: "var(--accent-500)" }}
+            >
+              {c.awayBand}
+            </p>
 
             {/* Pull quote */}
             <blockquote className="my-6 ps-4 border-s-2 border-[var(--gold-accent)]/40">
@@ -84,8 +134,11 @@ export default function TheStay({ lang }: Props) {
               </p>
             </blockquote>
 
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-6">
+            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-5">
               {c.body}
+            </p>
+            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-6">
+              {c.bodySecond}
             </p>
 
             {/* Distance pills — horizontal scroll on mobile */}

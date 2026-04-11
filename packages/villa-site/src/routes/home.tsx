@@ -34,28 +34,28 @@ const OG_LOCALE: Record<string, string> = {
 
 const META: Record<string, { title: string; description: string; openGraphTitle: string }> = {
   en: {
-    title: "Private pool villas above Antalya — Hisarçandır & Konyaaltı",
-    openGraphTitle: "Silyan Villas — Eleven private pool villas above Antalya",
+    title: "Nature villas with private pools — Hisarçandır above Antalya",
+    openGraphTitle: "Silyan Villas — Pine hills, private pools, 11 villas near Antalya",
     description:
-      "Eleven independent vacation villas with private pools in Hisarçandır, Konyaaltı, Antalya — 4–10 guests per villa, 8 km to the beach, 22 km to Antalya Airport (AYT). Family-run; book by inquiry or WhatsApp.",
+      "Eleven architect-designed private pool villas in pine-clad hills above Konyaaltı, Hisarçandır — a calm nature retreat away from city noise, 8 km to the Mediterranean, 22 km to Antalya Airport (AYT). 4–10 guests per villa. Family-run; book by inquiry or WhatsApp.",
   },
   tr: {
-    title: "Antalya'nın tepelerinde özel havuzlu villalar — Hisarçandır",
-    openGraphTitle: "Silyan Villas — Hisarçandır'da on bir özel havuzlu villa",
+    title: "Doğa içinde özel havuzlu villalar — Antalya üzerinde Hisarçandır",
+    openGraphTitle: "Silyan Villas — Çam ormanı, özel havuz, Antalya yakınında 11 villa",
     description:
-      "Hisarçandır, Konyaaltı'nda on bir bağımsız tatil villası — her biri özel havuz ve bahçeli; villada 4–10 kişi. Denize 8 km, AYT havalimanına 22 km. Aile işletmesi; talep veya WhatsApp ile doğrudan rezervasyon.",
+      "Hisarçandır'da Konyaaltı tepelerinde mimarlığı özenle işlenmiş on bir özel havuzlu tatil villası — şehir gürültüsünden uzak doğa kaçamağı; denize 8 km, AYT'ye 22 km. Villada 4–10 kişi. Aile işletmesi; talep veya WhatsApp.",
   },
   ar: {
-    title: "فيلات خاصة بمسابح في أعلى أنطاليا — هيسارتشاندير",
-    openGraphTitle: "سيليان فيلاز — أحد عشر فيلا بمسبح خاص فوق أنطاليا",
+    title: "فيلات طبيعة بمسابح خاصة — هيسارتشاندير فوق أنطاليا",
+    openGraphTitle: "سيليان فيلاز — غابة صنوبر، مسابح خاصة، 11 فيلا قرب أنطاليا",
     description:
-      "أحد عشر فيلا عطلات مستقلة مع مسابح خاصة في هيسارتشاندير، كونيالتي، أنطاليا — من 4 إلى 10 ضيوف لكل فيلا. 8 كم إلى الشاطئ و22 كم إلى مطار أنطاليا. إدارة عائلية؛ احجز عبر الطلب أو واتساب.",
+      "أحد عشر فيلا عطلات بمسابح خاصة على تلال الصنوبر فوق كونيالتي في هيسارتشاندير — ملاذ هادئ في الطبيعة بعيدًا عن ضجيج المدينة، 8 كم للبحر و22 كم لمطار أنطاليا. 4–10 ضيوف لكل فيلا. تشغيل عائلي؛ احجز بالطلب أو واتساب.",
   },
   ru: {
-    title: "Частные виллы с бассейнами над Анталией — Хисарчандыре",
-    openGraphTitle: "Silyan Villas — Одиннадцать вилл с частными бассейнами над Анталией",
+    title: "Виллы в природе с частными бассейнами — Хисарчандыре над Анталией",
+    openGraphTitle: "Silyan Villas — Сосны, частные бассейны, 11 вилл у Анталии",
     description:
-      "Одиннадцать отдельных вилл для отдыха с частными бассейнами в Хисарчандыре, Конъяалты, Анталия — от 4 до 10 гостей на виллу. 8 км до пляжа, 22 км до аэропорта AYT. Семейное управление; бронирование по запросу или в WhatsApp.",
+      "Одиннадцать продуманных архитекторами вилл с частными бассейнами на сосновых склонах над Конъяалты в Хисарчандыре — спокойный отдых вдали от городского шума, 8 км до моря, 22 км до аэропорта AYT. 4–10 гостей на виллу. Семейное управление; бронирование по запросу или в WhatsApp.",
   },
 };
 
@@ -94,7 +94,14 @@ export async function generateVillaHomeMetadata({
       type: "website",
       siteName: "Silyan Villas",
       locale: OG_LOCALE[lang] ?? "en_US",
-      images: [{ url: HERO_POSTER, width: 1200, height: 800, alt: "Silyan Villas — mountain villas near Antalya" }],
+      images: [
+        {
+          url: HERO_POSTER,
+          width: 1200,
+          height: 800,
+          alt: "Silyan Villas — private pool villas in pine hills, Hisarçandır near Antalya, Turkey",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -117,7 +124,7 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
       name: "Silyan Villas",
       url: `${base}/${lang}/`,
       description:
-        "Eleven independent private-pool vacation villas in Hisarçandır, Konyaaltı, Antalya — boutique hillside retreat 8 km from the Mediterranean coast.",
+        "Eleven independent private-pool villas in pine-clad hills above Konyaaltı, Hisarçandır, Antalya — nature-led retreat 8 km from the Mediterranean, modern comfortable homes designed with architects.",
       telephone: "+905316960953",
       email: "info@silyanvillas.com",
       sameAs: ["https://www.instagram.com/silyanvillalari/"],
@@ -191,6 +198,14 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
           acceptedAnswer: {
             "@type": "Answer",
             text: "The minimum stay is 2 nights for all villas.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is Silyan Villas quiet and close to nature?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. The villas are on a forested hillside in Hisarçandır above Konyaaltı — calm at night and immersed in pine forest. Antalya city centre and beaches are a short drive when you want them.",
           },
         },
       ],

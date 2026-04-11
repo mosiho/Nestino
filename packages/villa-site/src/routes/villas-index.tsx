@@ -296,22 +296,22 @@ const AI_LABEL: Record<string, string> = {
 const COPY: Record<string, { title: string; sub: string; view: string }> = {
   en: {
     title: "Our Villas",
-    sub: "Eleven independent villas, each with a private pool and garden, designed for families and groups seeking privacy in the mountains above Antalya.",
+    sub: "Eleven architect-planned homes in pine-clad hills — each villa has its own pool and garden, away from city noise yet minutes from Antalya and the sea. Pick the layout that fits your group.",
     view: "View villa",
   },
   tr: {
     title: "Villalarımız",
-    sub: "Her biri özel havuzu ve bahçesiyle bağımsız on bir villa. Antalya'nın doğasında mahremiyet arayan aileler ve gruplar için tasarlandı.",
+    sub: "Çam ormanlı yamaçlarda mimarlığı özenle işlenmiş on bir konut — her villada özel havuz ve bahçe; şehir gürültüsünden uzak, Antalya ve denize dakikalar içinde. Grubunuza uygun planı seçin.",
     view: "Villayı görüntüle",
   },
   ar: {
     title: "فيلاتنا",
-    sub: "إحدى عشرة فيلا مستقلة، لكل منها مسبح خاص وحديقة، مصممة للعائلات والمجموعات الباحثة عن الخصوصية في جبال أنطاليا.",
+    sub: "أحد عشر منزلاً مخططاً بعناية على تلال الصنوبر — لكل فيلا مسبحها وحديقتها الخاصة؛ بعيداً عن ضجيج المدينة ومع ذلك قريب من أنطاليا والبحر. اختر التخطيط المناسب لمجموعتك.",
     view: "عرض الفيلا",
   },
   ru: {
     title: "Наши виллы",
-    sub: "Одиннадцать независимых вилл, каждая с частным бассейном и садом, для семей и групп, ищущих уединение в горах над Анталией.",
+    sub: "Одиннадцать продуманных домов на сосновых склонах — у каждой виллы свой бассейн и сад: тишина вдали от суеты, но недалеко от Анталии и моря. Выберите планировку под вашу компанию.",
     view: "Смотреть виллу",
   },
 };
@@ -321,28 +321,28 @@ const VILLAS_LISTING_META: Record<
   { title: string; openGraphTitle: string; description: string }
 > = {
   en: {
-    title: "Our Villas — Eleven private pool villas near Antalya",
-    openGraphTitle: "Silyan Villas — Our villas in Hisarçandır & Konyaaltı",
+    title: "Our Villas — Nature villas with private pools, Hisarçandır",
+    openGraphTitle: "Silyan Villas — 11 private pool villas in pine hills above Antalya",
     description:
-      "Eleven independent villas in Hisarçandır above Konyaaltı, Antalya — each with a private pool and garden for families and groups. Compare bedrooms (2–5), capacity (4–10 guests), and amenities. Book by inquiry or WhatsApp.",
+      "Browse eleven independent villas in Hisarçandır above Konyaaltı — pine forest setting, private pool and garden each, modern layouts for 4–10 guests. Peaceful hillside away from city noise; beach 8 km, airport 22 km. Book by inquiry or WhatsApp.",
   },
   tr: {
-    title: "Villalarımız — Antalya yakınında on bir özel havuzlu villa",
-    openGraphTitle: "Silyan Villas — Hisarçandır ve Konyaaltı'daki villalarımız",
+    title: "Villalarımız — Doğa içinde özel havuzlu villalar, Hisarçandır",
+    openGraphTitle: "Silyan Villas — Antalya tepelerinde çam ormanında 11 özel havuzlu villa",
     description:
-      "Hisarçandır'da Konyaaltı üzerinde on bir bağımsız villa — her biri aileler ve gruplar için özel havuz ve bahçeli. Yatak odası (2–5) ve kapasiteyi (4–10 kişi) karşılaştırın. Talep veya WhatsApp ile doğrudan rezervasyon.",
+      "Hisarçandır'da Konyaaltı üzerinde on bir bağımsız villa — çam ormanı ortamı, her birinde özel havuz ve bahçe, 4–10 kişi için modern planlar. Şehir gürültüsünden uzak yamaç; deniz 8 km, havalimanı 22 km. Talep veya WhatsApp.",
   },
   ar: {
-    title: "فيلاتنا — أحد عشر فيلا بمسبح خاص قرب أنطاليا",
-    openGraphTitle: "سيليان فيلاز — فيلاتنا في هيسارتشاندير وكونيالتي",
+    title: "فيلاتنا — فيلات طبيعة بمسابح خاصة، هيسارتشاندير",
+    openGraphTitle: "سيليان فيلاز — 11 فيلا بمسبح خاص في غابة صنوبر فوق أنطاليا",
     description:
-      "أحد عشر فيلا مستقلة في هيسارتشاندير فوق كونيالتي، أنطاليا — لكل منها مسبح وحديقة خاصة. قارن غرف النوم (2–5) والسعة (4–10 ضيوف). احجز عبر الاستفسار أو واتساب.",
+      "تصفح أحد عشر فيلا مستقلة في هيسارتشاندير فوق كونيالتي — بيئة غابة صنوبر، مسبح وحديقة خاصة لكل منها، تصاميم عصرية لـ4–10 ضيوف. تلة هادئة بعيدًا عن ضجيج المدينة؛ الشاطئ 8 كم والمطار 22 كم. احجز بالطلب أو واتساب.",
   },
   ru: {
-    title: "Наши виллы — Одиннадцать вилл с бассейнами у Анталии",
-    openGraphTitle: "Silyan Villas — Виллы в Хисарчандыре и Конъяалты",
+    title: "Наши виллы — Виллы в природе с бассейнами, Хисарчандыре",
+    openGraphTitle: "Silyan Villas — 11 вилл с бассейнами в сосновых холмах над Анталией",
     description:
-      "Одиннадцать отдельных вилл в Хисарчандыре над Конъяалты, Анталия — у каждой частный бассейн и сад. Сравните спальни (2–5) и вместимость (4–10 гостей). Бронирование по запросу или в WhatsApp.",
+      "Одиннадцать отдельных вилл в Хисарчандыре над Конъяалты — сосновый лес, у каждой частный бассейн и сад, современные планировки на 4–10 гостей. Тихий склон вдали от суеты; пляж 8 км, аэропорт 22 км. Бронирование по запросу или в WhatsApp.",
   },
 };
 

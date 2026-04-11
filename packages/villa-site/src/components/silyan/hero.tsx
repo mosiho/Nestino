@@ -17,6 +17,8 @@ type Props = {
 
 type HeroCopy = {
   kicker: string;
+  /** Short nature-led line under the kicker (SEO + tone) */
+  ribbon: string;
   headline: string;
   subhead: string;
   cta1: string;
@@ -35,9 +37,10 @@ type HeroCopy = {
 const HERO_COPY: Record<string, HeroCopy> = {
   en: {
     kicker: "Hisarçandır · Antalya",
+    ribbon: "Immersed in nature — above the rush of the city",
     headline: "Eleven private villas in the mountains above Antalya",
     subhead:
-      "Each villa has its own pool, set in the pine-cooled hills above Antalya. The coast is 8 km away; the city and airport stay within an easy drive.",
+      "Each villa has its own pool among pine-cooled hills — a quiet base away from city noise. The Mediterranean is 8 km away; Antalya centre and AYT airport stay within an easy drive when you want them.",
     cta1: "Explore Villas",
     cta2: "WhatsApp",
     videoHint: "Play video",
@@ -49,9 +52,10 @@ const HERO_COPY: Record<string, HeroCopy> = {
   },
   tr: {
     kicker: "Hisarçandır · Antalya",
+    ribbon: "Doğanın içinde — şehrin gürültüsünden uzakta",
     headline: "Antalya'nın doğasında on bir özel villa",
     subhead:
-      "Özel havuzlar, dağ havası, denize 8 km — Türkiye'nin en gözde şehrine yakın, sakin bir kaçış noktanız.",
+      "Her villa çam serinliğindeki yamaçlarda kendi havuzuyla sessiz bir kaçış sunar; şehir gürültüsünden uzak. Akdeniz 8 km, merkez ve AYT havalimanı istediğinizde kısa sürüş mesafesinde.",
     cta1: "Villaları Keşfet",
     cta2: "WhatsApp",
     videoHint: "Videoyu oynat",
@@ -63,9 +67,10 @@ const HERO_COPY: Record<string, HeroCopy> = {
   },
   ar: {
     kicker: "هيسارتشاندير · أنطاليا",
+    ribbon: "في أحضان الطبيعة — بعيدًا عن صخب المدينة",
     headline: "أحد عشر فيلا خاصة في جبال أنطاليا",
     subhead:
-      "مسابح خاصة، هواء جبلي نقي، 8 كيلومترات من البحر — ملاذك الهادئ بالقرب من أكثر مدن تركيا زيارةً.",
+      "لكل فيلا مسبحها الخاص بين تلال الصنوبر والهواء الجبلي — ملاذ هادئ بعيدًا عن ضجيج المدينة. البحر الأبيض المتوسط على بعد 8 كم، ووسط أنطاليا والمطار ضمن سهولة الوصول.",
     cta1: "استكشف الفيلات",
     cta2: "واتساب",
     videoHint: "تشغيل الفيديو",
@@ -77,9 +82,10 @@ const HERO_COPY: Record<string, HeroCopy> = {
   },
   ru: {
     kicker: "Хисарчандыре · Анталия",
+    ribbon: "В атмосфере природы — вдали от городской суеты",
     headline: "Одиннадцать частных вилл в горах над Анталией",
     subhead:
-      "Частные бассейны, горный воздух, 8 км от моря — ваш уединённый отдых рядом с одним из самых популярных городов Турции.",
+      "У каждой виллы свой бассейн среди сосновых склонов — тихая база вдали от городского шума. До Средиземного моря 8 км; центр Анталии и аэропорт AYT — в комфортной доступности по дороге.",
     cta1: "Смотреть виллы",
     cta2: "WhatsApp",
     videoHint: "Включить видео",
@@ -278,6 +284,9 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/72 sm:text-xs sm:tracking-[0.34em]">
                 {copy.kicker}
               </p>
+              <p className="mb-4 max-w-[34rem] text-[13px] font-medium leading-snug text-white/95 sm:mb-5 sm:text-sm sm:leading-relaxed">
+                {copy.ribbon}
+              </p>
 
               <h1
                 id="hero-heading"
@@ -306,7 +315,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
                 ))}
               </ul>
 
-              <p className="mb-7 max-w-[34rem] text-pretty text-[15px] leading-relaxed text-white/82 sm:mb-8 sm:text-base sm:leading-[1.65]">
+              <p className="mb-7 max-w-[34rem] text-pretty text-[15px] leading-relaxed text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.65)] sm:mb-8 sm:text-base sm:leading-[1.65] sm:drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)]">
                 {copy.subhead}
               </p>
 

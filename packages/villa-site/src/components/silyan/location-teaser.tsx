@@ -1,32 +1,39 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Lang } from "../../lib/i18n";
 import { villaPath } from "../../lib/villa-path";
-import { LOCATION_IMAGE } from "../../lib/silyan-images";
 import AnimateOnScroll from "../animate-on-scroll";
+import LocationTeaserMedia from "./location-teaser-media";
 
 type Props = { lang: Lang; pathPrefix?: string };
 
-const COPY: Record<string, { headline: string; sub: string; cta: string }> = {
+const COPY: Record<string, { headline: string; sub: string; cta: string; playVideo: string; imageAlt: string }> = {
   en: {
     headline: "Everything near, nothing crowded",
     sub: "Forested hillside above Konyaaltı — minutes from the sea, the airport, and the old town. Cool mountain air meets Mediterranean warmth.",
     cta: "See the location",
+    playVideo: "Play aerial video of the area",
+    imageAlt: "Konyaaltı coastline near Silyan Villas",
   },
   tr: {
     headline: "Her şey yakın, hiçbir şey kalabalık değil",
     sub: "Konyaaltı'nın üzerindeki ormanla kaplı yamaçlar — denize, havalimanına ve tarihi merkeze dakikalar uzaklıkta. Dağ serinliği ile Akdeniz sıcaklığı buluşuyor.",
     cta: "Konumu gör",
+    playVideo: "Bölgenin havadan videosunu oynat",
+    imageAlt: "Silyan Villas yakınında Konyaaltı kıyı şeridi",
   },
   ar: {
     headline: "كل شيء قريب، لا شيء مزدحم",
     sub: "تلة مشجرة فوق كونيالتي — دقائق من البحر والمطار والمدينة القديمة. نسيم الجبل يلتقي بدفء البحر الأبيض المتوسط.",
     cta: "اعرض الموقع",
+    playVideo: "تشغيل فيديو جوي للمنطقة",
+    imageAlt: "ساحل كونيالتي قرب فيلات سيليان",
   },
   ru: {
     headline: "Всё рядом — и никакой суеты",
     sub: "Лесистый склон над Конъяалты — считанные минуты до моря, аэропорта и старого города. Прохлада гор встречается со средиземноморским теплом.",
     cta: "Посмотреть расположение",
+    playVideo: "Воспроизвести видео с воздуха",
+    imageAlt: "Побережье Конъяалты рядом с Silyan Villas",
   },
 };
 
@@ -118,16 +125,7 @@ export default function LocationTeaser({ lang, pathPrefix = "" }: Props) {
 
           {/* Image + distance details (desktop) */}
           <AnimateOnScroll variant="fade-up" delay={0.1} className="order-2 md:order-1">
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-[var(--shadow-lg)]">
-              <Image
-                src={LOCATION_IMAGE}
-                alt="Konyaaltı coastline near Silyan Villas"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-                loading="lazy"
-              />
-            </div>
+            <LocationTeaserMedia playLabel={c.playVideo} imageAlt={c.imageAlt} />
 
             {/* Detailed distance cards — desktop only */}
             <div className="hidden md:flex flex-col gap-3 mt-4">
