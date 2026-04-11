@@ -37,7 +37,7 @@ const HERO_COPY: Record<string, HeroCopy> = {
     kicker: "Hisarçandır · Antalya",
     headline: "Eleven private villas in the mountains above Antalya",
     subhead:
-      "Private pools, mountain air, 8 km from the sea — your retreat near one of Turkey's most-visited cities.",
+      "Each villa has its own pool, set in the pine-cooled hills above Antalya. The coast is 8 km away; the city and airport stay within an easy drive.",
     cta1: "Explore Villas",
     cta2: "WhatsApp",
     videoHint: "Play video",
