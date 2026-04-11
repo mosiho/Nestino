@@ -128,7 +128,13 @@ export async function generateLocationMetadata({ params, pathPrefix }: Props): P
   const h = await headers();
   const origin = resolveRequestOrigin(h.get("host"));
   const path = villaPath(pathPrefix, `/${lang}/location`);
-  return { title: meta.title, description: meta.description, openGraph: { title: meta.title, description: meta.description, url: `${origin.origin}${path}` } };
+  const canonical = `${origin.origin}${path}`;
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: { canonical },
+    openGraph: { title: meta.title, description: meta.description, url: canonical, type: "website" },
+  };
 }
 
 export default async function LocationPage({ params, pathPrefix }: Props) {

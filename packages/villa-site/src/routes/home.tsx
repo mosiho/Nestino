@@ -4,8 +4,9 @@ import Script from "next/script";
 
 import { isLang, type Lang } from "../lib/i18n";
 import { resolveRequestOrigin } from "../lib/site-origin";
-import { getSiteBySubdomain } from "../lib/tenant";
+import { getActiveLangs, getSiteBySubdomain } from "../lib/tenant";
 import { villaPath } from "../lib/villa-path";
+import { HERO_POSTER, SITE_LOGO } from "../lib/silyan-images";
 
 import Hero from "../components/silyan/hero";
 import StatBar from "../components/silyan/stat-bar";
@@ -24,26 +25,37 @@ type HomeProps = {
   pathPrefix: string;
 };
 
-const META: Record<string, { title: string; description: string }> = {
+const OG_LOCALE: Record<string, string> = {
+  en: "en_US",
+  tr: "tr_TR",
+  ar: "ar_SA",
+  ru: "ru_RU",
+};
+
+const META: Record<string, { title: string; description: string; openGraphTitle: string }> = {
   en: {
-    title: "Silyan Villas — Private villas in the mountains above Antalya",
+    title: "Private pool villas above Antalya — Hisarçandır & Konyaaltı",
+    openGraphTitle: "Silyan Villas — Eleven private pool villas above Antalya",
     description:
-      "Three private villas with pools in Hisarçandır, Konyaaltı, Antalya. Up to 10 guests. 8 km from the sea, 22 km from the airport. Inquiry-based direct booking.",
+      "Eleven independent vacation villas with private pools in Hisarçandır, Konyaaltı, Antalya — 4–10 guests per villa, 8 km to the beach, 22 km to Antalya Airport (AYT). Family-run; book by inquiry or WhatsApp.",
   },
   tr: {
-    title: "Silyan Villas — Antalya'nın doğasında özel villalar",
+    title: "Antalya'nın tepelerinde özel havuzlu villalar — Hisarçandır",
+    openGraphTitle: "Silyan Villas — Hisarçandır'da on bir özel havuzlu villa",
     description:
-      "Hisarçandır, Konyaaltı'nda özel havuzlu üç villa. 10 kişiye kadar. Denize 8 km, havalimanına 22 km. Doğrudan rezervasyon.",
+      "Hisarçandır, Konyaaltı'nda on bir bağımsız tatil villası — her biri özel havuz ve bahçeli; villada 4–10 kişi. Denize 8 km, AYT havalimanına 22 km. Aile işletmesi; talep veya WhatsApp ile doğrudan rezervasyon.",
   },
   ar: {
-    title: "سيليان فيلاز — فيلات خاصة في جبال أنطاليا",
+    title: "فيلات خاصة بمسابح في أعلى أنطاليا — هيسارتشاندير",
+    openGraphTitle: "سيليان فيلاز — أحد عشر فيلا بمسبح خاص فوق أنطاليا",
     description:
-      "ثلاث فيلات خاصة مع مسابح في هيسارتشاندير، كونيالتي، أنطاليا. حتى 10 ضيوف. 8 كيلومترات من البحر، 22 كيلومتراً من المطار.",
+      "أحد عشر فيلا عطلات مستقلة مع مسابح خاصة في هيسارتشاندير، كونيالتي، أنطاليا — من 4 إلى 10 ضيوف لكل فيلا. 8 كم إلى الشاطئ و22 كم إلى مطار أنطاليا. إدارة عائلية؛ احجز عبر الطلب أو واتساب.",
   },
   ru: {
-    title: "Silyan Villas — Частные виллы в горах над Анталией",
+    title: "Частные виллы с бассейнами над Анталией — Хисарчандыре",
+    openGraphTitle: "Silyan Villas — Одиннадцать вилл с частными бассейнами над Анталией",
     description:
-      "Три частные виллы с бассейнами в Хисарчандыре, Конъяалты, Анталия. До 10 гостей. 8 км от моря, 22 км от аэропорта.",
+      "Одиннадцать отдельных вилл для отдыха с частными бассейнами в Хисарчандыре, Конъяалты, Анталия — от 4 до 10 гостей на виллу. 8 км до пляжа, 22 км до аэропорта AYT. Семейное управление; бронирование по запросу или в WhatsApp.",
   },
 };
 
@@ -51,21 +63,44 @@ export async function generateVillaHomeMetadata({
   params,
   pathPrefix,
 }: HomeProps): Promise<Metadata> {
-  const { lang } = await params;
+  const { lang, siteSlug: slugFromParams } = await params;
   const meta = META[lang] ?? META.en!;
 
   const h = await headers();
-  const origin = resolveRequestOrigin(h.get("host"));
-  const ogPath = villaPath(pathPrefix, `/${lang}`);
+  const host = h.get("host");
+  const origin = resolveRequestOrigin(host);
+  const pagePath = villaPath(pathPrefix, `/${lang}`);
+  const canonical = `${origin.origin}${pagePath}`;
+
+  const siteSlug = slugFromParams ?? h.get("x-nestino-slug") ?? "";
+  const ctx = siteSlug ? await getSiteBySubdomain(siteSlug) : null;
+  const activeLangs = ctx ? getActiveLangs(ctx) : ["en"];
+  const languages: Record<string, string> = Object.fromEntries(
+    activeLangs.map((l) => [l, `${origin.origin}${villaPath(pathPrefix, `/${l}`)}`])
+  );
+  const defaultLang = ctx?.site.defaultLanguage ?? "en";
+  if (activeLangs.includes(defaultLang)) {
+    languages["x-default"] = `${origin.origin}${villaPath(pathPrefix, `/${defaultLang}`)}`;
+  }
 
   return {
     title: meta.title,
     description: meta.description,
+    alternates: { canonical, languages },
     openGraph: {
-      title: meta.title,
+      title: meta.openGraphTitle,
       description: meta.description,
-      url: `${origin.origin}${ogPath}`,
+      url: canonical,
       type: "website",
+      siteName: "Silyan Villas",
+      locale: OG_LOCALE[lang] ?? "en_US",
+      images: [{ url: HERO_POSTER, width: 1200, height: 800, alt: "Silyan Villas — mountain villas near Antalya" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.openGraphTitle,
+      description: meta.description,
+      images: [HERO_POSTER],
     },
   };
 }
@@ -78,14 +113,15 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
     {
       "@context": "https://schema.org",
       "@type": "LodgingBusiness",
-      "@id": `${base}/en/#lodging`,
+      "@id": `${base}/${lang}/#lodging`,
       name: "Silyan Villas",
       url: `${base}/${lang}/`,
       description:
-        "Three private villas with pools in Hisarçandır, Konyaaltı, Antalya — boutique mountain retreat 8 km from the sea.",
+        "Eleven independent private-pool vacation villas in Hisarçandır, Konyaaltı, Antalya — boutique hillside retreat 8 km from the Mediterranean coast.",
       telephone: "+905316960953",
       email: "info@silyanvillas.com",
       sameAs: ["https://www.instagram.com/silyanvillalari/"],
+      image: HERO_POSTER,
       address: {
         "@type": "PostalAddress",
         streetAddress: "Hisarçandır Mah. Çandır Cad. No:182",
@@ -99,7 +135,7 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
         latitude: 36.823,
         longitude: 30.5378,
       },
-      numberOfRooms: "11",
+      numberOfAccommodationUnits: 11,
       amenityFeature: [
         { "@type": "LocationFeatureSpecification", name: "Private Pool", value: true },
         { "@type": "LocationFeatureSpecification", name: "Free WiFi", value: true },
@@ -114,6 +150,11 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
       name: "Silyan Villas",
       url: `${base}/${lang}/`,
       inLanguage: lang,
+      publisher: {
+        "@type": "Organization",
+        name: "Silyan Villas",
+        logo: { "@type": "ImageObject", url: SITE_LOGO },
+      },
     },
     {
       "@context": "https://schema.org",
@@ -125,7 +166,7 @@ function buildJsonLd(hostHeader: string | null, lang: string, pathPrefix: string
           name: "How many villas are there at Silyan Villas?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Three — Villa Badem, Villa Defne, and Villa İncir. Each is a fully independent villa with its own private pool, garden, and entrance.",
+            text: "Eleven independent villas — including Villa Portakal, Villa Defne, Villa İncir, Villa Badem, and others. Each is a fully separate home with its own private pool, garden, and entrance; pools are never shared between guests.",
           },
         },
         {

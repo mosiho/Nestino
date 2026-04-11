@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
+import { headers } from "next/headers";
 
 import { villaPath } from "../lib/villa-path";
-import { VILLA_IMAGES } from "../lib/silyan-images";
+import { HERO_POSTER, VILLA_IMAGES } from "../lib/silyan-images";
+import { resolveRequestOrigin } from "../lib/site-origin";
+import { getActiveLangs, getSiteBySubdomain } from "../lib/tenant";
 
-export const villasIndexMetadata: Metadata = {
-  title: "Villas",
+const OG_LOCALE: Record<string, string> = {
+  en: "en_US",
+  tr: "tr_TR",
+  ar: "ar_SA",
+  ru: "ru_RU",
 };
 
 const VILLAS = [
@@ -309,18 +316,115 @@ const COPY: Record<string, { title: string; sub: string; view: string }> = {
   },
 };
 
+const VILLAS_LISTING_META: Record<
+  string,
+  { title: string; openGraphTitle: string; description: string }
+> = {
+  en: {
+    title: "Our Villas — Eleven private pool villas near Antalya",
+    openGraphTitle: "Silyan Villas — Our villas in Hisarçandır & Konyaaltı",
+    description:
+      "Eleven independent villas in Hisarçandır above Konyaaltı, Antalya — each with a private pool and garden for families and groups. Compare bedrooms (2–5), capacity (4–10 guests), and amenities. Book by inquiry or WhatsApp.",
+  },
+  tr: {
+    title: "Villalarımız — Antalya yakınında on bir özel havuzlu villa",
+    openGraphTitle: "Silyan Villas — Hisarçandır ve Konyaaltı'daki villalarımız",
+    description:
+      "Hisarçandır'da Konyaaltı üzerinde on bir bağımsız villa — her biri aileler ve gruplar için özel havuz ve bahçeli. Yatak odası (2–5) ve kapasiteyi (4–10 kişi) karşılaştırın. Talep veya WhatsApp ile doğrudan rezervasyon.",
+  },
+  ar: {
+    title: "فيلاتنا — أحد عشر فيلا بمسبح خاص قرب أنطاليا",
+    openGraphTitle: "سيليان فيلاز — فيلاتنا في هيسارتشاندير وكونيالتي",
+    description:
+      "أحد عشر فيلا مستقلة في هيسارتشاندير فوق كونيالتي، أنطاليا — لكل منها مسبح وحديقة خاصة. قارن غرف النوم (2–5) والسعة (4–10 ضيوف). احجز عبر الاستفسار أو واتساب.",
+  },
+  ru: {
+    title: "Наши виллы — Одиннадцать вилл с бассейнами у Анталии",
+    openGraphTitle: "Silyan Villas — Виллы в Хисарчандыре и Конъяалты",
+    description:
+      "Одиннадцать отдельных вилл в Хисарчандыре над Конъяалты, Анталия — у каждой частный бассейн и сад. Сравните спальни (2–5) и вместимость (4–10 гостей). Бронирование по запросу или в WhatsApp.",
+  },
+};
+
 type Props = {
   params: Promise<{ lang: string; siteSlug?: string }>;
   pathPrefix: string;
 };
+
+export async function generateVillasIndexMetadata({
+  params,
+  pathPrefix,
+}: Props): Promise<Metadata> {
+  const { lang, siteSlug: slugFromParams } = await params;
+  const meta = VILLAS_LISTING_META[lang] ?? VILLAS_LISTING_META.en!;
+  const h = await headers();
+  const host = h.get("host");
+  const origin = resolveRequestOrigin(host);
+  const pagePath = villaPath(pathPrefix, `/${lang}/villas`);
+  const canonical = `${origin.origin}${pagePath}`;
+
+  const siteSlug = slugFromParams ?? h.get("x-nestino-slug") ?? "";
+  const ctx = siteSlug ? await getSiteBySubdomain(siteSlug) : null;
+  const activeLangs = ctx ? getActiveLangs(ctx) : ["en"];
+  const languages: Record<string, string> = Object.fromEntries(
+    activeLangs.map((l) => [l, `${origin.origin}${villaPath(pathPrefix, `/${l}/villas`)}`])
+  );
+  const defaultLang = ctx?.site.defaultLanguage ?? "en";
+  if (activeLangs.includes(defaultLang)) {
+    languages["x-default"] = `${origin.origin}${villaPath(pathPrefix, `/${defaultLang}/villas`)}`;
+  }
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: { canonical, languages },
+    openGraph: {
+      title: meta.openGraphTitle,
+      description: meta.description,
+      url: canonical,
+      type: "website",
+      siteName: "Silyan Villas",
+      locale: OG_LOCALE[lang] ?? "en_US",
+      images: [{ url: HERO_POSTER, width: 1200, height: 800, alt: meta.openGraphTitle }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.openGraphTitle,
+      description: meta.description,
+      images: [HERO_POSTER],
+    },
+  };
+}
 
 export default async function VillasIndexPage({ params, pathPrefix }: Props) {
   const { lang } = await params;
   const c = COPY[lang] ?? COPY.en!;
   const aiLabel = AI_LABEL[lang] ?? AI_LABEL.en!;
 
+  const h = await headers();
+  const origin = resolveRequestOrigin(h.get("host")).origin;
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: c.title,
+    description: c.sub,
+    numberOfItems: VILLAS.length,
+    itemListElement: VILLAS.map((villa, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: villa.name,
+      url: `${origin}${villaPath(pathPrefix, `/${lang}/villas/${villa.slug}`)}`,
+    })),
+  };
+
   return (
-    <div className="pt-20 pb-16">
+    <>
+      <Script
+        id="jsonld-villas-index"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
+      />
+      <div className="pt-20 pb-16">
       <div className="section-y">
         <div className="content-wrapper">
           <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-500)" }}>
@@ -395,6 +499,7 @@ export default async function VillasIndexPage({ params, pathPrefix }: Props) {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

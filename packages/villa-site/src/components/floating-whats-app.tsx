@@ -31,7 +31,7 @@ export default function FloatingWhatsApp({ phone, message }: Props) {
       onClick={handleClick}
       aria-label="Chat on WhatsApp"
       style={{ zIndex: "var(--z-floating-whatsapp)" }}
-      className="fixed bottom-6 end-6 flex items-center justify-center w-14 h-14 rounded-full shadow-[var(--shadow-md)] transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="hidden md:flex fixed bottom-6 end-6 items-center justify-center w-14 h-14 rounded-full shadow-[var(--shadow-md)] transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2"
     >
       <span
         className="w-14 h-14 rounded-full flex items-center justify-center"

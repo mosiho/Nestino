@@ -77,10 +77,12 @@ export async function generatePrivacyMetadata({ params, pathPrefix }: Props): Pr
   const h = await headers();
   const origin = resolveRequestOrigin(h.get("host"));
   const path = villaPath(pathPrefix, `/${lang}/privacy`);
+  const canonical = `${origin.origin}${path}`;
   return {
     title: meta.title,
     description: meta.description,
-    openGraph: { title: meta.title, description: meta.description, url: `${origin.origin}${path}` },
+    alternates: { canonical },
+    openGraph: { title: meta.title, description: meta.description, url: canonical, type: "website" },
     robots: { index: true, follow: true },
   };
 }

@@ -1,10 +1,28 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { VILLA_IMAGES } from "../lib/silyan-images";
+import { resolveRequestOrigin } from "../lib/site-origin";
+import { getActiveLangs, getSiteBySubdomain } from "../lib/tenant";
 import { villaPath } from "../lib/villa-path";
+
+const OG_LOCALE: Record<string, string> = {
+  en: "en_US",
+  tr: "tr_TR",
+  ar: "ar_SA",
+  ru: "ru_RU",
+};
+
+function truncateDescription(text: string, max = 158): string {
+  const t = text.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const i = cut.lastIndexOf(" ");
+  return `${(i > 90 ? cut.slice(0, i) : cut).trimEnd()}…`;
+}
 import { WHATSAPP_BRAND_GREEN } from "../lib/whatsapp-brand";
 import GallerySection from "./villa-detail-gallery";
 
@@ -61,19 +79,72 @@ const AMENITY_SVG: Record<string, React.ReactNode> = {
 };
 
 const LABELS: Record<string, Record<string, string>> = {
-  en: { specs: "Specifications", bedrooms: "Bedrooms", bathrooms: "Bathrooms", maxGuests: "Max Guests", pool: "Pool", views: "Views", parking: "Parking", amenities: "Amenities", houseRules: "House Rules", checkIn: "Check-in", checkOut: "Check-out", minStay: "Minimum stay", noSmoking: "No smoking", noPets: "No pets", cta: "Inquire about this villa", whatsapp: "Message on WhatsApp", otherVillas: "Other villas", gallery: "Gallery", private: "Private, in-garden", mountain: "Mountain & garden", privateParking: "Private, on-site" },
-  tr: { specs: "Özellikler", bedrooms: "Yatak Odaları", bathrooms: "Banyolar", maxGuests: "Maks. Misafir", pool: "Havuz", views: "Manzara", parking: "Otopark", amenities: "Olanaklar", houseRules: "Ev Kuralları", checkIn: "Giriş", checkOut: "Çıkış", minStay: "Minimum konaklama", noSmoking: "Sigara içilmez", noPets: "Evcil hayvan yok", cta: "Bu villa için bilgi al", whatsapp: "WhatsApp ile mesaj", otherVillas: "Diğer villalar", gallery: "Galeri", private: "Özel, bahçe içinde", mountain: "Dağ ve bahçe", privateParking: "Özel, yerleşke içinde" },
-  ar: { specs: "المواصفات", bedrooms: "غرف النوم", bathrooms: "الحمامات", maxGuests: "أقصى عدد ضيوف", pool: "المسبح", views: "الإطلالة", parking: "الموقف", amenities: "المرافق", houseRules: "قواعد المنزل", checkIn: "تسجيل الدخول", checkOut: "تسجيل الخروج", minStay: "الحد الأدنى للإقامة", noSmoking: "ممنوع التدخين", noPets: "ممنوع الحيوانات الأليفة", cta: "استفسر عن هذه الفيلا", whatsapp: "أرسل رسالة واتساب", otherVillas: "فيلات أخرى", gallery: "معرض الصور", private: "خاص، في الحديقة", mountain: "جبل وحديقة", privateParking: "خاص، في الموقع" },
-  ru: { specs: "Характеристики", bedrooms: "Спальни", bathrooms: "Ванные", maxGuests: "Макс. гостей", pool: "Бассейн", views: "Виды", parking: "Парковка", amenities: "Удобства", houseRules: "Правила дома", checkIn: "Заезд", checkOut: "Выезд", minStay: "Мин. проживание", noSmoking: "Не курить", noPets: "Без животных", cta: "Узнать об этой вилле", whatsapp: "Написать в WhatsApp", otherVillas: "Другие виллы", gallery: "Галерея", private: "Частный, в саду", mountain: "Горы и сад", privateParking: "Частная, на территории" },
+  en: { specs: "Specifications", bedrooms: "Bedrooms", bathrooms: "Bathrooms", maxGuests: "Max Guests", pool: "Pool", views: "Views", parking: "Parking", amenities: "Amenities", houseRules: "House Rules", checkIn: "Check-in", checkOut: "Check-out", minStay: "Minimum stay", noSmoking: "No smoking", noPets: "No pets", cta: "Contact us on WhatsApp", whatsapp: "Message on WhatsApp", otherVillas: "Other villas", gallery: "Gallery", private: "Private, in-garden", mountain: "Mountain & garden", privateParking: "Private, on-site" },
+  tr: { specs: "Özellikler", bedrooms: "Yatak Odaları", bathrooms: "Banyolar", maxGuests: "Maks. Misafir", pool: "Havuz", views: "Manzara", parking: "Otopark", amenities: "Olanaklar", houseRules: "Ev Kuralları", checkIn: "Giriş", checkOut: "Çıkış", minStay: "Minimum konaklama", noSmoking: "Sigara içilmez", noPets: "Evcil hayvan yok", cta: "WhatsApp ile iletişim", whatsapp: "WhatsApp ile mesaj", otherVillas: "Diğer villalar", gallery: "Galeri", private: "Özel, bahçe içinde", mountain: "Dağ ve bahçe", privateParking: "Özel, yerleşke içinde" },
+  ar: { specs: "المواصفات", bedrooms: "غرف النوم", bathrooms: "الحمامات", maxGuests: "أقصى عدد ضيوف", pool: "المسبح", views: "الإطلالة", parking: "الموقف", amenities: "المرافق", houseRules: "قواعد المنزل", checkIn: "تسجيل الدخول", checkOut: "تسجيل الخروج", minStay: "الحد الأدنى للإقامة", noSmoking: "ممنوع التدخين", noPets: "ممنوع الحيوانات الأليفة", cta: "تواصل معنا عبر واتساب", whatsapp: "أرسل رسالة واتساب", otherVillas: "فيلات أخرى", gallery: "معرض الصور", private: "خاص، في الحديقة", mountain: "جبل وحديقة", privateParking: "خاص، في الموقع" },
+  ru: { specs: "Характеристики", bedrooms: "Спальни", bathrooms: "Ванные", maxGuests: "Макс. гостей", pool: "Бассейн", views: "Виды", parking: "Парковка", amenities: "Удобства", houseRules: "Правила дома", checkIn: "Заезд", checkOut: "Выезд", minStay: "Мин. проживание", noSmoking: "Не курить", noPets: "Без животных", cta: "Свяжитесь через WhatsApp", whatsapp: "Написать в WhatsApp", otherVillas: "Другие виллы", gallery: "Галерея", private: "Частный, в саду", mountain: "Горы и сад", privateParking: "Частная, на территории" },
 };
 
-type Props = { params: Promise<{ lang: string; slug: string; siteSlug?: string }>; pathPrefix?: string };
+type Props = {
+  params: Promise<{ lang: string; slug: string; siteSlug?: string }>;
+  pathPrefix?: string;
+};
 
-export async function generateVillaDetailMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateVillaDetailMetadata({
+  params,
+  pathPrefix = "",
+}: Props): Promise<Metadata> {
+  const p = await params;
+  const { slug, lang } = p;
   const villa = VILLAS[slug];
-  if (!villa) return { title: "Villa" };
-  return { title: villa.name };
+  if (!villa) {
+    return { title: "Villa", robots: { index: false, follow: false } };
+  }
+
+  const desc = villa.desc[lang] ?? villa.desc.en!;
+  const description = truncateDescription(desc);
+  const h = await headers();
+  const host = h.get("host");
+  const origin = resolveRequestOrigin(host);
+  const pagePath = villaPath(pathPrefix, `/${lang}/villas/${slug}`);
+  const canonical = `${origin.origin}${pagePath}`;
+
+  const siteSlug = p.siteSlug ?? h.get("x-nestino-slug") ?? "";
+  const ctx = siteSlug ? await getSiteBySubdomain(siteSlug) : null;
+  const activeLangs = ctx ? getActiveLangs(ctx) : ["en"];
+  const languages: Record<string, string> = Object.fromEntries(
+    activeLangs.map((l) => [l, `${origin.origin}${villaPath(pathPrefix, `/${l}/villas/${slug}`)}`])
+  );
+  const defaultLang = ctx?.site.defaultLanguage ?? "en";
+  if (activeLangs.includes(defaultLang)) {
+    languages["x-default"] = `${origin.origin}${villaPath(pathPrefix, `/${defaultLang}/villas/${slug}`)}`;
+  }
+
+  const card = VILLA_IMAGES[slug]?.card;
+  const ogImages = card
+    ? [{ url: card, width: 1200, height: 800, alt: `${villa.name} — private pool villa, Silyan Villas` }]
+    : undefined;
+
+  return {
+    title: villa.name,
+    description,
+    alternates: { canonical, languages },
+    openGraph: {
+      title: `${villa.name} — Silyan Villas`,
+      description,
+      url: canonical,
+      type: "website",
+      siteName: "Silyan Villas",
+      locale: OG_LOCALE[lang] ?? "en_US",
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: villa.name,
+      description,
+      ...(card ? { images: [card] } : {}),
+    },
+  };
 }
 
 export default async function VillaDetailPage({ params, pathPrefix = "" }: { params: { lang: string; slug: string }; pathPrefix?: string }) {
@@ -201,12 +272,12 @@ export default async function VillaDetailPage({ params, pathPrefix = "" }: { par
           <h2 className="font-serif font-semibold text-h3 text-[var(--color-text-primary)] mb-4">
             {l.cta}
           </h2>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex justify-center">
             <a
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-md text-sm font-medium text-white transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:brightness-110 active:scale-[0.97] w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-md text-sm font-medium text-white transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:brightness-110 active:scale-[0.97] w-full sm:w-auto max-w-md"
               style={{ backgroundColor: WHATSAPP_BRAND_GREEN }}
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
@@ -214,12 +285,6 @@ export default async function VillaDetailPage({ params, pathPrefix = "" }: { par
               </svg>
               {l.whatsapp}
             </a>
-            <Link
-              href={villaPath(pathPrefix, `/${lang}/contact`)}
-              className="inline-flex items-center justify-center px-7 py-3.5 rounded-md text-sm font-medium border border-[var(--color-border-strong)] text-[var(--color-text-primary)] hover:border-[var(--accent-500)] transition-all duration-300 bg-[var(--color-surface)] active:scale-[0.97] w-full sm:w-auto"
-            >
-              {l.cta}
-            </Link>
           </div>
         </div>
 

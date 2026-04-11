@@ -10,10 +10,10 @@ import { THE_STAY_IMAGE } from "../lib/silyan-images";
 type Props = { params: Promise<{ lang: string; siteSlug?: string }>; pathPrefix: string };
 
 const META: Record<string, { title: string; description: string }> = {
-  en: { title: "About — Silyan Villas", description: "Family-run boutique villas in Hisarçandır — three independent homes with private pools, managed directly by the hosts." },
-  tr: { title: "Hakkımızda — Silyan Villas", description: "Hisarçandır'da aile işletmesi butik villalar — özel havuzlu üç bağımsız ev, doğrudan ev sahipleri tarafından yönetilir." },
-  ar: { title: "من نحن — سيليان فيلاز", description: "فيلات بوتيك عائلية في هيسارتشاندير — ثلاث منازل مستقلة بمسابح خاصة." },
-  ru: { title: "О нас — Silyan Villas", description: "Семейные бутик-виллы в Хисарчандыре — три независимых дома с частными бассейнами." },
+  en: { title: "About — Silyan Villas", description: "Family-run boutique villas in Hisarçandır — eleven independent homes with private pools, managed directly by the hosts." },
+  tr: { title: "Hakkımızda — Silyan Villas", description: "Hisarçandır'da aile işletmesi butik villalar — özel havuzlu on bir bağımsız ev, doğrudan ev sahipleri tarafından yönetilir." },
+  ar: { title: "من نحن — سيليان فيلاز", description: "فيلات بوتيك عائلية في هيسارتشاندير — أحد عشر منزلاً مستقلاً بمسابح خاصة." },
+  ru: { title: "О нас — Silyan Villas", description: "Семейные бутик-виллы в Хисарчандыре — одиннадцать независимых домов с частными бассейнами." },
 };
 
 const COPY: Record<string, { label: string; h1: string; p1: string; p2: string; pullQuote: string; bulletsTitle: string; bullets: { icon: string; text: string }[] }> = {
@@ -83,7 +83,18 @@ export async function generateAboutMetadata({ params, pathPrefix }: Props): Prom
   const h = await headers();
   const origin = resolveRequestOrigin(h.get("host"));
   const path = villaPath(pathPrefix, `/${lang}/about`);
-  return { title: meta.title, description: meta.description, openGraph: { title: meta.title, description: meta.description, url: `${origin.origin}${path}` } };
+  const canonical = `${origin.origin}${path}`;
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: { canonical },
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url: canonical,
+      type: "website",
+    },
+  };
 }
 
 export default async function AboutPage({ params, pathPrefix }: Props) {

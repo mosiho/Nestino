@@ -24,28 +24,27 @@ type LayoutProps = {
 
 export async function generateVillaLangMetadata({
   params,
-  pathPrefix,
+  pathPrefix: _pathPrefix,
 }: LayoutProps): Promise<Metadata> {
-  const { lang, siteSlug: slugFromParams } = await params;
+  const { siteSlug: slugFromParams } = await params;
   const h = await headers();
   const slug = slugFromParams ?? h.get("x-nestino-slug") ?? "";
   const ctx = slug ? await getSiteBySubdomain(slug) : null;
 
-  const activeLangs = ctx ? getActiveLangs(ctx) : ["en"];
-
-  const canonical = villaPath(pathPrefix, `/${lang}`);
-
   return {
     metadataBase: resolveRequestOrigin(h.get("host")),
-    alternates: {
-      languages: Object.fromEntries(
-        activeLangs.map((l) => [l, villaPath(pathPrefix, `/${l}`)])
-      ),
-      canonical,
-    },
     title: {
       default: ctx?.tenant.name ?? "Villa",
       template: `%s | ${ctx?.tenant.name ?? "Villa"}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }

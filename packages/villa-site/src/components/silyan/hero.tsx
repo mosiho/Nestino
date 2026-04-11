@@ -21,7 +21,6 @@ type HeroCopy = {
   subhead: string;
   cta1: string;
   cta2: string;
-  scroll: string;
   videoHint: string;
   /** Poster / hero still — locale-specific for image SEO and accessibility */
   heroImageAlt: string;
@@ -36,61 +35,57 @@ type HeroCopy = {
 const HERO_COPY: Record<string, HeroCopy> = {
   en: {
     kicker: "Hisarçandır · Antalya",
-    headline: "Three private villas in the mountains above Antalya",
+    headline: "Eleven private villas in the mountains above Antalya",
     subhead:
       "Private pools, mountain air, 8 km from the sea — your retreat near one of Turkey's most-visited cities.",
     cta1: "Explore Villas",
     cta2: "WhatsApp",
-    scroll: "Scroll",
     videoHint: "Play video",
     heroImageAlt:
       "Private pool and pine-covered hills at Silyan Villas — Hisarçandır, Konyaaltı, Antalya, Turkey",
-    facts: ["3 independent villas", "Private pool each", "8 km to the sea", "22 km to AYT airport"],
+    facts: ["11 independent villas", "Private pool each", "8 km to the sea", "22 km to AYT airport"],
     factsSummary: "Key facts about Silyan Villas",
     locationLink: "Distances & neighbourhood",
   },
   tr: {
     kicker: "Hisarçandır · Antalya",
-    headline: "Antalya'nın doğasında üç özel villa",
+    headline: "Antalya'nın doğasında on bir özel villa",
     subhead:
       "Özel havuzlar, dağ havası, denize 8 km — Türkiye'nin en gözde şehrine yakın, sakin bir kaçış noktanız.",
     cta1: "Villaları Keşfet",
     cta2: "WhatsApp",
-    scroll: "Kaydır",
     videoHint: "Videoyu oynat",
     heroImageAlt:
       "Silyan Villas'ta özel havuz ve çam ormanlı yamaç — Hisarçandır, Konyaaltı, Antalya, Türkiye",
-    facts: ["3 bağımsız villa", "Her villa özel havuz", "Denize 8 km", "AYT havalimanına 22 km"],
+    facts: ["11 bağımsız villa", "Her villa özel havuz", "Denize 8 km", "AYT havalimanına 22 km"],
     factsSummary: "Silyan Villas hakkında öne çıkan bilgiler",
     locationLink: "Mesafeler ve mahalle",
   },
   ar: {
     kicker: "هيسارتشاندير · أنطاليا",
-    headline: "ثلاث فيلات خاصة في جبال أنطاليا",
+    headline: "أحد عشر فيلا خاصة في جبال أنطاليا",
     subhead:
       "مسابح خاصة، هواء جبلي نقي، 8 كيلومترات من البحر — ملاذك الهادئ بالقرب من أكثر مدن تركيا زيارةً.",
     cta1: "استكشف الفيلات",
     cta2: "واتساب",
-    scroll: "مرر للأسفل",
     videoHint: "تشغيل الفيديو",
     heroImageAlt:
       "مسبح خاص ومنحدرات مغطاة بالأشجار في سيليان فيلاز — هيسارتشاندير، كونيالتي، أنطاليا، تركيا",
-    facts: ["3 فيلات مستقلة", "مسبح خاص لكل فيلا", "8 كم إلى البحر", "22 كم إلى مطار AYT"],
+    facts: ["11 فيلا مستقلة", "مسبح خاص لكل فيلا", "8 كم إلى البحر", "22 كم إلى مطار AYT"],
     factsSummary: "حقائق رئيسية عن سيليان فيلاز",
     locationLink: "المسافات والحي",
   },
   ru: {
     kicker: "Хисарчандыре · Анталия",
-    headline: "Три частные виллы в горах над Анталией",
+    headline: "Одиннадцать частных вилл в горах над Анталией",
     subhead:
       "Частные бассейны, горный воздух, 8 км от моря — ваш уединённый отдых рядом с одним из самых популярных городов Турции.",
     cta1: "Смотреть виллы",
     cta2: "WhatsApp",
-    scroll: "Вниз",
     videoHint: "Включить видео",
     heroImageAlt:
       "Частный бассейн и лесистый склон в Silyan Villas — Хисарчандыре, Коньяалты, Анталия, Турция",
-    facts: ["3 отдельные виллы", "Свой бассейн в каждой", "8 км до моря", "22 км до аэропорта AYT"],
+    facts: ["11 отдельных вилл", "Свой бассейн в каждой", "8 км до моря", "22 км до аэропорта AYT"],
     factsSummary: "Кратко о Silyan Villas",
     locationLink: "Расстояния и район",
   },
@@ -280,7 +275,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
           <div className="content-wrapper">
             {/* Desktop: frosted glass panel, start-aligned. Mobile: content flows naturally */}
             <div className="sm:max-w-[36rem] sm:rounded-2xl sm:border sm:border-white/[0.12] sm:bg-black/35 sm:p-8 sm:shadow-[0_32px_80px_-12px_rgba(0,0,0,0.5)] sm:backdrop-blur-2xl md:max-w-[38rem] md:p-10">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55 sm:text-xs sm:tracking-[0.34em]">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/72 sm:text-xs sm:tracking-[0.34em]">
                 {copy.kicker}
               </p>
 
@@ -301,14 +296,17 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
                 aria-label={copy.factsSummary}
               >
                 {copy.facts.map((fact, i) => (
-                  <li key={fact} className="inline-flex items-center text-[11px] font-medium leading-snug text-white/58 sm:text-xs">
-                    {i > 0 ? <span className="mx-2 text-white/25 select-none" aria-hidden>·</span> : null}
+                  <li
+                    key={fact}
+                    className="inline-flex items-center text-[11px] font-semibold leading-snug text-white/[0.92] drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)] sm:text-xs"
+                  >
+                    {i > 0 ? <span className="mx-2 text-white/40 select-none" aria-hidden>·</span> : null}
                     <span>{fact}</span>
                   </li>
                 ))}
               </ul>
 
-              <p className="mb-7 max-w-[34rem] text-pretty text-[15px] leading-relaxed text-white/75 sm:mb-8 sm:text-base sm:leading-[1.65]">
+              <p className="mb-7 max-w-[34rem] text-pretty text-[15px] leading-relaxed text-white/82 sm:mb-8 sm:text-base sm:leading-[1.65]">
                 {copy.subhead}
               </p>
 
@@ -337,7 +335,7 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
               <div className="mt-6 hidden sm:block">
                 <Link
                   href={villaPath(pathPrefix, `/${lang}/location`)}
-                  className="text-sm font-medium text-white/55 underline-offset-4 transition-colors hover:text-white/90 hover:underline"
+                  className="text-sm font-medium text-white/70 underline-offset-4 transition-colors hover:text-white/95 hover:underline"
                 >
                   {copy.locationLink}
                 </Link>
@@ -345,20 +343,6 @@ export default function Hero({ lang, phone, pathPrefix = "" }: Props) {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* ── Scroll indicator ── */}
-      <div
-        className="pointer-events-none absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white/48 sm:bottom-6"
-        aria-hidden
-      >
-        <span className="text-[11px] font-semibold uppercase tracking-[0.28em]">
-          {copy.scroll}
-        </span>
-        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" className="motion-safe:animate-gentle-pulse opacity-85">
-          <rect x="1.5" y="1.5" width="19" height="27" rx="9.5" stroke="currentColor" strokeWidth="1.25" />
-          <circle cx="11" cy="9" r="2" fill="currentColor" className="motion-safe:animate-hero-wheel" />
-        </svg>
       </div>
     </section>
   );
