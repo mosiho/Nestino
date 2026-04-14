@@ -340,6 +340,48 @@ export const trMessages: Messages = {
         "İvmeyi sürdürmek isterseniz, Bowora ortak fiyatıyla (liste fiyatının %50 altı) çeyrek planda kalırsınız. Doğrudan kanalınız yayında kalır ve optimizasyon döngüsü çalışır. Tam ayrıntılar için Şartlar’a bakın.",
     },
   },
+  affiliate: {
+    meta: {
+      title: "Nestino ortaklık programı — yönlendirmelerde %10 kazanç",
+      description:
+        "Nestino ortağı olun: villa ve konaklama işletmecilerini doğrudan rezervasyon büyüme sistemimize yönlendirin; uygun abonelik gelirinde %10 kazanın. Başvuru WhatsApp ile başlar.",
+    },
+    whatsappPrefill:
+      "Merhaba Nestino — Nestino ortaklık programına (%10 komisyon) başvurmak istiyorum. Kitleniz/kanalınız: [kısa açıklama ekleyin].",
+    hero: {
+      badge: "Ortaklık programı",
+      title: "Sahipleri Nestino’ya yönlendirip %10 kazanın",
+      body:
+        "Nestino, premium işletmelerin OTA’ya marj kaptırmadan doğrudan rezervasyon büyümesi için çalışır. Kitlenizde villa sahibi, ev sahibi veya seyahat işletmecisi varsa; onay sonrası uygun yönlendirilen abonelik gelirinde %10 kazanabilirsiniz.",
+      disclaimer:
+        "Komisyon yapısı, ödeme zamanı ve uygunluk WhatsApp ve ortak şartlarda netleşir — tüm başvurular kabul edilmeyebilir.",
+      cta: "WhatsApp’tan başvur",
+      footnote: "WhatsApp üzerinden yanıtlıyoruz — genelde bir iş günü içinde.",
+    },
+    program: {
+      badge: "Nasıl çalışır",
+      title: "İlgi ortaklığa dönüşür: üç adım",
+      subtitle:
+        "Bu sayfada ayrı bir form yok — başvurunuz WhatsApp ile başlar; uygunluk ve takibi hızlıca hizalarız.",
+      steps: [
+        {
+          n: "01",
+          title: "Bağlamla yazın",
+          body: "Önceden doldurulmuş WhatsApp notunu kullanın; web sitenizi, kitlenizi veya topluluğunuzu ve Nestino’yu nasıl tanıtacağınızı ekleyin.",
+        },
+        {
+          n: "02",
+          title: "İnceleme ve şartlar",
+          body: "Programın uyumunu teyit eder, nitelikli yönlendirmenin ne anlama geldiğini ve ödeme zamanını sade dilde paylaşırız.",
+        },
+        {
+          n: "03",
+          title: "Yönlendir ve kazan",
+          body: "Yönlendirdiğiniz işletmeciler Nestino’ya abone olduğunda; yazılı mutabakata göre uygun gelirde %10 kazanırsınız — ayrıntılar sohbette netleşir.",
+        },
+      ],
+    },
+  },
   demo: {
     previewTitle: "Yeni siteniz — canlı önizleme",
     previewSr: "Canlı önizleme",

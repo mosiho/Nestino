@@ -32,12 +32,15 @@ const SECTION_IDS_BOWORA = [
   "contact",
 ] as const;
 
+const SECTION_IDS_AFFILIATE = ["hero", "how-it-works", "contact"] as const;
+
 /** Viewport offset from top: sticky header + small buffer for scroll-spy */
 const SCROLL_SPY_OFFSET_PX = 76;
 
 type SectionId =
   | (typeof SECTION_IDS_ALL)[number]
-  | (typeof SECTION_IDS_BOWORA)[number];
+  | (typeof SECTION_IDS_BOWORA)[number]
+  | (typeof SECTION_IDS_AFFILIATE)[number];
 
 function scrollToSection(id: SectionId) {
   const reduceMotion = window.matchMedia(
@@ -53,10 +56,12 @@ export function Navbar() {
   const { locale, messages } = useLocaleContext();
   const nav = messages.nav;
   const basePath = pathWithoutLocale(pathname);
-  const sectionIds =
+  const sectionIds: readonly SectionId[] =
     basePath === "/bowora"
-      ? (SECTION_IDS_BOWORA as readonly SectionId[])
-      : (SECTION_IDS_ALL as readonly SectionId[]);
+      ? SECTION_IDS_BOWORA
+      : basePath === "/affiliate"
+        ? SECTION_IDS_AFFILIATE
+        : SECTION_IDS_ALL;
 
   const sectionLabels: Record<SectionId, string> = {
     hero: nav.overview,
@@ -76,7 +81,11 @@ export function Navbar() {
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
   const waPrefill =
-    basePath === "/bowora" ? messages.bowora.whatsappPrefill : messages.whatsappPrefill;
+    basePath === "/bowora"
+      ? messages.bowora.whatsappPrefill
+      : basePath === "/affiliate"
+        ? messages.affiliate.whatsappPrefill
+        : messages.whatsappPrefill;
   const waHref = getWhatsAppChatUrl(waPrefill);
 
   const updateActive = useCallback(() => {

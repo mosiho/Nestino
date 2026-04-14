@@ -336,6 +336,48 @@ export const enMessages = {
         "If you want to keep the momentum, stay on the quarterly plan at the Bowora partner price (50% off list). Your direct channel stays live and the optimization loop keeps running. See Terms for full details.",
     },
   },
+  affiliate: {
+    meta: {
+      title: "Nestino Affiliate Program — earn 10% on referrals",
+      description:
+        "Apply to become a Nestino affiliate: refer villa and hospitality owners to our direct-booking growth engine and earn 10% on qualifying referred subscription revenue. Start on WhatsApp.",
+    },
+    whatsappPrefill:
+      "Hi Nestino — I’d like to apply for the Nestino affiliate program (10% commission). My audience/channel: [add a short description].",
+    hero: {
+      badge: "Affiliate program",
+      title: "Earn 10% by referring owners to Nestino",
+      body:
+        "Nestino helps premium properties grow direct bookings—without giving up margin to OTAs. If your audience includes villa owners, hosts, or travel operators, you can earn 10% on qualifying referred subscription revenue once approved.",
+      disclaimer:
+        "Commission structure, payout timing, and eligibility are confirmed in WhatsApp and partner terms—not all applications are accepted.",
+      cta: "Apply on WhatsApp",
+      footnote: "We reply on WhatsApp — usually within one business day.",
+    },
+    program: {
+      badge: "How it works",
+      title: "Three steps from interest to partner",
+      subtitle:
+        "There’s no separate signup form here—your application starts as a WhatsApp thread so we can align on fit and tracking quickly.",
+      steps: [
+        {
+          n: "01",
+          title: "Message us with context",
+          body: "Use the pre-filled WhatsApp note and add your website, audience, or community—and how you plan to introduce Nestino.",
+        },
+        {
+          n: "02",
+          title: "Review and terms",
+          body: "We’ll confirm whether the program fits, explain what counts as a qualifying referral, and share payout timing in plain language.",
+        },
+        {
+          n: "03",
+          title: "Refer and earn",
+          body: "When referred owners subscribe to Nestino, you earn 10% on eligible revenue as agreed in writing—details are finalized in chat.",
+        },
+      ],
+    },
+  },
   demo: {
     previewTitle: "This is your new site — live preview",
     previewSr: "Live preview",
