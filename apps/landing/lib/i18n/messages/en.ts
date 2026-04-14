@@ -294,6 +294,48 @@ export const enMessages = {
     silyanName: "Silyan Villas",
     silyanHint: "Demo · Antalya, Turkey · multilingual",
   },
+  bowora: {
+    meta: {
+      title: "Nestino × Bowora — 50% off quarterly | Direct villa bookings",
+      description:
+        "Exclusive Bowora partner offer: quarterly Nestino at half price. Build your direct booking engine—Google, AI search, and high-converting channels—without OTA commissions.",
+    },
+    whatsappPrefill:
+      "Hi Nestino — I’m from Bowora and I’d like the 50% off quarterly plan for my villa.",
+    hero: {
+      badge: "Nestino × Bowora",
+      title:
+        "Your villa on direct bookings — half off quarterly, only for the Bowora community",
+      body:
+        "Nestino is a growth engine for premium villas: we ship a guest-ready direct channel and keep routing qualified demand to you across Google and AI answers—so more guests book you without a marketplace in the middle. Bowora helps founders get seen; Nestino helps owners keep margin.",
+      partnerLine:
+        "Offer for founders and teams listed on Bowora — verify on",
+      boworaLinkLabel: "Bowora.com",
+      cta: "Chat on WhatsApp",
+      footnote: "Mention Bowora in your message so we can apply the partner rate.",
+    },
+    pricing: {
+      badge: "Partner pricing",
+      title: "Quarterly plan — Bowora exclusive",
+      subtitle:
+        "Same full Nestino product as always. This page shows only the quarterly billing option at 50% off for the Bowora community.",
+      partnerDisclaimer:
+        "Promotional partner rate for Bowora referrals; eligibility may be confirmed in chat. See Terms for subscription details.",
+      tierBadge: "QUARTERLY",
+      wasLabel: "Regular price",
+      discountBadge: "50% off",
+      exclusiveBadge: "Bowora exclusive",
+      savingsLine: "You save $499.50 per quarter vs. list price.",
+      nowPrice: "$499.50",
+      whatsAppCta: "Claim this rate on WhatsApp",
+    },
+    faq: {
+      trialAnswer:
+        "Your first month is free with no credit card required. We’ll implement reasonable edits during the trial. After 30 days, continue on the Bowora quarterly partner rate shown on this page or walk away—no lock-in.",
+      pricingAfterAnswer:
+        "If you want to keep the momentum, stay on the quarterly plan at the Bowora partner price (50% off list). Your direct channel stays live and the optimization loop keeps running. See Terms for full details.",
+    },
+  },
   demo: {
     previewTitle: "This is your new site — live preview",
     previewSr: "Live preview",

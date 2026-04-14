@@ -298,6 +298,48 @@ export const trMessages: Messages = {
     silyanName: "Silyan Villas",
     silyanHint: "Demo · Antalya, Türkiye · çok dilli",
   },
+  bowora: {
+    meta: {
+      title: "Nestino × Bowora — çeyrek planda %50 indirim | Doğrudan villa rezervasyonu",
+      description:
+        "Bowora ortak teklifi: Nestino çeyrek planı yarı fiyatına. Doğrudan rezervasyon motorunuzu kurun — Google, yapay zekâ araması ve yüksek dönüşümlü kanallar — OTA komisyonu olmadan.",
+    },
+    whatsappPrefill:
+      "Merhaba Nestino — Bowora’dan yazıyorum, villam için %50 indirimli çeyrek planı öğrenmek istiyorum.",
+    hero: {
+      badge: "Nestino × Bowora",
+      title:
+        "Villanız doğrudan rezervasyonda — çeyrek planda yarı fiyat, yalnızca Bowora topluluğu için",
+      body:
+        "Nestino premium villalar için bir büyüme motorudur: misafire hazır doğrudan kanalınızı kurar ve Google ile yapay zekâ yanıtları boyunca nitelikli talebi size yönlendirir — arada pazar yeri olmadan daha çok misafir sizi bulur. Bowora funder’ların görünür olmasına yardım eder; Nestino işletmecilerin marjını korumasına odaklanır.",
+      partnerLine:
+        "Bowora’da listelenen funder’lar ve ekipler için teklif — doğrulama:",
+      boworaLinkLabel: "Bowora.com",
+      cta: "WhatsApp’tan yazın",
+      footnote: "Ortak tarifeyi uygulayabilmemiz için mesajınızda Bowora’dan olduğunuzu belirtin.",
+    },
+    pricing: {
+      badge: "Ortak fiyatlandırma",
+      title: "Çeyrek plan — Bowora’ya özel",
+      subtitle:
+        "Her zaman aynı tam Nestino ürünü. Bu sayfada yalnızca Bowora topluluğu için liste fiyatının %50 altındaki çeyrek faturalandırma seçeneği gösterilir.",
+      partnerDisclaimer:
+        "Bowora yönlendirmeleri için promosyonel ortak tarif; uygunluk sohbette doğrulanabilir. Abonelik ayrıntıları için Şartlar’a bakın.",
+      tierBadge: "ÇEYREK",
+      wasLabel: "Liste fiyatı",
+      discountBadge: "%50 indirim",
+      exclusiveBadge: "Bowora’ya özel",
+      savingsLine: "Liste fiyatına göre çeyrek başına 499,50 $ tasarruf.",
+      nowPrice: "499,50 $",
+      whatsAppCta: "Bu tarifi WhatsApp’tan talep edin",
+    },
+    faq: {
+      trialAnswer:
+        "İlk ayınız kredi kartı gerekmeden ücretsizdir. Deneme süresince makul düzenlemeler yaparız. 30 gün sonra bu sayfadaki Bowora çeyrek ortak tarifesiyle devam edin veya çıkın — bağlayıcı değil.",
+      pricingAfterAnswer:
+        "İvmeyi sürdürmek isterseniz, Bowora ortak fiyatıyla (liste fiyatının %50 altı) çeyrek planda kalırsınız. Doğrudan kanalınız yayında kalır ve optimizasyon döngüsü çalışır. Tam ayrıntılar için Şartlar’a bakın.",
+    },
+  },
   demo: {
     previewTitle: "Yeni siteniz — canlı önizleme",
     previewSr: "Canlı önizleme",

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { captureEvent } from "@/components/analytics/track-event";
@@ -8,9 +9,9 @@ import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useLocaleContext } from "@/components/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
 import { getWhatsAppChatUrl } from "@/lib/constants";
-import { localizedPath } from "@/lib/i18n/paths";
+import { localizedPath, pathWithoutLocale } from "@/lib/i18n/paths";
 
-const SECTION_IDS = [
+const SECTION_IDS_ALL = [
   "hero",
   "problem",
   "engine",
@@ -21,10 +22,24 @@ const SECTION_IDS = [
   "contact",
 ] as const;
 
+const SECTION_IDS_BOWORA = [
+  "hero",
+  "problem",
+  "engine",
+  "how-it-works",
+  "pricing",
+  "faq",
+  "contact",
+] as const;
+
 /** Viewport offset from top: sticky header + small buffer for scroll-spy */
 const SCROLL_SPY_OFFSET_PX = 76;
 
-function scrollToSection(id: (typeof SECTION_IDS)[number]) {
+type SectionId =
+  | (typeof SECTION_IDS_ALL)[number]
+  | (typeof SECTION_IDS_BOWORA)[number];
+
+function scrollToSection(id: SectionId) {
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
@@ -34,9 +49,16 @@ function scrollToSection(id: (typeof SECTION_IDS)[number]) {
 }
 
 export function Navbar() {
+  const pathname = usePathname() ?? "";
   const { locale, messages } = useLocaleContext();
   const nav = messages.nav;
-  const sectionLabels: Record<(typeof SECTION_IDS)[number], string> = {
+  const basePath = pathWithoutLocale(pathname);
+  const sectionIds =
+    basePath === "/bowora"
+      ? (SECTION_IDS_BOWORA as readonly SectionId[])
+      : (SECTION_IDS_ALL as readonly SectionId[]);
+
+  const sectionLabels: Record<SectionId, string> = {
     hero: nav.overview,
     problem: nav.problem,
     engine: nav.engine,
@@ -47,25 +69,26 @@ export function Navbar() {
     contact: nav.contact,
   };
 
-  const [activeId, setActiveId] =
-    useState<(typeof SECTION_IDS)[number]>("hero");
+  const [activeId, setActiveId] = useState<SectionId>("hero");
   const [heroBehindNav, setHeroBehindNav] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
-  const waHref = getWhatsAppChatUrl(messages.whatsappPrefill);
+  const waPrefill =
+    basePath === "/bowora" ? messages.bowora.whatsappPrefill : messages.whatsappPrefill;
+  const waHref = getWhatsAppChatUrl(waPrefill);
 
   const updateActive = useCallback(() => {
-    let next: (typeof SECTION_IDS)[number] = SECTION_IDS[0];
-    for (const id of SECTION_IDS) {
+    let next: SectionId = sectionIds[0] ?? "hero";
+    for (const id of sectionIds) {
       const el = document.getElementById(id);
       if (!el) continue;
       const { top } = el.getBoundingClientRect();
       if (top <= SCROLL_SPY_OFFSET_PX) next = id;
     }
     setActiveId((prev) => (prev === next ? prev : next));
-  }, []);
+  }, [sectionIds]);
 
   const syncHeroBehindNav = useCallback(() => {
     const hero = document.getElementById("hero");
@@ -139,7 +162,7 @@ export function Navbar() {
             className="flex gap-1 overflow-x-auto overscroll-x-contain py-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-1.5 [&::-webkit-scrollbar]:hidden"
             aria-label={nav.onThisPage}
           >
-            {SECTION_IDS.map((id) => {
+            {sectionIds.map((id) => {
               const isActive = activeId === id;
               return (
                 <a

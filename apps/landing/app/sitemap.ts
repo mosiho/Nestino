@@ -12,7 +12,7 @@ import {
 import { getActiveLangs, getSiteBySubdomain } from "@nestino/villa-site/lib/tenant";
 
 function publicPaths(): string[] {
-  const core = ["/", "/privacy", "/terms"];
+  const core = ["/", "/privacy", "/terms", "/bowora"];
   const out: string[] = [];
   for (const p of core) {
     if (p === "/") {
