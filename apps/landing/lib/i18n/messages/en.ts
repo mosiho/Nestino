@@ -1,17 +1,17 @@
 export const enMessages = {
   meta: {
-    homeTitle: "Nestino — Zero-commission direct bookings for villas",
+    homeTitle: "Nestino — Your villa, your guests, zero commission",
     homeDescription:
-      "Fill your rooms with direct bookings. Nestino drives qualified guests to your villa—Google, AI search, and high-converting channels. No OTA commissions. First month free.",
+      "Stop giving 15-30% to OTAs. Nestino builds your direct booking engine—Google, AI search, and high-converting channels bring qualified guests straight to you. First month free.",
     privacyTitle: "Privacy Policy",
     privacyDescription: "How Nestino handles data for the marketing site and trials.",
     termsTitle: "Terms of Service",
     termsDescription: "Terms for using Nestino marketing site and trial activation.",
     ogLocale: "en_US",
     organizationDescription:
-      "Zero-commission direct booking growth for premium villas and boutique stays.",
+      "Empowering villa direct bookings with AI-driven growth.",
     websiteDescription:
-      "Zero-commission direct bookings for premium villas—discovery, conversion, and an autonomous growth engine.",
+      "Empowering villa direct bookings with AI-driven growth.",
   },
   languageSwitcher: {
     label: "Language",
@@ -38,11 +38,11 @@ export const enMessages = {
     "Hi Nestino — I’d like to learn about direct bookings for my property.",
   hero: {
     badge: "Zero commission · direct bookings",
-    titleBefore: "Fill your rooms",
-    titleHighlight: "directly",
-    titleAfter: "zero OTA commissions",
+    titleBefore: "Your villa deserves",
+    titleHighlight: "direct",
+    titleAfter: "bookings — not OTA taxes",
     body:
-      "Nestino drives qualified guests straight to your villa through Google, AI search, and high-converting direct channels. No middleman. No commission. Your bookings, your margin.",
+      "Guests find you through Google and AI search, land on a site built to convert, and book directly. No middleman takes a cut. Your property, your guests, your margin.",
     cta: "Chat on WhatsApp",
     footnote: "We reply on WhatsApp — usually within one business day.",
     visualCards: [
@@ -273,7 +273,7 @@ export const enMessages = {
   },
   footer: {
     tagline:
-      "Zero-commission direct bookings for premium villas—discovery, conversion, and a growth engine built for owners who want margin back.",
+      "Empowering villa direct bookings with AI-driven growth.",
     legal: "Legal",
     privacy: "Privacy",
     terms: "Terms",

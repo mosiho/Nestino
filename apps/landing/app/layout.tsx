@@ -49,11 +49,31 @@ const notoNaskhArabic = Noto_Naskh_Arabic({
 export const metadata: Metadata = {
   metadataBase: getMetadataBaseUrl(),
   title: {
-    default: "Nestino — Zero-commission direct bookings for villas",
+    default: "Nestino — Your villa, your guests, zero commission",
     template: "%s | Nestino",
   },
   description:
-    "Fill your rooms with direct bookings. Nestino drives qualified guests to your villa—Google, AI search, and high-converting channels. No OTA commissions. First month free.",
+    "Stop giving 15-30% to OTAs. Nestino builds your direct booking engine—Google, AI search, and high-converting channels bring qualified guests straight to you. First month free.",
+  openGraph: {
+    type: "website",
+    siteName: "Nestino",
+    images: [
+      {
+        url: "/nestino-og.png",
+        width: 1200,
+        height: 628,
+        alt: "Nestino — Empowering villa direct bookings with AI-driven growth",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/nestino-og.png"],
+  },
+  icons: {
+    icon: "/nestino-logo.png",
+    apple: "/nestino-logo.png",
+  },
 };
 
 export default async function RootLayout({

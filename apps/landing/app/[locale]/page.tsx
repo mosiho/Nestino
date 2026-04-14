@@ -41,11 +41,20 @@ export async function generateMetadata({
       siteName: "Nestino",
       title: messages.meta.homeTitle,
       description: messages.meta.homeDescription,
+      images: [
+        {
+          url: `${siteUrl}/nestino-og.png`,
+          width: 1200,
+          height: 628,
+          alt: "Nestino — Empowering villa direct bookings with AI-driven growth",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: messages.meta.homeTitle,
       description: messages.meta.homeDescription,
+      images: [`${siteUrl}/nestino-og.png`],
     },
     alternates: {
       canonical: canonicalPath,

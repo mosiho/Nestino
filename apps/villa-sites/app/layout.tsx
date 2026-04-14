@@ -34,9 +34,12 @@ const notoNaskhArabic = Noto_Naskh_Arabic({
 });
 
 export const metadata: Metadata = {
-  // Each page overrides via generateMetadata in [lang]/layout.tsx
   title: "Silyan Villas",
   description: "Private villas with pools in the mountains above Antalya.",
+  icons: {
+    icon: "/nestino-logo.png",
+    apple: "/nestino-logo.png",
+  },
 };
 
 export default async function RootLayout({

@@ -2,9 +2,9 @@ import type { Messages } from "./en";
 
 export const trMessages: Messages = {
   meta: {
-    homeTitle: "Nestino — Villalar için komisyonsuz doğrudan rezervasyon",
+    homeTitle: "Nestino — Villanız, misafirleriniz, sıfır komisyon",
     homeDescription:
-      "Odalarınızı doğrudan rezervasyonlarla doldurun. Nestino, nitelikli misafirleri villanıza yönlendirir—Google, yapay zekâ araması ve yüksek dönüşümlü kanallar. OTA komisyonu yok. İlk ay ücretsiz.",
+      "OTA'lara %15-30 komisyon vermeyi bırakın. Nestino doğrudan rezervasyon motorunuzu kurar — Google, yapay zekâ araması ve yüksek dönüşümlü kanallar nitelikli misafirleri doğrudan size getirir. İlk ay ücretsiz.",
     privacyTitle: "Gizlilik Politikası",
     privacyDescription:
       "Nestino’nun pazarlama sitesi ve denemeler için verileri nasıl işlediği.",
@@ -12,9 +12,9 @@ export const trMessages: Messages = {
     termsDescription: "Nestino pazarlama sitesi ve deneme aktivasyonu için şartlar.",
     ogLocale: "tr_TR",
     organizationDescription:
-      "Premium villalar ve butik konaklamalar için komisyonsuz doğrudan rezervasyon büyümesi.",
+      "Yapay zekâ destekli büyümeyle villa doğrudan rezervasyonlarını güçlendiriyoruz.",
     websiteDescription:
-      "Premium villalar için komisyonsuz doğrudan rezervasyon—keşif, dönüşüm ve otonom büyüme motoru.",
+      "Yapay zekâ destekli büyümeyle villa doğrudan rezervasyonlarını güçlendiriyoruz.",
   },
   languageSwitcher: {
     label: "Dil",
@@ -41,11 +41,11 @@ export const trMessages: Messages = {
     "Merhaba Nestino — mülküm için doğrudan rezervasyonlar hakkında bilgi almak istiyorum.",
   hero: {
     badge: "Sıfır komisyon · doğrudan rezervasyon",
-    titleBefore: "Odalarınızı",
+    titleBefore: "Villanız",
     titleHighlight: "doğrudan",
-    titleAfter: "OTA komisyonu olmadan doldurun",
+    titleAfter: "rezervasyonu hak ediyor — OTA vergisi değil",
     body:
-      "Nestino, Google, yapay zekâ araması ve yüksek dönüşümlü doğrudan kanallar üzerinden nitelikli misafirleri doğrudan villanıza getirir. Aracı yok. Komisyon yok. Rezervasyonlar sizin, marjınız sizin.",
+      "Misafirler sizi Google ve yapay zekâ aramasında buluyor, dönüşüm odaklı sitenize geliyor ve doğrudan rezervasyon yapıyor. Aracı pay almıyor. Mülkünüz, misafirleriniz, marjınız.",
     cta: "WhatsApp’tan yazın",
     footnote: "WhatsApp üzerinden yanıtlıyoruz — genelde bir iş günü içinde.",
     visualCards: [
@@ -277,7 +277,7 @@ export const trMessages: Messages = {
   },
   footer: {
     tagline:
-      "Premium villalar için komisyonsuz doğrudan rezervasyon—keşif, dönüşüm ve marjını geri isteyen sahipler için büyüme motoru.",
+      "Yapay zekâ destekli büyümeyle villa doğrudan rezervasyonlarını güçlendiriyoruz.",
     legal: "Yasal",
     privacy: "Gizlilik",
     terms: "Şartlar",

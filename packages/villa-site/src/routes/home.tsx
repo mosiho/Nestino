@@ -99,7 +99,7 @@ export async function generateVillaHomeMetadata({
         {
           url: HERO_POSTER,
           width: 1200,
-          height: 800,
+          height: 630,
           alt: "Silyan Villas — private pool villas in pine hills, Hisarçandır near Antalya, Turkey",
         },
       ],
