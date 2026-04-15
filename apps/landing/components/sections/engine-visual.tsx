@@ -287,8 +287,7 @@ export function EngineVisualSection() {
                   <motion.g
                     key={`m-${s.id}`}
                     initial={reduced ? false : { opacity: 0, y: -10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.35 }}
                   >
                     <rect
@@ -314,8 +313,7 @@ export function EngineVisualSection() {
 
                 <motion.g
                   initial={reduced ? false : { scale: 0.92, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
+                  animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.45 }}
                 >
                   {!reduced ? (
@@ -377,8 +375,7 @@ export function EngineVisualSection() {
                   <motion.g
                     key={`mo-${o.id}`}
                     initial={reduced ? false : { opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 + i * 0.05, duration: 0.35 }}
                   >
                     <rect
