@@ -73,7 +73,7 @@ export function EngineVisualSection() {
         />
 
         <AnimateIn delay={0.12} className="mt-14">
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-background p-6 shadow-md sm:p-10">
+          <div className="relative overflow-visible rounded-2xl border border-border bg-background p-6 shadow-md sm:overflow-hidden sm:p-10">
             <div className="mx-auto max-w-4xl">
               <svg
                 viewBox="0 0 720 280"
