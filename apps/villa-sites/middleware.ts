@@ -1,46 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { isLang } from "@nestino/villa-site/lib/i18n";
-
-const VILLA_BASE_DOMAIN =
-  process.env.NEXT_PUBLIC_VILLA_BASE_DOMAIN ?? "nestino.com";
+import { resolveSlug } from "@nestino/villa-site/lib/slug";
 
 // Paths that bypass tenancy + language routing entirely
 const BYPASS_PREFIXES = ["/api/", "/_next/", "/images/", "/favicon.ico"];
 const BYPASS_EXACT = new Set(["/robots.txt", "/sitemap.xml"]);
 const STATIC_EXTENSION_RE = /\.[^/]+$/;
-
-// ---------------------------------------------------------------------------
-// Slug resolution
-// ---------------------------------------------------------------------------
-
-function resolveSlug(host: string): string | null {
-  // Strip port (for local dev)
-  const hostname = host.split(":")[0] ?? "";
-
-  // *.nestino.com → extract subdomain
-  if (hostname.endsWith(`.${VILLA_BASE_DOMAIN}`)) {
-    const sub = hostname.slice(0, hostname.length - VILLA_BASE_DOMAIN.length - 1);
-    return sub || null;
-  }
-
-  // Local dev: {slug}.localhost
-  if (hostname.endsWith(".localhost")) {
-    const sub = hostname.slice(0, hostname.indexOf(".localhost"));
-    return sub || null;
-  }
-
-  // Plain localhost (no subdomain) — return 'silyan' for dev convenience.
-  // The dev fallback in lib/tenant.ts serves the Silyan context regardless of slug.
-  if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return "silyan";
-  }
-
-  // Custom domain: treat the full hostname as the lookup key.
-  // The DB query in lib/tenant.ts handles custom_domain lookup separately.
-  // For now, return null — custom domain support comes post-MVP.
-  return null;
-}
 
 // ---------------------------------------------------------------------------
 // Language segment extraction

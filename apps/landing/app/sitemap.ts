@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 
 import { getSiteUrl } from "@/lib/constants";
 import { listDemoSitemapSubdomains } from "@/lib/demo-queries";
@@ -103,7 +103,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             eq(contentPages.status, "active"),
             eq(contentPages.pageType, "guide")
           )
-        );
+        )
+        .orderBy(asc(contentPages.slug));
 
       for (const page of guidePages) {
         for (const lang of langs) {

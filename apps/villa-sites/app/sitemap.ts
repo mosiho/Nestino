@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 import { getDb, isDatabaseConfigured, contentPages, contentVersions } from "@nestino/db";
 import { getSiteBySubdomain, getActiveLangs } from "@nestino/villa-site/lib/tenant";
+import { resolveSlug } from "@nestino/villa-site/lib/slug";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const h = await headers();
-  const slug = h.get("x-nestino-slug") ?? "";
   const host = h.get("host") ?? "";
+  const slug = h.get("x-nestino-slug") || resolveSlug(host) || "";
   const protocol = host.includes("localhost") ? "http" : "https";
   const base = `${protocol}://${host}`;
 
@@ -34,11 +35,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         eq(contentVersions.status, "published")
       )
     )
-    .where(eq(contentPages.siteId, ctx.site.id));
+    .where(eq(contentPages.siteId, ctx.site.id))
+    .orderBy(asc(contentPages.slug));
 
   const entries: MetadataRoute.Sitemap = [];
 
   for (const lang of activeLangs) {
+    entries.push({
+      url: `${base}/${lang}/`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(activeLangs.map((l) => [l, `${base}/${l}/`])),
+      },
+    });
     entries.push({
       url: `${base}/${lang}/guides`,
       lastModified: new Date(),
